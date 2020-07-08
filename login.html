@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title> AHS Mobile App Login Page</title>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
+
+    </head>
+
+    <body>
+        <h1>AHS Mobile App Login</h1>
+        <div id="loginContainer">
+            <input type="email" placeholder="email" id="email"/>
+            <input type="password" placeholder="password" id="password"/>
+
+            <button onclick="login()" id="login">Login</button>
+            <!--<button onclick="signUp()" id="signUp">Sign Up</button>-->
+            <button onclick="signOut()" id="signOut">Sign Out</button>
+
+        </div>
+
+        <script src="server.js"></script>
+    </body>
+
+    <style>
+        body{
+            background-color:#EFEFEF;
+        }
+
+        h1{
+            margin-top: 150px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        #loginContainer{
+            background-color: white;
+            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+
+            width: 325px;
+            height: 200px;
+            padding: 15px 15px;
+            border-radius: 10px;
+            margin: 10px auto;
+        }
+
+        #email{
+            background-color: white;
+            width: 70%;
+            height: 40px;
+            display: block;
+            margin: 10px auto;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid black; 
+        }
+
+        #password{
+            background-color: white;
+            width: 70%;
+            height: 40px;
+            display: block;
+            margin: 10px auto;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid black; 
+        }
+
+        #login{
+            background-color: #B1B1B1;
+            color: white;
+            border: none;
+            font-weight: bold;
+            padding: 15px 32px; 
+            border-radius: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin-left: 55px;
+            margin-top: 20px;
+        }
+
+        #signOut{
+            background-color: #B1B1B1;
+            color: white;
+            border: none;
+            font-weight: bold;
+            padding: 15px 32px; 
+            border-radius: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        button:hover{
+            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        }
+    </style>
+
+</html>
+

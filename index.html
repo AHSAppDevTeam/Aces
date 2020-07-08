@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Content Editing System: Index</title>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+   
+        <script>
+            $(document).ready(function(){
+                $('select').formSelect();
+            });
+        </script>
+    </head>
+
+    <body>
+        <h1>Content Editing System: Index</h1>
+        <div id="indexContainer">
+            <div class="btn-group">
+                <button onclick="homepage()" class="btn waves-effect grey darken-1" id="homepage">Homepage</button>
+                <button onclick="bulletin()" class="btn waves-effect grey darken-1" id="bulletin">Bulletin</button>
+                <button onclick="back1()"  class="btn waves-effect grey darken-1" id="back">Go Back</button>
+            </div>
+        </div>
+
+        <script src="server.js"></script>
+    </body>
+
+    <style>
+        body{
+            background-color:#EFEFEF;
+        }
+
+        h1{
+            margin-top: 200px;
+            margin-bottom: 30px;
+            font-size: 35px;
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        #indexContainer{
+            text-align: center;
+        }
+
+        .btn-group button{
+            display: inline-block;
+        }
+    </style>
+
+</html>
+
