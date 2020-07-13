@@ -2,26 +2,14 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-        <title>Content Editing System: Index</title>
-        <!-- The core Firebase JS SDK is always required and must be listed first -->
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
-
+        <title>Content Editing System: TOC</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-   
-        <script>
-            $(document).ready(function(){
-                $('select').formSelect();
-            });
-        </script>
+
     </head>
 
     <body>
-        <h1>Content Editing System: Index</h1>
+        <h1>Content Editing System: Table of Contents</h1>
+
         <div id="indexContainer">
             <div class="btn-group">
                 <button onclick="homepage()" class="btn waves-effect grey darken-1" id="homepage">Homepage</button>
@@ -30,6 +18,19 @@
             </div>
         </div>
 
+         <!-- The core Firebase JS SDK is always required and must be listed first -->
+         <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+         <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
+         <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
+ 
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+   
+        <script>
+            $(document).ready(function(){
+                $('select').formSelect();
+            });
+        </script>
         <script src="server.js"></script>
     </body>
 

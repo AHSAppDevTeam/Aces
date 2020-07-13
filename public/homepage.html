@@ -5,10 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Content Editing System: Homepage</title>
-        <!-- The core Firebase JS SDK is always required and must be listed first -->
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
 
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -16,6 +12,7 @@
 
     <body>
         <h1>Content Editing System: Homepage</h1>
+
         <div id="main">
             <div id= "form">
                 <div class="row">
@@ -44,13 +41,9 @@
                         </div>
 
                         <div class="row">
-                            <!--<div class="input-field col s6">
-                                <label for="number">Article Number</label><br>
-                                <input type="number" name="number" id="number"/>
-                            </div>-->
                             <div class="input-field col s6">
-                                <label for="timestamp">Date</label><br>
-                                <input type="text" class="datepicker" id="timestamp">
+                                <label for="id">ID (for update/remove)</label><br>
+                                <input type="text" name="id" id="id"/>
                             </div>
                             <div class="input-field col s6">
                                 <label for="image">Image Link</label><br>
@@ -59,11 +52,15 @@
                         </div>
 
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
+                                <label for="timestamp">Date</label><br>
+                                <input type="text" class="datepicker" id="timestamp">
+                            </div>
+                            <div class="input-field col s4">
                                 <label for="title">Article Title</label><br>
                                 <input type="text" name="title" id="title"/>
                             </div>
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
                                 <label for="author">Author</label><br>
                                 <input type="text" name="author" id="author"/>
                             </div>
@@ -92,7 +89,21 @@
                 <button id="removeBtn" class="btn waves-effect grey darken-1"> Remove </button>
                 <button onclick="back2()" class="btn waves-effect grey darken-1" id="back"> Go Back </button>
             </div>
+
+            <div id="collectionTitle" class="input-field col s6">
+                <p>Added Articles...</p>
+            </div>
+
+            <ul id="myUL" class="collection">
+            </ul>
+            
         </div>
+
+
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -137,6 +148,21 @@
             width: 600px;
             border: solid 1px #EBEBEB;
             padding: 1rem;
+        }
+
+        #collectionTitle{
+            margin-top: 70px;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li{
+            /* dont know if box sizing matters here */
+            box-sizing: border-box; 
+            padding: 12px 8px 12px 40px;
         }
 
         button{

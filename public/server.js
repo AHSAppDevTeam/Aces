@@ -33,7 +33,7 @@ function login(){
     promise.catch(e => alert(e.message));
     alert("Signed in with " + email.value + ".");
     //Take user to a different location or homepage
-    location.replace("index.html");
+    location.replace("toc.html");
 }
 
 function signOut(){
@@ -62,11 +62,11 @@ function bulletin(){
 }
 
 function back1(){
-    location.replace("login.html");
+    location.replace("index.html");
 }
 
 function back2(){
-    location.replace("index.html");
+    location.replace("toc.html");
 }
 
 //textarea autoexpand
@@ -106,14 +106,14 @@ function makeid(length) {
 //homepage constants
 const category = document.getElementById('category');
 const isFeatured = document.getElementById('isFeatured');
-const number = document.getElementById('number');
+//const number = document.getElementById('number');
 const id = document.getElementById('id');
 const title = document.getElementById('title');
 const author = document.getElementById('author');
 const image = document.getElementById('image');
 const timestamp = document.getElementById('timestamp');
 const body = document.getElementById('textarea1');
-const imgNum = document.getElementById('imgNum');
+//const imgNum = document.getElementById('imgNum');
 
 const addBtn = document.getElementById('addBtn');
 const updateBtn = document.getElementById('updateBtn');
@@ -149,9 +149,40 @@ addBtn.addEventListener('click', (e) => {
         0: image.value,
     });
 
-    //var elem = document.getElementById('');
-    //elem.parentNode.removeChild(elem);
+    //append a list item to the top of added articles
+    var li = document.createElement("li");
+    var input = postId;
+    li.setAttribute("id", input);
+    //console.log(li.id);
+    
+    var a = document.createTextNode("ID: " + input);
+    var b = document.createTextNode("isFeatured: " + isFeatured.value);
+    var c = document.createTextNode("Date: " + timestamp.value);
+    var d = document.createTextNode("Title: " + title.value);
+    var e = document.createTextNode("Author: " + author.value);
+    var f = document.createTextNode("Body: " + body.value);
+
+    li.appendChild(a);
+    var br1 = document.createElement("br");
+    li.appendChild(br1);
+    li.appendChild(b);
+    var br2 = document.createElement("br");
+    li.appendChild(br2);
+    li.appendChild(c);
+    var br3 = document.createElement("br");
+    li.appendChild(br3);
+    li.appendChild(d);
+    var br4 = document.createElement("br");
+    li.appendChild(br4);
+    li.appendChild(e);
+    var br5 = document.createElement("br");
+    li.appendChild(br5);
+    li.appendChild(f);
+
+    var list = document.getElementById("myUL");
+    list.insertBefore(li, list.childNodes[0]);
 });
+
 
 var counter = 0; 
 updateBtn.addEventListener('click', (e) => {
@@ -181,22 +212,57 @@ updateBtn.addEventListener('click', (e) => {
         2: image.value,
     };
     if(counter == 1){
-        database.ref('/homepage/' + category.value + '/' + postId + '/articleImages/').update(newImg1);
+        database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
     }else{
-    database.ref('/homepage/' + category.value + '/' + postId + '/articleImages/').update(newImg2);
+    database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
     }
-    database.ref('/homepage/' + category.value + '/' + postId).update(newData);
-});
+    database.ref('/homepage/' + category.value + '/' + id.value).update(newData);
+   
 
+    var li = document.createElement("li");
+    var input = id.value;
+    li.setAttribute("id", id.value);
+    
+    var a = document.createTextNode("ID: " + id.value);
+    var b = document.createTextNode("isFeatured: " + isFeatured.value);
+    var c = document.createTextNode("Date: " + timestamp.value);
+    var d = document.createTextNode("Title: " + title.value);
+    var e = document.createTextNode("Author: " + author.value);
+    var f = document.createTextNode("Body: " + body.value);
+
+    li.appendChild(a);
+    var br1 = document.createElement("br");
+    li.appendChild(br1);
+    li.appendChild(b);
+    var br2 = document.createElement("br");
+    li.appendChild(br2);
+    li.appendChild(c);
+    var br3 = document.createElement("br");
+    li.appendChild(br3);
+    li.appendChild(d);
+    var br4 = document.createElement("br");
+    li.appendChild(br4);
+    li.appendChild(e);
+    var br5 = document.createElement("br");
+    li.appendChild(br5);
+    li.appendChild(f);
+
+    var oldNode = document.getElementById(id.value);
+    oldNode.parentNode.replaceChild(li, oldNode);
+});
+    
 removeBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    database.ref('/homepage/' + category.value + '/' + postId).remove()
+    database.ref('/homepage/' + category.value + '/' + id.value).remove()
     .then(() => {
-        window.alert('Article ' + postId + ' removed from database.');
+        window.alert('Article ' + id.value + ' removed from database.');
     })
     .catch(error => {
         console.error(error);
     });
+
+    var elem = document.getElementById(id.value);
+    elem.parentNode.removeChild(elem);
 });
 
 //id listener
@@ -218,3 +284,6 @@ if(category.value = "asb"){
         console.log(snapshot.key);
     });
 }
+
+//FCM?
+//const messaging = firebase.messaging();
