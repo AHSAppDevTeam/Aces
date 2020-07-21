@@ -11,7 +11,15 @@
     </head>
 
     <body>
-        <h1>Content Editing System: Homepage</h1>
+        <!-- <h1>Content Editing System: Homepage</h1> -->
+        <nav class="grey darken-2">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">
+                    <img src="images/feather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
+                </a>
+                <a href="#" id ="navTitle" class="brand-logo" style="margin-left: 85px;">Content Editing System: Homepage</a>
+            </div>
+        </nav>
 
         <div id="main">
             <div id= "form">
@@ -82,28 +90,46 @@
                         </div>
                     </form>
                 </div>              
-            </div>
+            </div>   
+        </div>
+        
             <div class="input-field center">
                 <button id="addBtn" class="btn waves-effect grey darken-1"> Add </button>
                 <button id="updateBtn" class="btn waves-effect grey darken-1"> Update </button>
                 <button id="removeBtn" class="btn waves-effect grey darken-1"> Remove </button>
                 <button onclick="back2()" class="btn waves-effect grey darken-1" id="back"> Go Back </button>
-            </div>
+            </div>     
 
-            <div id="collectionTitle" class="input-field col s6">
-                <p>Added Articles...</p>
-            </div>
+        <div id="feed" class="container">
+            <div class="row">
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>ASB</p>
+                    </div>
+                    <ul id="myUL1" class="collection"></ul>
+                </div>
 
-            <ul id="myUL" class="collection">
-            </ul>
-            
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>District</p>
+                    </div>
+                    <ul id="myUL2" class="collection"></ul>
+                </div>
+
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                    <p>Sports</p>
+                    </div>
+                    <ul id="myUL3" class="collection"></ul>
+                </div>
+            </div>
         </div>
 
 
         <!-- The core Firebase JS SDK is always required and must be listed first -->
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -116,7 +142,7 @@
                 });
             });
         </script>
-        <script src="server.js"></script>
+        <script src="scripts/server.js"></script>
     </body>
 
     <style>
@@ -133,10 +159,15 @@
             font-family: 'Times New Roman', Times, serif;
         }
 
+        #navTitle{
+            font-size: 25px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
         #main{
             width: 600px; 
-            height: 800px;
             margin: 10px auto; 
+            margin-top: 30px;
             background-color: white;
             display: ruby;
             flex-direction: column;
@@ -146,12 +177,22 @@
 
         #form{
             width: 600px;
-            border: solid 1px #EBEBEB;
+            border: solid 2px #EBEBEB;
             padding: 1rem;
         }
 
-        #collectionTitle{
-            margin-top: 70px;
+        #feed{
+            margin-top: 50px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        #sectionTitles{
+            font-size: 20px;
+            font-family: 'Times New Roman', Times, serif;
+            margin-top: 50px;
         }
 
         ul {
@@ -160,9 +201,9 @@
         }
 
         ul li{
-            /* dont know if box sizing matters here */
-            box-sizing: border-box; 
-            padding: 12px 8px 12px 40px;
+            padding: 2rem;
+            border: solid 1px #EBEBEB;
+            font-size: 15px;
         }
 
         button{

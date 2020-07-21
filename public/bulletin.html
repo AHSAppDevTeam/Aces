@@ -11,7 +11,17 @@
     </head>
 
     <body>
-        <h1>Content Editing System: Bulletin</h1>
+        <!-- <h1>Content Editing System: Bulletin</h1> -->
+
+        <nav class="grey darken-2">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">
+                    <img src="images/feather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
+                </a>
+                <a href="#" id ="navTitle" class="brand-logo" style="margin-left: 85px;">Content Editing System: Bulletin</a>
+            </div>
+        </nav>
+
         <div id="main">
             <div id= "form">
                 <div class="row">
@@ -30,23 +40,9 @@
                                 </select>
                                 <label>Article Category</label>
                             </div>
-                            <!--<div class="input-field col s6">
-                                <form action="#">
-                                    <p>
-                                        <label for="isFeatured">
-                                            <input type="checkbox" id="isFeatured" value=1 />
-                                            <span>isFeatured</span>
-                                        </label>
-                                    </p>
-                                </form>
-                            </div>--> 
                         </div>
 
                         <div class="row">
-                            <!--<div class="input-field col s6">
-                                <label for="number">Article Number</label><br>
-                                <input type="number" name="number" id="number"/>
-                            </div>-->
                             <div class="input-field col s6">
                                 <label for="id">ID (for update/remove)</label><br>
                                 <input type="text" name="id" id="id"/>
@@ -72,14 +68,6 @@
                             </div>
                         </div>
 
-                        <!--<div class="row">
-                            <div class="input-field col s6">
-                                <label for="imgNum">Image Number</label><br>
-                                <input type="number" name="imgNum" id="imgNum"/>
-                            </div>
-                        </div>-->
-
-                        <!--To Do: fix how adding a big text pushes everything to the top-->
                         <div class="row">
                             <div class="input-field col s12">
                                 <textarea id="textarea1" class="materialize-textarea" name="body"></textarea>
@@ -94,21 +82,61 @@
                 <button id="updateBtn1" class="btn waves-effect grey darken-1"> Update </button>
                 <button id="removeBtn1" class="btn waves-effect grey darken-1"> Remove </button>
                 <button onclick="back2()" class="btn waves-effect grey darken-1" id="back"> Go Back </button>
-            </div>
-
-            <div id="collectionTitle" class="input-field col s6">
-                <p>Added Articles...</p>
-            </div>
-
-            <ul id="myUL" class="collection">
-            </ul>
-            
+            </div>      
         </div>
 
+
+        <div id="feed" class="container">
+            <div class="row">
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>Athletics</p>
+                    </div>
+                    <ul id="myUL1" class="collection"></ul>
+                </div>
+
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>Colleges</p>
+                    </div>
+                    <ul id="myUL2" class="collection"></ul>
+                </div>
+
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>Events</p>
+                    </div>
+                    <ul id="myUL3" class="collection"></ul>
+                </div>
+
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>Others</p>
+                    </div>
+                    <ul id="myUL4" class="collection"></ul>
+                </div>
+
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>Reference</p>
+                    </div>
+                    <ul id="myUL5" class="collection"></ul>
+                </div>
+
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>Seniors</p>
+                    </div>
+                    <ul id="myUL6" class="collection"></ul>
+                </div>
+            </div>
+        </div>
+            
+
         <!-- The core Firebase JS SDK is always required and must be listed first -->
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -121,7 +149,8 @@
                 });
             });
         </script>
-        <script src="bulletin.js"></script>
+        
+        <script src="scripts/bulletin.js"></script>     
     </body>
 
     <style>
@@ -137,11 +166,16 @@
             text-align: center;
             font-family: 'Times New Roman', Times, serif;
         }
+        
+        #navTitle{
+            font-size: 25px;
+            font-family: 'Times New Roman', Times, serif;
+        }
 
         #main{
             width: 600px; 
-            height: 800px;
             margin: 10px auto; 
+            margin-top: 30px;
             background-color: white;
             display: ruby;
             flex-direction: column;
@@ -151,12 +185,22 @@
 
         #form{
             width: 600px;
-            border: solid 1px #EBEBEB;
+            border: solid 2px #EBEBEB;
             padding: 1rem;
         }
         
-        #collectionTitle{
-            margin-top: 70px;
+        #feed{
+            margin-top: 50px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        #sectionTitles{
+            font-size: 20px;
+            font-family: 'Times New Roman', Times, serif;
+            margin-top: 50px;
         }
 
         ul {
@@ -165,9 +209,9 @@
         }
 
         ul li{
-            /* dont know if box sizing matters here */
-            box-sizing: border-box; 
-            padding: 12px 8px 12px 40px;
+            padding: 2rem;
+            border: solid 1px #EBEBEB;
+            font-size: 15px;
         }
 
         button{

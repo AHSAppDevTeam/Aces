@@ -8,22 +8,32 @@
     messagingSenderId: "654225823864",
     appId: "1:654225823864:web:944772a5cadae0c8b7758d"
   };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+  
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+    
+const auth = firebase.auth();
 
-  var auth = firebase.auth();
+//   function signUp(){
 
-function signUp(){
+//     var email = document.getElementById("email");
+//     var password = document.getElementById("password"); 
 
-    var email = document.getElementById("email");
-    var password = document.getElementById("password"); 
+//     const promise = auth.createUserWithEmailAndPassword(email.value, password.value);
+//     promise.catch(e => alert(e.message));
 
-    const promise = auth.createUserWithEmailAndPassword(email.value, password.value);
-    promise.catch(e => alert(e.message));
-
-    alert("Signed up.");
-}
-
+//     alert("Signed up.");
+// }
+auth.onAuthStateChanged(function(user){
+    if(user){
+        var email = user.email;
+        alert("Active user: " + email);
+        //is signed in
+    }else{
+        //alert("No active user.")
+        //no user is signed in
+    }
+});
  
 function login(){
     var email = document.getElementById("email");
@@ -40,17 +50,6 @@ function signOut(){
     auth.signOut();
     alert("Signed out.");
 }
-
-auth.onAuthStateChanged(function(user){
-    if(user){
-        var email = user.email;
-        alert("Active user: " + email);
-        //is signed in
-    }else{
-        //alert("No active user.")
-        //no user is signed in
-    }
-});
 
 //move web location
 function homepage(){
@@ -119,10 +118,9 @@ const addBtn = document.getElementById('addBtn');
 const updateBtn = document.getElementById('updateBtn');
 const removeBtn = document.getElementById('removeBtn');
 
-const database = firebase.database();
+const database = firebase.database(); 
 //const rootRef = database.ref('homepage');
 
-//to add, update, remove, and read data from firebase
 addBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
@@ -131,8 +129,12 @@ addBtn.addEventListener('click', (e) => {
         // alert(this.value);
      }).change();
 
-     //convert date to unix timestamp
+    //detect html tags
+    var htmlValue = body.value.includes("</"); 
+
+    //convert date to unix timestamp
     var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));  
+    //var unixTimestamp = new Date().getTime();
 
     var newPostRef = database.ref('/homepage/' + category.value).push();
     var postId = newPostRef.key;
@@ -142,6 +144,7 @@ addBtn.addEventListener('click', (e) => {
         articleBody: body.value,
         articleTitle: title.value,
         articleUnixEpoch: unixTimestamp, 
+        hasHTML: htmlValue, 
         isFeatured: JSON.parse(isFeatured.value.toLowerCase()), 
     });
 
@@ -150,11 +153,10 @@ addBtn.addEventListener('click', (e) => {
     });
 
     //append a list item to the top of added articles
-    var li = document.createElement("li");
+    /*var li = document.createElement("li");
     var input = postId;
     li.setAttribute("id", input);
-    //console.log(li.id);
-    
+
     var a = document.createTextNode("ID: " + input);
     var b = document.createTextNode("isFeatured: " + isFeatured.value);
     var c = document.createTextNode("Date: " + timestamp.value);
@@ -179,8 +181,9 @@ addBtn.addEventListener('click', (e) => {
     li.appendChild(br5);
     li.appendChild(f);
 
+
     var list = document.getElementById("myUL");
-    list.insertBefore(li, list.childNodes[0]);
+    list.insertBefore(li, list.childNodes[0]);*/
 });
 
 
@@ -194,13 +197,16 @@ updateBtn.addEventListener('click', (e) => {
         // alert(this.value);
      }).change();
     
-    var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));  
+
+    var htmlValue = body.value.includes("</"); 
+    var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));
 
     const newData = {
         articleAuthor: author.value,
         articleBody: body.value,
         articleTitle: title.value,
         articleUnixEpoch: unixTimestamp, 
+        hasHTML: htmlValue, 
         isFeatured: JSON.parse(isFeatured.value.toLowerCase()), 
     };
 
@@ -219,7 +225,7 @@ updateBtn.addEventListener('click', (e) => {
     database.ref('/homepage/' + category.value + '/' + id.value).update(newData);
    
 
-    var li = document.createElement("li");
+    /*var li = document.createElement("li");
     var input = id.value;
     li.setAttribute("id", id.value);
     
@@ -248,11 +254,12 @@ updateBtn.addEventListener('click', (e) => {
     li.appendChild(f);
 
     var oldNode = document.getElementById(id.value);
-    oldNode.parentNode.replaceChild(li, oldNode);
+    oldNode.parentNode.replaceChild(li, oldNode);*/
 });
     
 removeBtn.addEventListener('click', (e) => {
     e.preventDefault();
+
     database.ref('/homepage/' + category.value + '/' + id.value).remove()
     .then(() => {
         window.alert('Article ' + id.value + ' removed from database.');
@@ -260,9 +267,6 @@ removeBtn.addEventListener('click', (e) => {
     .catch(error => {
         console.error(error);
     });
-
-    var elem = document.getElementById(id.value);
-    elem.parentNode.removeChild(elem);
 });
 
 //id listener
@@ -270,20 +274,173 @@ var postId;
 
 if(category.value = "asb"){
     database.ref('homepage').child('asb').once('child_changed', snapshot => {
-        postId = snapshot.key; 
-        console.log(snapshot.key);
+        postId = snapshot.key;
     });
 }else if(category.value = "district"){
     database.ref('homepage').child('district').once('child_changed', snapshot => {
-        postId = snapshot.key; 
-        console.log(snapshot.key);
+        postId = snapshot.key;
     });
 }else{
     database.ref('homepage').child('sports').once('child_changed', snapshot => {
-        postId = snapshot.key; 
-        console.log(snapshot.key);
+        postId = snapshot.key;
     });
 }
+
+
+function timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp * 1000);
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var time = month + ' ' + date + ', ' + year;
+    return time;
+  }
+
+//getting data from the server
+
+database.ref('homepage').child('asb').on('value', function (snapshot) {
+    snapshot.forEach(function (childSnapshot){
+
+        var data = childSnapshot.val();
+        var key = childSnapshot.key;
+        var time = timeConverter(data.articleUnixEpoch); 
+        var li = document.createElement("li");
+
+        var a = document.createTextNode("ID: " + key);
+        var b = document.createTextNode("isFeatured: " + data.isFeatured);
+        var c = document.createTextNode("Images: " + data.articleImages);
+        var d = document.createTextNode("Date: " + time);
+        var e = document.createTextNode("Title: " + data.articleTitle);
+        var f = document.createTextNode("Author: " + data.articleAuthor);
+        var g = document.createTextNode("Body: " + data.articleBody);
+        var h = document.createTextNode("hasHTML: " + data.hasHTML);
+
+        li.appendChild(a);
+        var br1 = document.createElement("br");
+        li.appendChild(br1);
+        li.appendChild(b);
+        var br2 = document.createElement("br");
+        li.appendChild(br2);
+        li.appendChild(c);
+        var br3 = document.createElement("br");
+        li.appendChild(br3);
+        li.appendChild(d);
+        var br4 = document.createElement("br");
+        li.appendChild(br4);
+        li.appendChild(e);
+        var br5 = document.createElement("br");
+        li.appendChild(br5);
+        li.appendChild(f);
+        var br6 = document.createElement("br");
+        li.appendChild(br6);
+        li.appendChild(g);
+        var br7 = document.createElement("br");
+        li.appendChild(br7);
+        li.appendChild(h);
+
+
+        var list = document.getElementById("myUL1");
+        list.insertBefore(li, list.childNodes[0]);
+
+       });
+});
+
+database.ref('homepage').child('district').on('value', function (snapshot) {
+    snapshot.forEach(function (childSnapshot){
+
+        var data = childSnapshot.val();
+        var key = childSnapshot.key;
+        var time = timeConverter(data.articleUnixEpoch); 
+        var li = document.createElement("li");
+
+        var a = document.createTextNode("ID: " + key);
+        var b = document.createTextNode("isFeatured: " + data.isFeatured);
+        var c = document.createTextNode("Images: " + data.articleImages);
+        var d = document.createTextNode("Date: " + time);
+        var e = document.createTextNode("Title: " + data.articleTitle);
+        var f = document.createTextNode("Author: " + data.articleAuthor);
+        var g = document.createTextNode("Body: " + data.articleBody);
+        var h = document.createTextNode("hasHTML: " + data.hasHTML);
+
+        li.appendChild(a);
+        var br1 = document.createElement("br");
+        li.appendChild(br1);
+        li.appendChild(b);
+        var br2 = document.createElement("br");
+        li.appendChild(br2);
+        li.appendChild(c);
+        var br3 = document.createElement("br");
+        li.appendChild(br3);
+        li.appendChild(d);
+        var br4 = document.createElement("br");
+        li.appendChild(br4);
+        li.appendChild(e);
+        var br5 = document.createElement("br");
+        li.appendChild(br5);
+        li.appendChild(f);
+        var br6 = document.createElement("br");
+        li.appendChild(br6);
+        li.appendChild(g);
+        var br7 = document.createElement("br");
+        li.appendChild(br7);
+        li.appendChild(h);
+
+
+        var list = document.getElementById("myUL2");
+        list.insertBefore(li, list.childNodes[0]);
+
+       });
+});
+
+database.ref('homepage').child('sports').on('value', function (snapshot) {
+    snapshot.forEach(function (childSnapshot){
+
+        var data = childSnapshot.val();
+        var key = childSnapshot.key;
+        var time = timeConverter(data.articleUnixEpoch); 
+        var li = document.createElement("li");
+
+        var a = document.createTextNode("ID: " + key);
+        var b = document.createTextNode("isFeatured: " + data.isFeatured);
+        var c = document.createTextNode("Images: " + data.articleImages);
+        var d = document.createTextNode("Date: " + time);
+        var e = document.createTextNode("Title: " + data.articleTitle);
+        var f = document.createTextNode("Author: " + data.articleAuthor);
+        var g = document.createTextNode("Body: " + data.articleBody);
+        var h = document.createTextNode("hasHTML: " + data.hasHTML);
+
+
+        li.appendChild(a);
+        var br1 = document.createElement("br");
+        li.appendChild(br1);
+        li.appendChild(b);
+        var br2 = document.createElement("br");
+        li.appendChild(br2);
+        li.appendChild(c);
+        var br3 = document.createElement("br");
+        li.appendChild(br3);
+        li.appendChild(d);
+        var br4 = document.createElement("br");
+        li.appendChild(br4);
+        li.appendChild(e);
+        var br5 = document.createElement("br");
+        li.appendChild(br5);
+        li.appendChild(f);
+        var br6 = document.createElement("br");
+        li.appendChild(br6);
+        li.appendChild(g);
+        var br7 = document.createElement("br");
+        li.appendChild(br7);
+        li.appendChild(h);
+
+
+        var list = document.getElementById("myUL3");
+        list.insertBefore(li, list.childNodes[0]);
+
+       });
+});
+
 
 //FCM?
 //const messaging = firebase.messaging();

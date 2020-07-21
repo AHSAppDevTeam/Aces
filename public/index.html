@@ -3,44 +3,48 @@
     <head>
         <meta charset="utf-8">
         <title> AHS Mobile App Login Page</title>
-        <!-- The core Firebase JS SDK is always required and must be listed first -->
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
-
     </head>
 
     <body>
+        <div id="feather">
+            <img src="images/feather.png" style="width: 60px;">
+        </div>
+
         <h1>AHS Mobile App Login</h1>
+    
         <div id="loginContainer">
             <input type="email" placeholder="email" id="email"/>
             <input type="password" placeholder="password" id="password"/>
 
             <button onclick="login()" id="login">Login</button>
-            <!--<button onclick="signUp()" id="signUp">Sign Up</button>-->
+            <!-- <button onclick="signUp()" id="signUp">Sign Up</button> -->
             <button onclick="signOut()" id="signOut">Sign Out</button>
-
         </div>
-
-        <script src="server.js"></script>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+        
+        <script src="scripts/server.js"></script>
     </body>
 
     <style>
         body{
-            background-color:#EFEFEF;
+            background-color:#616161;
         }
 
         h1{
-            margin-top: 150px;
+            margin-top: 100px;
             margin-bottom: 35px;
             text-align: center;
         }
+
 
         #loginContainer{
             background-color: white;
             box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 
-            width: 325px;
+            width: 300px;
             height: 200px;
             padding: 15px 15px;
             border-radius: 10px;
@@ -80,7 +84,7 @@
             text-decoration: none;
             display: inline-block;
             font-size: 13px;
-            margin-left: 55px;
+            margin-left: 38px;
             margin-top: 20px;
         }
 
