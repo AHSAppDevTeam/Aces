@@ -81,7 +81,7 @@
                 <button id="addBtn1" class="btn waves-effect grey darken-1"> Add </button>
                 <button id="updateBtn1" class="btn waves-effect grey darken-1"> Update </button>
                 <button id="removeBtn1" class="btn waves-effect grey darken-1"> Remove </button>
-                <button onclick="back2()" class="btn waves-effect grey darken-1" id="back"> Go Back </button>
+                <button onclick="back2()" class="btn waves-effect grey darken-1" id="back">Go to Directory</button>
             </div>      
         </div>
 
@@ -142,6 +142,21 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
         <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+              apiKey: "AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE",
+              authDomain: "arcadia-high-mobile.firebaseapp.com",
+              databaseURL: "https://arcadia-high-mobile.firebaseio.com",
+              projectId: "arcadia-high-mobile",
+              storageBucket: "arcadia-high-mobile.appspot.com",
+              messagingSenderId: "654225823864",
+              appId: "1:654225823864:web:944772a5cadae0c8b7758d"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+          </script>
+          
+        <script>
             $(document).ready(function(){
                 $('select').formSelect();
                 $('.datepicker').datepicker({
@@ -150,6 +165,7 @@
             });
         </script>
         
+        <script src="scripts/auth.js"></script>
         <script src="scripts/bulletin.js"></script>     
     </body>
 

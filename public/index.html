@@ -10,21 +10,48 @@
             <img src="images/feather.png" style="width: 60px;">
         </div>
 
-        <h1>AHS Mobile App Login</h1>
-    
-        <div id="loginContainer">
-            <input type="email" placeholder="email" id="email"/>
-            <input type="password" placeholder="password" id="password"/>
+        <div id="login_div" class="main-div">
+            <h1>AHS Mobile App Login</h1>
+            <div id="loginContainer">
+                <input type="email" placeholder="email" id="email"/>
+                <input type="password" placeholder="password" id="password"/>
 
-            <button onclick="login()" id="login">Login</button>
-            <!-- <button onclick="signUp()" id="signUp">Sign Up</button> -->
-            <button onclick="signOut()" id="signOut">Sign Out</button>
-        </div>
+                <button onclick="login()" id="login">Login</button>
+                <!-- <button onclick="signUp()" id="signUp">Sign Up</button> -->
+                <!-- <button onclick="signOut()" id="signOut">Sign Out</button> -->
+            </div>
+        </div>    
+
+        <div id="user_div" class="loggedin-div">
+            <h1>Welcome!</h1>
+            <div id="loginContainer">
+                <p id="user_para"></p>
+                <button onclick="signOut()" id="signOut">Sign Out</button>
+                <button onclick="back2()" id="next">Go to Directory</button>
+            </div>
+        </div>   
+
         <!-- The core Firebase JS SDK is always required and must be listed first -->
         <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+
+        <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+              apiKey: "AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE",
+              authDomain: "arcadia-high-mobile.firebaseapp.com",
+              databaseURL: "https://arcadia-high-mobile.firebaseio.com",
+              projectId: "arcadia-high-mobile",
+              storageBucket: "arcadia-high-mobile.appspot.com",
+              messagingSenderId: "654225823864",
+              appId: "1:654225823864:web:944772a5cadae0c8b7758d"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+          </script>
         
+        <script src="scripts/auth.js"></script>
         <script src="scripts/server.js"></script>
     </body>
 
@@ -39,15 +66,30 @@
             text-align: center;
         }
 
+        .main-div, .loggedin-div{
+            margin: 0px auto;
+            display: none;
+        }
+
+        /* .main-div input {
+            display: block; 
+        }
+
+        .main-div button {
+            display: block; 
+        } */
 
         #loginContainer{
             background-color: white;
             box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+            font-size: 20px;
+            color:#616161 ;
+            text-align: center;
 
-            width: 300px;
+            width: 290px;
             height: 200px;
             padding: 15px 15px;
-            border-radius: 10px;
+            border-radius: 20px;
             margin: 10px auto;
         }
 
@@ -84,7 +126,7 @@
             text-decoration: none;
             display: inline-block;
             font-size: 13px;
-            margin-left: 38px;
+            /* margin-left: 100px; */
             margin-top: 20px;
         }
 
@@ -99,6 +141,22 @@
             text-decoration: none;
             display: inline-block;
             font-size: 13px;
+            /* margin-left: 90px; */
+            margin-top: 20px;
+        }
+
+        #next{
+            background-color: #B1B1B1;
+            color: white;
+            border: none;
+            font-weight: bold;
+            padding: 15px 32px; 
+            border-radius: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            /* margin-left: 90px; */
             margin-top: 20px;
         }
 

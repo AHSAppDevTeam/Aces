@@ -22,14 +22,31 @@
             <div class="btn-group">
                 <button onclick="homepage()" class="btn waves-effect grey darken-1" id="homepage">Homepage</button>
                 <button onclick="bulletin()" class="btn waves-effect grey darken-1" id="bulletin">Bulletin</button>
-                <button onclick="back1()"  class="btn waves-effect grey darken-1" id="back">Go Back</button>
+                <button onclick="notif()"  class="btn waves-effect grey darken-1" id="notif">Notifications</button>
+                <button onclick="back1()"  class="btn waves-effect grey darken-1" id="back">Go Back to Login</button>
             </div>
         </div>
+
 
          <!-- The core Firebase JS SDK is always required and must be listed first -->
          <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
          <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
          <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+
+         <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+              apiKey: "AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE",
+              authDomain: "arcadia-high-mobile.firebaseapp.com",
+              databaseURL: "https://arcadia-high-mobile.firebaseio.com",
+              projectId: "arcadia-high-mobile",
+              storageBucket: "arcadia-high-mobile.appspot.com",
+              messagingSenderId: "654225823864",
+              appId: "1:654225823864:web:944772a5cadae0c8b7758d"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+          </script>
  
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -40,6 +57,7 @@
             });
         </script>
 
+        <script src="scripts/auth.js"></script>
         <script src="scripts/server.js"></script>
     </body>
 

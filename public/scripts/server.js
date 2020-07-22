@@ -1,56 +1,3 @@
- // Your web app's Firebase configuration
- var firebaseConfig = {
-    apiKey: "AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE",
-    authDomain: "arcadia-high-mobile.firebaseapp.com",
-    databaseURL: "https://arcadia-high-mobile.firebaseio.com",
-    projectId: "arcadia-high-mobile",
-    storageBucket: "arcadia-high-mobile.appspot.com",
-    messagingSenderId: "654225823864",
-    appId: "1:654225823864:web:944772a5cadae0c8b7758d"
-  };
-  
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-    
-const auth = firebase.auth();
-
-//   function signUp(){
-
-//     var email = document.getElementById("email");
-//     var password = document.getElementById("password"); 
-
-//     const promise = auth.createUserWithEmailAndPassword(email.value, password.value);
-//     promise.catch(e => alert(e.message));
-
-//     alert("Signed up.");
-// }
-auth.onAuthStateChanged(function(user){
-    if(user){
-        var email = user.email;
-        alert("Active user: " + email);
-        //is signed in
-    }else{
-        //alert("No active user.")
-        //no user is signed in
-    }
-});
- 
-function login(){
-    var email = document.getElementById("email");
-    var password = document.getElementById("password"); 
-
-    const promise = auth.signInWithEmailAndPassword(email.value, password.value);
-    promise.catch(e => alert(e.message));
-    alert("Signed in with " + email.value + ".");
-    //Take user to a different location or homepage
-    location.replace("toc.html");
-}
-
-function signOut(){
-    auth.signOut();
-    alert("Signed out.");
-}
-
 //move web location
 function homepage(){
     location.replace("homepage.html");
@@ -66,6 +13,10 @@ function back1(){
 
 function back2(){
     location.replace("toc.html");
+}
+
+function notif(){
+    location.replace("notifs.html");
 }
 
 //textarea autoexpand
@@ -152,38 +103,140 @@ addBtn.addEventListener('click', (e) => {
         0: image.value,
     });
 
-    //append a list item to the top of added articles
-    /*var li = document.createElement("li");
-    var input = postId;
-    li.setAttribute("id", input);
+    if(category.value == "asb"){
+        database.ref('homepage').child('asb').once('child_added', function (snapshot) {
+                var data = snapshot.val();
+                var key = snapshot.key;
+                var time = timeConverter(data.articleUnixEpoch); 
+                var li = document.createElement("li");
+        
+                var a = document.createTextNode("ID: " + key);
+                var b = document.createTextNode("isFeatured: " + data.isFeatured);
+                var c = document.createTextNode("Images: " + data.articleImages);
+                var d = document.createTextNode("Date: " + time);
+                var e = document.createTextNode("Title: " + data.articleTitle);
+                var f = document.createTextNode("Author: " + data.articleAuthor);
+                var g = document.createTextNode("Body: " + data.articleBody);
+                var h = document.createTextNode("hasHTML: " + data.hasHTML);
+        
+                li.appendChild(a);
+                var br1 = document.createElement("br");
+                li.appendChild(br1);
+                li.appendChild(b);
+                var br2 = document.createElement("br");
+                li.appendChild(br2);
+                li.appendChild(c);
+                var br3 = document.createElement("br");
+                li.appendChild(br3);
+                li.appendChild(d);
+                var br4 = document.createElement("br");
+                li.appendChild(br4);
+                li.appendChild(e);
+                var br5 = document.createElement("br");
+                li.appendChild(br5);
+                li.appendChild(f);
+                var br6 = document.createElement("br");
+                li.appendChild(br6);
+                li.appendChild(g);
+                var br7 = document.createElement("br");
+                li.appendChild(br7);
+                li.appendChild(h);
+        
+        
+                var list = document.getElementById("myUL1");
+                list.insertBefore(li, list.childNodes[0]);
+        });
+    }
 
-    var a = document.createTextNode("ID: " + input);
-    var b = document.createTextNode("isFeatured: " + isFeatured.value);
-    var c = document.createTextNode("Date: " + timestamp.value);
-    var d = document.createTextNode("Title: " + title.value);
-    var e = document.createTextNode("Author: " + author.value);
-    var f = document.createTextNode("Body: " + body.value);
+    if(category.value == "district"){
+        database.ref('homepage').child('district').once('child_added', function (snapshot) {
+            var data = snapshot.val();
+            var key = snapshot.key;
+            var time = timeConverter(data.articleUnixEpoch); 
+            var li = document.createElement("li");
 
-    li.appendChild(a);
-    var br1 = document.createElement("br");
-    li.appendChild(br1);
-    li.appendChild(b);
-    var br2 = document.createElement("br");
-    li.appendChild(br2);
-    li.appendChild(c);
-    var br3 = document.createElement("br");
-    li.appendChild(br3);
-    li.appendChild(d);
-    var br4 = document.createElement("br");
-    li.appendChild(br4);
-    li.appendChild(e);
-    var br5 = document.createElement("br");
-    li.appendChild(br5);
-    li.appendChild(f);
+            var a = document.createTextNode("ID: " + key);
+            var b = document.createTextNode("isFeatured: " + data.isFeatured);
+            var c = document.createTextNode("Images: " + data.articleImages);
+            var d = document.createTextNode("Date: " + time);
+            var e = document.createTextNode("Title: " + data.articleTitle);
+            var f = document.createTextNode("Author: " + data.articleAuthor);
+            var g = document.createTextNode("Body: " + data.articleBody);
+            var h = document.createTextNode("hasHTML: " + data.hasHTML);
+
+            li.appendChild(a);
+            var br1 = document.createElement("br");
+            li.appendChild(br1);
+            li.appendChild(b);
+            var br2 = document.createElement("br");
+            li.appendChild(br2);
+            li.appendChild(c);
+            var br3 = document.createElement("br");
+            li.appendChild(br3);
+            li.appendChild(d);
+            var br4 = document.createElement("br");
+            li.appendChild(br4);
+            li.appendChild(e);
+            var br5 = document.createElement("br");
+            li.appendChild(br5);
+            li.appendChild(f);
+            var br6 = document.createElement("br");
+            li.appendChild(br6);
+            li.appendChild(g);
+            var br7 = document.createElement("br");
+            li.appendChild(br7);
+            li.appendChild(h);
 
 
-    var list = document.getElementById("myUL");
-    list.insertBefore(li, list.childNodes[0]);*/
+            var list = document.getElementById("myUL2");
+            list.insertBefore(li, list.childNodes[0]);
+        });
+    }
+
+    if(category.value == "sports"){
+        database.ref('homepage').child('sports').once('child_added', function (snapshot) {
+            var data = snapshot.val();
+            var key = snapshot.key;
+            var time = timeConverter(data.articleUnixEpoch); 
+            var li = document.createElement("li");
+
+            var a = document.createTextNode("ID: " + key);
+            var b = document.createTextNode("isFeatured: " + data.isFeatured);
+            var c = document.createTextNode("Images: " + data.articleImages);
+            var d = document.createTextNode("Date: " + time);
+            var e = document.createTextNode("Title: " + data.articleTitle);
+            var f = document.createTextNode("Author: " + data.articleAuthor);
+            var g = document.createTextNode("Body: " + data.articleBody);
+            var h = document.createTextNode("hasHTML: " + data.hasHTML);
+
+            li.appendChild(a);
+            var br1 = document.createElement("br");
+            li.appendChild(br1);
+            li.appendChild(b);
+            var br2 = document.createElement("br");
+            li.appendChild(br2);
+            li.appendChild(c);
+            var br3 = document.createElement("br");
+            li.appendChild(br3);
+            li.appendChild(d);
+            var br4 = document.createElement("br");
+            li.appendChild(br4);
+            li.appendChild(e);
+            var br5 = document.createElement("br");
+            li.appendChild(br5);
+            li.appendChild(f);
+            var br6 = document.createElement("br");
+            li.appendChild(br6);
+            li.appendChild(g);
+            var br7 = document.createElement("br");
+            li.appendChild(br7);
+            li.appendChild(h);
+
+
+            var list = document.getElementById("myUL3");
+            list.insertBefore(li, list.childNodes[0]);
+        });
+    }
 });
 
 
@@ -223,38 +276,8 @@ updateBtn.addEventListener('click', (e) => {
     database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
     }
     database.ref('/homepage/' + category.value + '/' + id.value).update(newData);
-   
 
-    /*var li = document.createElement("li");
-    var input = id.value;
-    li.setAttribute("id", id.value);
-    
-    var a = document.createTextNode("ID: " + id.value);
-    var b = document.createTextNode("isFeatured: " + isFeatured.value);
-    var c = document.createTextNode("Date: " + timestamp.value);
-    var d = document.createTextNode("Title: " + title.value);
-    var e = document.createTextNode("Author: " + author.value);
-    var f = document.createTextNode("Body: " + body.value);
-
-    li.appendChild(a);
-    var br1 = document.createElement("br");
-    li.appendChild(br1);
-    li.appendChild(b);
-    var br2 = document.createElement("br");
-    li.appendChild(br2);
-    li.appendChild(c);
-    var br3 = document.createElement("br");
-    li.appendChild(br3);
-    li.appendChild(d);
-    var br4 = document.createElement("br");
-    li.appendChild(br4);
-    li.appendChild(e);
-    var br5 = document.createElement("br");
-    li.appendChild(br5);
-    li.appendChild(f);
-
-    var oldNode = document.getElementById(id.value);
-    oldNode.parentNode.replaceChild(li, oldNode);*/
+    alert("Please refresh the screen after updating the article!");
 });
     
 removeBtn.addEventListener('click', (e) => {
@@ -267,6 +290,8 @@ removeBtn.addEventListener('click', (e) => {
     .catch(error => {
         console.error(error);
     });
+
+    alert("Please refresh the screen after removing an article!");
 });
 
 //id listener
@@ -297,11 +322,11 @@ function timeConverter(UNIX_timestamp){
     return time;
   }
 
+
 //getting data from the server
-
-database.ref('homepage').child('asb').on('value', function (snapshot) {
+database.ref('homepage').child('asb').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
-
+        //console.log(childSnapshot.val());
         var data = childSnapshot.val();
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
@@ -346,7 +371,7 @@ database.ref('homepage').child('asb').on('value', function (snapshot) {
        });
 });
 
-database.ref('homepage').child('district').on('value', function (snapshot) {
+database.ref('homepage').child('district').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
 
         var data = childSnapshot.val();
@@ -393,7 +418,7 @@ database.ref('homepage').child('district').on('value', function (snapshot) {
        });
 });
 
-database.ref('homepage').child('sports').on('value', function (snapshot) {
+database.ref('homepage').child('sports').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
 
         var data = childSnapshot.val();
@@ -440,7 +465,3 @@ database.ref('homepage').child('sports').on('value', function (snapshot) {
 
        });
 });
-
-
-//FCM?
-//const messaging = firebase.messaging();

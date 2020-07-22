@@ -1,57 +1,3 @@
- // Your web app's Firebase configuration
- var firebaseConfig = {
-    apiKey: "AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE",
-    authDomain: "arcadia-high-mobile.firebaseapp.com",
-    databaseURL: "https://arcadia-high-mobile.firebaseio.com",
-    projectId: "arcadia-high-mobile",
-    storageBucket: "arcadia-high-mobile.appspot.com",
-    messagingSenderId: "654225823864",
-    appId: "1:654225823864:web:944772a5cadae0c8b7758d"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-
-  const auth = firebase.auth();
-
-//   function signUp(){
-
-//     var email = document.getElementById("email");
-//     var password = document.getElementById("password"); 
-
-//     const promise = auth.createUserWithEmailAndPassword(email.value, password.value);
-//     promise.catch(e => alert(e.message));
-
-//     alert("Signed up.");
-// }
-
- 
-function login(){
-    var email = document.getElementById("email");
-    var password = document.getElementById("password"); 
-
-    const promise = auth.signInWithEmailAndPassword(email.value, password.value);
-    promise.catch(e => alert(e.message));
-    alert("Signed in with " + email.value + ".");
-    //Take user to a different location or homepage
-    location.replace("toc.html");
-}
-
-function signOut(){
-    auth.signOut();
-    alert("Signed out.");
-}
-
-auth.onAuthStateChanged(function(user){
-    if(user){
-        var email = user.email;
-        alert("Active user: " + email);
-        //is signed in
-    }else{
-        //alert("No active user.")
-        //no user is signed in
-    }
-});
-
 //move web location
 function homepage(){
     location.replace("homepage.html");
@@ -67,6 +13,10 @@ function back1(){
 
 function back2(){
     location.replace("toc.html");
+}
+
+function notif(){
+    location.replace("notifs.html");
 }
 
 //textarea autoexpand
@@ -227,7 +177,7 @@ function timeConverter(UNIX_timestamp){
   }
 
 //getting data from the server
-database.ref('bulletin').child('athletics').on('value', function (snapshot) {
+database.ref('bulletin').child('athletics').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
 
         var data = childSnapshot.val();
@@ -269,7 +219,7 @@ database.ref('bulletin').child('athletics').on('value', function (snapshot) {
     });
 });
 
-database.ref('bulletin').child('colleges').on('value', function (snapshot) {
+database.ref('bulletin').child('colleges').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
@@ -311,7 +261,7 @@ database.ref('bulletin').child('colleges').on('value', function (snapshot) {
        });
 });
 
-database.ref('bulletin').child('events').on('value', function (snapshot) {
+database.ref('bulletin').child('events').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
@@ -352,7 +302,7 @@ database.ref('bulletin').child('events').on('value', function (snapshot) {
        });
 });
 
-database.ref('bulletin').child('others').on('value', function (snapshot) {
+database.ref('bulletin').child('others').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
@@ -394,7 +344,7 @@ database.ref('bulletin').child('others').on('value', function (snapshot) {
        });
 });
 
-database.ref('bulletin').child('reference').on('value', function (snapshot) {
+database.ref('bulletin').child('reference').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
@@ -436,7 +386,7 @@ database.ref('bulletin').child('reference').on('value', function (snapshot) {
        });
 });
 
-database.ref('bulletin').child('seniors').on('value', function (snapshot) {
+database.ref('bulletin').child('seniors').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
