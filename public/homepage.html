@@ -30,9 +30,9 @@
                             <div class="input-field col s6">
                                 <select id="category">
                                     <option value="" disabled selected>Choose your option</option>
-                                    <option value="asb">ASB</option>
-                                    <option value="district">District</option>
-                                    <option value="sports">Sports</option>
+                                    <option value="ASB">ASB</option>
+                                    <option value="District">District</option>
+                                    <option value="General_Info">General Info</option>
                                 </select>
                                 <label>Article Category</label>
                             </div>
@@ -49,17 +49,10 @@
                         </div>
 
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
                                 <label for="id">ID (for update/remove)</label><br>
                                 <input type="text" name="id" id="id"/>
                             </div>
-                            <div class="input-field col s6">
-                                <label for="image">Image Link</label><br>
-                                <input type="text" name="image" id="image"/>
-                            </div>
-                        </div>
-
-                        <div class="row">
                             <div class="input-field col s4">
                                 <label for="timestamp">Date</label><br>
                                 <input type="text" class="datepicker" id="timestamp">
@@ -68,9 +61,20 @@
                                 <label for="title">Article Title</label><br>
                                 <input type="text" name="title" id="title"/>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="input-field col s4">
                                 <label for="author">Author</label><br>
                                 <input type="text" name="author" id="author"/>
+                            </div>
+                            <div class="input-field col s4">
+                                <label for="image">Image Link</label><br>
+                                <input type="text" name="image" id="image"/>
+                            </div>
+                            <div class="input-field col s4">
+                                <label for="video">Video ID</label><br>
+                                <input type="text" name="video" id="video"/>
                             </div>
                         </div>
 
@@ -118,7 +122,7 @@
 
                 <div id="addedArticles" class="col s12">
                     <div id="sectionTitles">   
-                    <p>Sports</p>
+                    <p>General Info</p>
                     </div>
                     <ul id="myUL3" class="collection"></ul>
                 </div>
@@ -131,6 +135,8 @@
         <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
 
+        <!-- Load the Firebase SDKs before loading this file
+        <script src="/__/firebase/init.js"></script> -->
         <script>
             // Your web app's Firebase configuration
             var firebaseConfig = {
@@ -158,7 +164,7 @@
             });
         </script>
 
-        <script src="scripts/auth.js"></script>
+        <script src="scripts/persistauth.js"></script>
         <script src="scripts/server.js"></script>
     </body>
 

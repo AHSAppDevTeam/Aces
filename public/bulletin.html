@@ -28,44 +28,44 @@
                     <form class="col s12">
 
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s7">
                                 <select id="category">
                                     <option value="" disabled selected>Choose your option</option>
-                                    <option value="athletics">Athletics</option>
-                                    <option value="colleges">Colleges</option>
-                                    <option value="events">Events</option>
-                                    <option value="others">Others</option>
-                                    <option value="reference">Reference</option>
-                                    <option value="seniors">Seniors</option>
+                                    <option value="Academics">Academics</option>
+                                    <option value="Athletics">Athletics</option>
+                                    <option value="Clubs">Clubs</option>
+                                    <option value="Colleges">Colleges</option>
+                                    <option value="Reference">Reference</option>
+                                    <!-- <option value="seniors">Seniors</option> -->
                                 </select>
                                 <label>Article Category</label>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s7">
                                 <label for="id">ID (for update/remove)</label><br>
                                 <input type="text" name="id" id="id"/>
                             </div>
-                            <div class="input-field col s6">
+                            <!-- <div class="input-field col s6">
                                 <label for="image">Image Link</label><br>
                                 <input type="text" name="image" id="image"/>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="row">
-                            <div class="input-field col s4">
+                            <div class="input-field col s6">
                                 <label for="timestamp">Date</label><br>
                                 <input type="text" class="datepicker" id="timestamp">
                             </div>
-                            <div class="input-field col s4">
+                            <div class="input-field col s6">
                                 <label for="title">Article Title</label><br>
                                 <input type="text" name="title" id="title"/>
                             </div>
-                            <div class="input-field col s4">
+                            <!-- <div class="input-field col s4">
                                 <label for="author">Author</label><br>
                                 <input type="text" name="author" id="author"/>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="row">
@@ -90,28 +90,28 @@
             <div class="row">
                 <div id="addedArticles" class="col s12">
                     <div id="sectionTitles">   
-                        <p>Athletics</p>
+                        <p>Academics</p>
                     </div>
                     <ul id="myUL1" class="collection"></ul>
                 </div>
 
                 <div id="addedArticles" class="col s12">
                     <div id="sectionTitles">   
-                        <p>Colleges</p>
+                        <p>Athletics</p>
                     </div>
                     <ul id="myUL2" class="collection"></ul>
                 </div>
 
                 <div id="addedArticles" class="col s12">
                     <div id="sectionTitles">   
-                        <p>Events</p>
+                        <p>Clubs</p>
                     </div>
                     <ul id="myUL3" class="collection"></ul>
                 </div>
 
                 <div id="addedArticles" class="col s12">
                     <div id="sectionTitles">   
-                        <p>Others</p>
+                        <p>Colleges</p>
                     </div>
                     <ul id="myUL4" class="collection"></ul>
                 </div>
@@ -122,13 +122,13 @@
                     </div>
                     <ul id="myUL5" class="collection"></ul>
                 </div>
-
+<!-- 
                 <div id="addedArticles" class="col s12">
                     <div id="sectionTitles">   
                         <p>Seniors</p>
                     </div>
                     <ul id="myUL6" class="collection"></ul>
-                </div>
+                </div> -->
             </div>
         </div>
             
@@ -141,6 +141,8 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+       <!-- Load the Firebase SDKs before loading this file
+       <script src="/__/firebase/init.js"></script> -->
         <script>
             // Your web app's Firebase configuration
             var firebaseConfig = {
@@ -165,7 +167,7 @@
             });
         </script>
         
-        <script src="scripts/auth.js"></script>
+        <script src="scripts/persistauth.js"></script>
         <script src="scripts/bulletin.js"></script>     
     </body>
 

@@ -58,8 +58,8 @@ const category = document.getElementById('category');
 //const number = document.getElementById('number');
 const id = document.getElementById('id');
 const title = document.getElementById('title');
-const author = document.getElementById('author');
-const image = document.getElementById('image');
+// const author = document.getElementById('author');
+// const image = document.getElementById('image');
 const timestamp = document.getElementById('timestamp');
 const body = document.getElementById('textarea1');
 //const imgNum = document.getElementById('imgNum');
@@ -82,16 +82,18 @@ addBtn1.addEventListener('click', (e) => {
     var postId = newPostRef.key;
 
     newPostRef.set({
-        articleAuthor: author.value,
+        // articleAuthor: author.value,
         articleBody: body.value,
         articleTitle: title.value,
         articleUnixEpoch: unixTimestamp,
         hasHTML: htmlValue,
     });
 
-    database.ref('/bulletin/' + category.value + '/' + postId + '/articleImages/').set({
-        0: image.value,
-    });
+    alert("Please refresh the screen after adding the article!");
+
+    // database.ref('/bulletin/' + category.value + '/' + postId + '/articleImages/').set({
+    //     0: image.value,
+    // });
 });
 
 var counter = 0; 
@@ -103,26 +105,27 @@ updateBtn1.addEventListener('click', (e) => {
     var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));  
 
     const newData = {
-        articleAuthor: author.value,
+        // articleAuthor: author.value,
         articleBody: body.value,
         articleTitle: title.value,
         articleUnixEpoch: unixTimestamp,
         hasHTML: htmlValue,
     };
 
-    const newImg1 = {
-        1: image.value,
-    };
+    // const newImg1 = {
+    //     1: image.value,
+    // };
 
-    const newImg2 = {
-        2: image.value,
-    };
-    if(counter == 1){
-        database.ref('/bulletin/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
-    }else{
-    database.ref('/bulletin/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
-    }
+    // const newImg2 = {
+    //     2: image.value,
+    // };
+    // if(counter == 1){
+    //     database.ref('/bulletin/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
+    // }else{
+    // database.ref('/bulletin/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
+    // }
     database.ref('/bulletin/' + category.value + '/' + id.value).update(newData);
+    alert("Please refresh the screen after updating the article!");
 });
 
 removeBtn1.addEventListener('click', (e) => {
@@ -135,36 +138,39 @@ removeBtn1.addEventListener('click', (e) => {
     .catch(error => {
         console.error(error);
     });
+    
+    alert("Please refresh the screen after removing an article!");
 });
 
 //id listener
 var postId; 
 
-if(category.value = "athletics"){
-    database.ref('bulletin').child('athletics').once('child_changed', snapshot => {
+if(category.value = "Academics"){
+    database.ref('bulletin').child('Academics').once('child_changed', snapshot => {
         postId = snapshot.key;
     });
-}else if(category.value = "colleges"){
-    database.ref('bulletin').child('colleges').once('child_changed', snapshot => {
+}else if(category.value = "Athletics"){
+    database.ref('bulletin').child('Athletics').once('child_changed', snapshot => {
         postId = snapshot.key; 
     });
-}else if(category.value = "events"){
-    database.ref('bulletin').child('events').once('child_changed', snapshot => {
+}else if(category.value = "Clubs"){
+    database.ref('bulletin').child('Clubs').once('child_changed', snapshot => {
         postId = snapshot.key; 
     });
-}else if(category.value = "others"){
-    database.ref('bulletin').child('others').once('child_changed', snapshot => {
-        postId = snapshot.key; 
-    });
-}else if(category.value = "reference"){
-    database.ref('bulletin').child('reference').once('child_changed', snapshot => {
+}else if(category.value = "Colleges"){
+    database.ref('bulletin').child('Colleges').once('child_changed', snapshot => {
         postId = snapshot.key; 
     });
 }else{
-    database.ref('bulletin').child('seniors').once('child_changed', snapshot => {
+    database.ref('bulletin').child('Reference').once('child_changed', snapshot => {
         postId = snapshot.key; 
     });
 }
+// else{
+//     database.ref('bulletin').child('seniors').once('child_changed', snapshot => {
+//         postId = snapshot.key; 
+//     });
+// }
 
 function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
@@ -177,7 +183,7 @@ function timeConverter(UNIX_timestamp){
   }
 
 //getting data from the server
-database.ref('bulletin').child('athletics').once('value', function (snapshot) {
+database.ref('bulletin').child('Academics').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
 
         var data = childSnapshot.val();
@@ -186,26 +192,26 @@ database.ref('bulletin').child('athletics').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("Images: " + data.articleImages);
+        // var b = document.createTextNode("Images: " + data.articleImages);
         var c = document.createTextNode("Date: " + time);
         var d = document.createTextNode("Title: " + data.articleTitle);
-        var e = document.createTextNode("Author: " + data.articleAuthor);
+        // var e = document.createTextNode("Author: " + data.articleAuthor);
         var f = document.createTextNode("Body: " + data.articleBody);
         var g = document.createTextNode("hasHTML: " + data.hasHTML);
 
         li.appendChild(a);
-        var br1 = document.createElement("br");
-        li.appendChild(br1);
-        li.appendChild(b);
+        // var br1 = document.createElement("br");
+        // li.appendChild(br1);
+        // li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        var br4 = document.createElement("br");
-        li.appendChild(br4);
-        li.appendChild(e);
+        // var br4 = document.createElement("br");
+        // li.appendChild(br4);
+        // li.appendChild(e);
         var br5 = document.createElement("br");
         li.appendChild(br5);
         li.appendChild(f);
@@ -219,7 +225,7 @@ database.ref('bulletin').child('athletics').once('value', function (snapshot) {
     });
 });
 
-database.ref('bulletin').child('colleges').once('value', function (snapshot) {
+database.ref('bulletin').child('Athletics').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
@@ -227,27 +233,27 @@ database.ref('bulletin').child('colleges').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("Images: " + data.articleImages);
+        // var b = document.createTextNode("Images: " + data.articleImages);
         var c = document.createTextNode("Date: " + time);
         var d = document.createTextNode("Title: " + data.articleTitle);
-        var e = document.createTextNode("Author: " + data.articleAuthor);
+        // var e = document.createTextNode("Author: " + data.articleAuthor);
         var f = document.createTextNode("Body: " + data.articleBody);
         var g = document.createTextNode("hasHTML: " + data.hasHTML);
 
 
         li.appendChild(a);
-        var br1 = document.createElement("br");
-        li.appendChild(br1);
-        li.appendChild(b);
+        // var br1 = document.createElement("br");
+        // li.appendChild(br1);
+        // li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        var br4 = document.createElement("br");
-        li.appendChild(br4);
-        li.appendChild(e);
+        // var br4 = document.createElement("br");
+        // li.appendChild(br4);
+        // li.appendChild(e);
         var br5 = document.createElement("br");
         li.appendChild(br5);
         li.appendChild(f);
@@ -261,7 +267,7 @@ database.ref('bulletin').child('colleges').once('value', function (snapshot) {
        });
 });
 
-database.ref('bulletin').child('events').once('value', function (snapshot) {
+database.ref('bulletin').child('Clubs').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
@@ -269,27 +275,27 @@ database.ref('bulletin').child('events').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("Images: " + data.articleImages);
+        // var b = document.createTextNode("Images: " + data.articleImages);
         var c = document.createTextNode("Date: " + time);
         var d = document.createTextNode("Title: " + data.articleTitle);
-        var e = document.createTextNode("Author: " + data.articleAuthor);
+        // var e = document.createTextNode("Author: " + data.articleAuthor);
         var f = document.createTextNode("Body: " + data.articleBody);
         var g = document.createTextNode("hasHTML: " + data.hasHTML);
 
 
         li.appendChild(a);
-        var br1 = document.createElement("br");
-        li.appendChild(br1);
-        li.appendChild(b);
+        // var br1 = document.createElement("br");
+        // li.appendChild(br1);
+        // li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        var br4 = document.createElement("br");
-        li.appendChild(br4);
-        li.appendChild(e);
+        // var br4 = document.createElement("br");
+        // li.appendChild(br4);
+        // li.appendChild(e);
         var br5 = document.createElement("br");
         li.appendChild(br5);
         li.appendChild(f);
@@ -302,7 +308,7 @@ database.ref('bulletin').child('events').once('value', function (snapshot) {
        });
 });
 
-database.ref('bulletin').child('others').once('value', function (snapshot) {
+database.ref('bulletin').child('Colleges').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
@@ -310,27 +316,27 @@ database.ref('bulletin').child('others').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("Images: " + data.articleImages);
+        // var b = document.createTextNode("Images: " + data.articleImages);
         var c = document.createTextNode("Date: " + time);
         var d = document.createTextNode("Title: " + data.articleTitle);
-        var e = document.createTextNode("Author: " + data.articleAuthor);
+        // var e = document.createTextNode("Author: " + data.articleAuthor);
         var f = document.createTextNode("Body: " + data.articleBody);
         var g = document.createTextNode("hasHTML: " + data.hasHTML);
 
 
         li.appendChild(a);
-        var br1 = document.createElement("br");
-        li.appendChild(br1);
-        li.appendChild(b);
+        // var br1 = document.createElement("br");
+        // li.appendChild(br1);
+        // li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        var br4 = document.createElement("br");
-        li.appendChild(br4);
-        li.appendChild(e);
+        // var br4 = document.createElement("br");
+        // li.appendChild(br4);
+        // li.appendChild(e);
         var br5 = document.createElement("br");
         li.appendChild(br5);
         li.appendChild(f);
@@ -344,7 +350,7 @@ database.ref('bulletin').child('others').once('value', function (snapshot) {
        });
 });
 
-database.ref('bulletin').child('reference').once('value', function (snapshot) {
+database.ref('bulletin').child('Reference').once('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot){
         var data = childSnapshot.val();
         var key = childSnapshot.key;
@@ -352,27 +358,27 @@ database.ref('bulletin').child('reference').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("Images: " + data.articleImages);
+        // var b = document.createTextNode("Images: " + data.articleImages);
         var c = document.createTextNode("Date: " + time);
         var d = document.createTextNode("Title: " + data.articleTitle);
-        var e = document.createTextNode("Author: " + data.articleAuthor);
+        // var e = document.createTextNode("Author: " + data.articleAuthor);
         var f = document.createTextNode("Body: " + data.articleBody);
         var g = document.createTextNode("hasHTML: " + data.hasHTML);
 
 
         li.appendChild(a);
-        var br1 = document.createElement("br");
-        li.appendChild(br1);
-        li.appendChild(b);
+        // var br1 = document.createElement("br");
+        // li.appendChild(br1);
+        // li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        var br4 = document.createElement("br");
-        li.appendChild(br4);
-        li.appendChild(e);
+        // var br4 = document.createElement("br");
+        // li.appendChild(br4);
+        // li.appendChild(e);
         var br5 = document.createElement("br");
         li.appendChild(br5);
         li.appendChild(f);
@@ -386,44 +392,44 @@ database.ref('bulletin').child('reference').once('value', function (snapshot) {
        });
 });
 
-database.ref('bulletin').child('seniors').once('value', function (snapshot) {
-    snapshot.forEach(function (childSnapshot){
-        var data = childSnapshot.val();
-        var key = childSnapshot.key;
-        var time = timeConverter(data.articleUnixEpoch); 
-        var li = document.createElement("li");
+// database.ref('bulletin').child('seniors').once('value', function (snapshot) {
+//     snapshot.forEach(function (childSnapshot){
+//         var data = childSnapshot.val();
+//         var key = childSnapshot.key;
+//         var time = timeConverter(data.articleUnixEpoch); 
+//         var li = document.createElement("li");
 
-        var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("Images: " + data.articleImages);
-        var c = document.createTextNode("Date: " + time);
-        var d = document.createTextNode("Title: " + data.articleTitle);
-        var e = document.createTextNode("Author: " + data.articleAuthor);
-        var f = document.createTextNode("Body: " + data.articleBody);
-        var g = document.createTextNode("hasHTML: " + data.hasHTML);
-
-
-        li.appendChild(a);
-        var br1 = document.createElement("br");
-        li.appendChild(br1);
-        li.appendChild(b);
-        var br2 = document.createElement("br");
-        li.appendChild(br2);
-        li.appendChild(c);
-        var br3 = document.createElement("br");
-        li.appendChild(br3);
-        li.appendChild(d);
-        var br4 = document.createElement("br");
-        li.appendChild(br4);
-        li.appendChild(e);
-        var br5 = document.createElement("br");
-        li.appendChild(br5);
-        li.appendChild(f);
-        var br6 = document.createElement("br");
-        li.appendChild(br6);
-        li.appendChild(g);
+//         var a = document.createTextNode("ID: " + key);
+//         // var b = document.createTextNode("Images: " + data.articleImages);
+//         var c = document.createTextNode("Date: " + time);
+//         var d = document.createTextNode("Title: " + data.articleTitle);
+//         // var e = document.createTextNode("Author: " + data.articleAuthor);
+//         var f = document.createTextNode("Body: " + data.articleBody);
+//         var g = document.createTextNode("hasHTML: " + data.hasHTML);
 
 
-        var list = document.getElementById("myUL6");
-        list.insertBefore(li, list.childNodes[0]);
-       });
-});
+//         li.appendChild(a);
+//         // var br1 = document.createElement("br");
+//         // li.appendChild(br1);
+//         // li.appendChild(b);
+//         var br2 = document.createElement("br");
+//         li.appendChild(br2);
+//         li.appendChild(c);
+//         var br3 = document.createElement("br");
+//         li.appendChild(br3);
+//         li.appendChild(d);
+//         // var br4 = document.createElement("br");
+//         // li.appendChild(br4);
+//         // li.appendChild(e);
+//         var br5 = document.createElement("br");
+//         li.appendChild(br5);
+//         li.appendChild(f);
+//         var br6 = document.createElement("br");
+//         li.appendChild(br6);
+//         li.appendChild(g);
+
+
+//         var list = document.getElementById("myUL6");
+//         list.insertBefore(li, list.childNodes[0]);
+//        });
+// });
