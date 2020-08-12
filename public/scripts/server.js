@@ -155,8 +155,7 @@ addBtn.addEventListener('click', (e) => {
     //         0: video.value,
     //     });
     // }
-
-    alert("Please refresh the screen after adding the article!");
+    M.toast({html: 'Added Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
 
 
@@ -215,7 +214,7 @@ updateBtn.addEventListener('click', (e) => {
     
     database.ref('/homepage/' + category.value + '/' + id.value).update(newData);
 
-    alert("Please refresh the screen after updating the article!");
+    M.toast({html: 'Updated Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
 
     
@@ -230,7 +229,7 @@ removeBtn.addEventListener('click', (e) => {
         console.error(error);
     });
 
-    window.alert("Please refresh the screen after removing an article!");
+    M.toast({html: 'Removed Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
 
 //id listener
@@ -272,10 +271,10 @@ database.ref('homepage').child('ASB').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("isFeatured: " + data.isFeatured);
+        var b = document.createTextNode("Title: " + data.articleTitle);
         var c = document.createTextNode("Images: " + data.articleImages);
         var d = document.createTextNode("Date: " + time);
-        var e = document.createTextNode("Title: " + data.articleTitle);
+        var e = document.createTextNode("isFeatured: " + data.isFeatured);
         var f = document.createTextNode("Author: " + data.articleAuthor);
         var g = document.createTextNode("Body: " + data.articleBody);
         var h = document.createTextNode("hasHTML: " + data.hasHTML);
@@ -324,14 +323,15 @@ database.ref('homepage').child('District').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("isFeatured: " + data.isFeatured);
+        var b = document.createTextNode("Title: " + data.articleTitle);
         var c = document.createTextNode("Images: " + data.articleImages);
         var d = document.createTextNode("Date: " + time);
-        var e = document.createTextNode("Title: " + data.articleTitle);
+        var e = document.createTextNode("isFeatured: " + data.isFeatured);
         var f = document.createTextNode("Author: " + data.articleAuthor);
         var g = document.createTextNode("Body: " + data.articleBody);
         var h = document.createTextNode("hasHTML: " + data.hasHTML);
         var i = document.createTextNode("Video IDs: " + data.articleVideoIDs);
+
 
         li.appendChild(a);
         var br1 = document.createElement("br");
@@ -375,10 +375,10 @@ database.ref('homepage').child('General_Info').once('value', function (snapshot)
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        var b = document.createTextNode("isFeatured: " + data.isFeatured);
+        var b = document.createTextNode("Title: " + data.articleTitle);
         var c = document.createTextNode("Images: " + data.articleImages);
         var d = document.createTextNode("Date: " + time);
-        var e = document.createTextNode("Title: " + data.articleTitle);
+        var e = document.createTextNode("isFeatured: " + data.isFeatured);
         var f = document.createTextNode("Author: " + data.articleAuthor);
         var g = document.createTextNode("Body: " + data.articleBody);
         var h = document.createTextNode("hasHTML: " + data.hasHTML);

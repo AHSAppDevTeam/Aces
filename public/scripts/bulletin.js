@@ -89,7 +89,7 @@ addBtn1.addEventListener('click', (e) => {
         hasHTML: htmlValue,
     });
 
-    alert("Please refresh the screen after adding the article!");
+    M.toast({html: 'Added Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 
     // database.ref('/bulletin/' + category.value + '/' + postId + '/articleImages/').set({
     //     0: image.value,
@@ -125,7 +125,8 @@ updateBtn1.addEventListener('click', (e) => {
     // database.ref('/bulletin/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
     // }
     database.ref('/bulletin/' + category.value + '/' + id.value).update(newData);
-    alert("Please refresh the screen after updating the article!");
+
+    M.toast({html: 'Updated Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
 
 removeBtn1.addEventListener('click', (e) => {
@@ -139,7 +140,7 @@ removeBtn1.addEventListener('click', (e) => {
         console.error(error);
     });
     
-    alert("Please refresh the screen after removing an article!");
+    M.toast({html: 'Removed Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
 
 //id listener
@@ -192,32 +193,24 @@ database.ref('bulletin').child('Academics').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        // var b = document.createTextNode("Images: " + data.articleImages);
+        var b = document.createTextNode("Title: " + data.articleTitle);
         var c = document.createTextNode("Date: " + time);
-        var d = document.createTextNode("Title: " + data.articleTitle);
-        // var e = document.createTextNode("Author: " + data.articleAuthor);
-        var f = document.createTextNode("Body: " + data.articleBody);
-        var g = document.createTextNode("hasHTML: " + data.hasHTML);
+        var d = document.createTextNode("Body: " + data.articleBody);
+        var e = document.createTextNode("hasHTML: " + data.hasHTML);
 
         li.appendChild(a);
-        // var br1 = document.createElement("br");
-        // li.appendChild(br1);
-        // li.appendChild(b);
+        var br1 = document.createElement("br");
+        li.appendChild(br1);
+        li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        // var br4 = document.createElement("br");
-        // li.appendChild(br4);
-        // li.appendChild(e);
-        var br5 = document.createElement("br");
-        li.appendChild(br5);
-        li.appendChild(f);
-        var br6 = document.createElement("br");
-        li.appendChild(br6);
-        li.appendChild(g);
+        var br4 = document.createElement("br");
+        li.appendChild(br4);
+        li.appendChild(e);
 
 
         var list = document.getElementById("myUL1");
@@ -233,33 +226,25 @@ database.ref('bulletin').child('Athletics').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        // var b = document.createTextNode("Images: " + data.articleImages);
+        var b = document.createTextNode("Title: " + data.articleTitle);
         var c = document.createTextNode("Date: " + time);
-        var d = document.createTextNode("Title: " + data.articleTitle);
-        // var e = document.createTextNode("Author: " + data.articleAuthor);
-        var f = document.createTextNode("Body: " + data.articleBody);
-        var g = document.createTextNode("hasHTML: " + data.hasHTML);
-
+        var d = document.createTextNode("Body: " + data.articleBody);
+        var e = document.createTextNode("hasHTML: " + data.hasHTML);
 
         li.appendChild(a);
-        // var br1 = document.createElement("br");
-        // li.appendChild(br1);
-        // li.appendChild(b);
+        var br1 = document.createElement("br");
+        li.appendChild(br1);
+        li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        // var br4 = document.createElement("br");
-        // li.appendChild(br4);
-        // li.appendChild(e);
-        var br5 = document.createElement("br");
-        li.appendChild(br5);
-        li.appendChild(f);
-        var br6 = document.createElement("br");
-        li.appendChild(br6);
-        li.appendChild(g);
+        var br4 = document.createElement("br");
+        li.appendChild(br4);
+        li.appendChild(e);
+
 
 
         var list = document.getElementById("myUL2");
@@ -275,33 +260,25 @@ database.ref('bulletin').child('Clubs').once('value', function (snapshot) {
         var li = document.createElement("li");
 
         var a = document.createTextNode("ID: " + key);
-        // var b = document.createTextNode("Images: " + data.articleImages);
+        var b = document.createTextNode("Title: " + data.articleTitle);
         var c = document.createTextNode("Date: " + time);
-        var d = document.createTextNode("Title: " + data.articleTitle);
-        // var e = document.createTextNode("Author: " + data.articleAuthor);
-        var f = document.createTextNode("Body: " + data.articleBody);
-        var g = document.createTextNode("hasHTML: " + data.hasHTML);
-
+        var d = document.createTextNode("Body: " + data.articleBody);
+        var e = document.createTextNode("hasHTML: " + data.hasHTML);
 
         li.appendChild(a);
-        // var br1 = document.createElement("br");
-        // li.appendChild(br1);
-        // li.appendChild(b);
+        var br1 = document.createElement("br");
+        li.appendChild(br1);
+        li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        // var br4 = document.createElement("br");
-        // li.appendChild(br4);
-        // li.appendChild(e);
-        var br5 = document.createElement("br");
-        li.appendChild(br5);
-        li.appendChild(f);
-        var br6 = document.createElement("br");
-        li.appendChild(br6);
-        li.appendChild(g);
+        var br4 = document.createElement("br");
+        li.appendChild(br4);
+        li.appendChild(e);
+
 
         var list = document.getElementById("myUL3");
         list.insertBefore(li, list.childNodes[0]);

@@ -3,20 +3,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Push Notifications</title>
+    <title>Content Editing System: Push Notifications</title>
 
+
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 
 <body>
-    <p id="token"></p>
-    <div class="input-field center">
-        <button onclick="back()" class="btn waves-effect grey darken-1">Go Back</button>
-    </div> 
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red darken-4">
+          <i class="large material-icons">keyboard_arrow_up</i>
+        </a>
+    </div>
+
+        <nav class="white">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">
+                    <img src="images/peacockfeather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
+                </a>
+                <a href="#" id ="navTitle" class="brand-logo" style="margin-left: 85px;">Content Editing System: Push Notifications</a>
+            </div>
+        </nav>
+    <!-- <p id="token"></p> -->
+
+        <div id="main">
+            <div id= "form">
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                                <div class="input-field col s6">
+                                    <label for="notifTitle">Notification Title</label><br>
+                                    <input type="text" name="notifTitle" id="notifTitle"/>
+                                </div>
+
+                                <div class="input-field col s6">
+                                    <label for="notifID">Article ID (for clicking on notif)</label><br>
+                                    <input type="text" name="notifID" id="notifID"/>
+                                </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <select id="topic">
+                                    <option value="" disabled selected>Choose topic:</option>
+                                    <option value="mandatory">Mandatory</option>
+                                    <option value="general">General</option>
+                                    <option value="district">District</option>
+                                    <option value="asb">ASB</option>
+                                    <option value="bulletin">Bulletin</option>
+                                </select>
+                                <label>Topics</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="notifBody" class="materialize-textarea" name="notifBody"></textarea>
+                                <label for="notifBody">Notification Body</label>
+                            </div> 
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s7">
+                                <label for="id">Notification ID (for remove only)</label><br>
+                                <input type="text" name="id" id="id"/>
+                            </div> 
+                        </div>
+
+                    </form>
+                </div> 
+            </div>
+        </div> 
+                    <div class="input-field center">
+                <button id='postnotif' class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Send Notification</span></button>
+                <button id="removeBtn1" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Remove</span></button>
+                <button onclick="back()" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Go to Directory</span></button>
+            </div> 
+
+        <div id="feed" class="container">
+            <div class="row">
+                <div id="addedArticles" class="col s12">
+                    <div id="sectionTitles">   
+                        <p>Database | Notifications</p>
+                    </div>
+                    <ul id="myUL1" class="collection"></ul>
+                </div>
+            </div>
+        </div>
 
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>
 
     <script>
@@ -81,6 +160,41 @@
 
         IntitalizeFireBaseMessaging();
     </script>
+    
+    <script src=https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#postnotif').click(function(){
+                var settings = {
+                    "url": "https://fcm.googleapis.com/fcm/send",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Authorization": "key=AAAAmFLl2Hg:APA91bE_LA-QY1JMJJjQpr_HGsCkcizU3sl_uNXI2inT1LgSXGaSOMbevOjRUzITq_8e8Tk2qLioUyMUdWQ2Im-92qhbgKhLG3PvQA8luQWmBtZ2NKZgYs4dM9kwsyDC-ubb5asSM3td",
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify({"notification":{"title": $('#notifTitle').val(),"body": $('#notifBody').val()},"data":{"articleID": $('#notifID').val()},"to": "/topics/" + $('#topic').val()}),
+                    };
+
+                    $.ajax(settings).done(function (response) {
+                        console.log(response);
+                    });
+            });
+        });
+    </script>
+    
+            <script>
+                $(document).ready(function(){
+                    $('select').formSelect();
+                    $('.fixed-action-btn').floatingActionButton().click(moveUp);
+
+                    function moveUp(){
+                        $(window).scrollTop(0);
+                    }
+                });
+            </script>
+
 
     <script src="scripts/persistauth.js"></script>
     <script src="scripts/notifs.js"></script>
@@ -90,5 +204,87 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
+
+<style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        
+        body{
+            background-color: #EFEFEF;
+        }
+
+        h1{
+            font-size: 25px;
+            margin-top: 20px;
+            margin-bottom: 1px;
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        #navTitle{
+            font-size: 25px;
+            font-family: 'Times New Roman', Times, serif;
+            color: darkred;
+        }
+
+        #main{
+            width: 600px; 
+            margin: 10px auto; 
+            margin-top: 30px;
+            background-color: white;
+            border-radius: 50px;
+            display: ruby;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #form{
+                width: 600px;
+                box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+                /* border: solid 10px #EBEBEB; */
+                border: solid 7px darkred;
+                border-radius: 50px;
+                padding: 1rem;
+            }
+            
+        #feed{
+            margin-top: 50px;
+        }
+
+        p {
+            text-align: center;
+            color: darkred;
+        }
+
+        #sectionTitles{
+            font-size: 20px;
+            font-family: 'Times New Roman', Times, serif;
+            margin-top: 50px;
+        }
+
+        ul {
+            margin:auto;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li{
+            padding: 2rem;
+            background-color: white;
+            border: solid 2px #EBEBEB;
+            font-size: 15px;
+            max-height: 100px;
+            overflow: scroll;
+            color: darkred;
+        }
+
+        button{
+            margin-top: 1px;
+        }
+
+</style>
+
 
 </html>

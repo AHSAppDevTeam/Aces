@@ -3,16 +3,17 @@
     <head>
         <meta charset="utf-8">
         <title>Content Editing System: TOC</title>
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     </head>
 
     <body>
         <!-- <h1>Content Editing System: Table of Contents</h1> -->
         <!-- NAVBAR -->
-        <nav class="grey darken-2">
+        <nav class="white">
             <div class="nav-wrapper">
                 <a href="#" class="brand-logo">
-                    <img src="images/feather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
+                    <img src="images/peacockfeather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
                 </a>
                 <a href="#" id ="navTitle" class="brand-logo" style="margin-left: 85px;">Content Editing System: Directory</a>
             </div>
@@ -20,10 +21,10 @@
 
         <div id="indexContainer">
             <div class="btn-group">
-                <button onclick="homepage()" class="btn waves-effect grey darken-1" id="homepage">Homepage</button>
-                <button onclick="bulletin()" class="btn waves-effect grey darken-1" id="bulletin">Bulletin</button>
-                <!-- <button onclick="notif()"  class="btn waves-effect grey darken-1" id="notif">Notifications</button> -->
-                <button onclick="back1()"  class="btn waves-effect grey darken-1" id="back">Go Back to Login</button>
+                <button onclick="homepage()" class="btn waves-effect yellow lighten-4" id="homepage"><span class="black-text text-darken-4">Homepage</span></button>
+                <button onclick="bulletin()" class= "btn waves-effect yellow lighten-4" id="bulletin"><span class="black-text text-darken-4">Bulletin</span></button>
+                <button onclick="notif()" class="btn waves-effect yellow lighten-4" id="notif"><span class="black-text text-darken-4">Push Notifications</span></button>
+                <button onclick="back1()" class="btn waves-effect yellow lighten-4" id="back"><span class="black-text text-darken-4">Go Back to Login</span></button>
             </div>
         </div>
 
@@ -72,6 +73,7 @@
         #navTitle{
             font-size: 25px;
             font-family: 'Times New Roman', Times, serif;
+            color: darkred;
         }
 
         #nav-mobile{

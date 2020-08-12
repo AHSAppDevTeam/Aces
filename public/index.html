@@ -2,16 +2,17 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-        <title> AHS Mobile App Login Page</title>
+        <title>AHS Content Editing System</title>
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     </head>
 
     <body>
         <div id="feather">
-            <img src="images/feather.png" style="width: 60px;">
+            <img src="images/peacockfeather.png" style="width: 60px;">
         </div>
 
         <div id="login_div" class="main-div">
-            <h1>AHS Mobile App Login</h1>
+            <h1>AHS Content Editing System</h1>
             <div id="loginContainer">
                 <input type="email" placeholder="email" id="email"/>
                 <input type="password" placeholder="password" id="password"/>
@@ -60,10 +61,12 @@
 
     <style>
         body{
-            background-color:#616161;
+            /* background-color:#616161; */
+            background-color: white;
         }
 
         h1{
+            color:#620000;
             margin-top: 100px;
             margin-bottom: 35px;
             text-align: center;
@@ -82,8 +85,13 @@
             display: block; 
         } */
 
+        #user_para{
+            color: white;
+        }
+
         #loginContainer{
-            background-color: white;
+            /* background-color: white; */
+            background-color: darkred;
             box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
             font-size: 20px;
             color:#616161 ;
@@ -97,29 +105,32 @@
         }
 
         #email{
-            background-color: white;
+            background-color: darkred;
+            color: white;
             width: 70%;
             height: 40px;
             display: block;
             margin: 10px auto;
             border: none;
             outline: none;
-            border-bottom: 2px solid black; 
+            border-bottom: 1px solid white; 
         }
 
         #password{
-            background-color: white;
+            background-color: darkred;
+            color: white;
             width: 70%;
             height: 40px;
             display: block;
             margin: 10px auto;
             border: none;
             outline: none;
-            border-bottom: 2px solid black; 
+            border-bottom: 1px solid white; 
         }
 
         #login{
-            background-color: #B1B1B1;
+            /* background-color: #B1B1B1; */
+            background-color: #620000;
             color: white;
             border: none;
             font-weight: bold;
@@ -134,7 +145,8 @@
         }
 
         #signOut{
-            background-color: #B1B1B1;
+            /* background-color: #B1B1B1;*/
+            background-color: #620000;
             color: white;
             border: none;
             font-weight: bold;
@@ -149,7 +161,7 @@
         }
 
         #next{
-            background-color: #B1B1B1;
+            background-color: #620000;
             color: white;
             border: none;
             font-weight: bold;
@@ -163,9 +175,27 @@
             margin-top: 20px;
         }
 
+        button{
+            outline:none;
+        }
+
         button:hover{
             box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
         }
+
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: white;
+            opacity: 1; /* Firefox */
+        }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: white !important;
+        }
+
     </style>
 
 </html>

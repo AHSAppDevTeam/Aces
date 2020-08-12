@@ -5,18 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Content Editing System: Bulletin</title>
-
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     </head>
 
     <body>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red darken-4">
+              <i class="large material-icons">keyboard_arrow_up</i>
+            </a>
+        </div>
         <!-- <h1>Content Editing System: Bulletin</h1> -->
 
-        <nav class="grey darken-2">
+        <nav class="white">
             <div class="nav-wrapper">
                 <a href="#" class="brand-logo">
-                    <img src="images/feather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
+                    <img src="images/peacockfeather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
                 </a>
                 <a href="#" id ="navTitle" class="brand-logo" style="margin-left: 85px;">Content Editing System: Bulletin</a>
             </div>
@@ -76,21 +81,21 @@
                         </div>
                     </form>
                 </div>              
-            </div>
-            <div class="input-field center">
-                <button id="addBtn1" class="btn waves-effect grey darken-1"> Add </button>
-                <button id="updateBtn1" class="btn waves-effect grey darken-1"> Update </button>
-                <button id="removeBtn1" class="btn waves-effect grey darken-1"> Remove </button>
-                <button onclick="back2()" class="btn waves-effect grey darken-1" id="back">Go to Directory</button>
-            </div>      
+            </div>    
         </div>
+        <div class="input-field center">
+            <button id="addBtn1" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Add</span></button>
+            <button id="updateBtn1" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Update</span></button>
+            <button id="removeBtn1" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Remove</span></button>
+            <button onclick="back2()" class="btn waves-effect yellow lighten-4" id="back"><span class="black-text text-darken-4">Go to Directory</span></button>
+        </div>  
 
 
         <div id="feed" class="container">
             <div class="row">
                 <div id="addedArticles" class="col s12">
                     <div id="sectionTitles">   
-                        <p>Academics</p>
+                        <p>Database | Academics</p>
                     </div>
                     <ul id="myUL1" class="collection"></ul>
                 </div>
@@ -164,6 +169,11 @@
                 $('.datepicker').datepicker({
                     format: 'yyyy.mm.dd' 
                 });
+                $('.fixed-action-btn').floatingActionButton().click(moveUp);
+
+                function moveUp(){
+                    $(window).scrollTop(0);
+                }
             });
         </script>
         
@@ -175,6 +185,10 @@
         *{
             margin: 0;
             padding: 0;
+        }
+        
+        body{
+            background-color: #EFEFEF;
         }
 
         h1{
@@ -188,6 +202,7 @@
         #navTitle{
             font-size: 25px;
             font-family: 'Times New Roman', Times, serif;
+            color: darkred;
         }
 
         #main{
@@ -195,24 +210,28 @@
             margin: 10px auto; 
             margin-top: 30px;
             background-color: white;
+            border-radius: 50px;
             display: ruby;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-
         #form{
-            width: 600px;
-            border: solid 2px #EBEBEB;
-            padding: 1rem;
-        }
-        
+                width: 600px;
+                box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+                /* border: solid 10px #EBEBEB; */
+                border: solid 7px darkred;
+                border-radius: 50px;
+                padding: 1rem;
+            }
+            
         #feed{
             margin-top: 50px;
         }
 
         p {
             text-align: center;
+            color: darkred;
         }
 
         #sectionTitles{
@@ -222,14 +241,19 @@
         }
 
         ul {
+            margin:auto;
             margin: 0;
             padding: 0;
         }
 
         ul li{
             padding: 2rem;
-            border: solid 1px #EBEBEB;
+            background-color: white;
+            border: solid 2px #EBEBEB;
             font-size: 15px;
+            max-height: 100px;
+            overflow: scroll;
+            color: darkred;
         }
 
         button{
