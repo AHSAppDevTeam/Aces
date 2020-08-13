@@ -18,10 +18,10 @@
                 </a>
             </div>
             <ul>
-                <li><a class="btn-floating pink lighten-3"><i class="material-icons">looks_one</i></a></li>
-                <li><a class="btn-floating deep-orange accent-1"><i class="material-icons">looks_two</i></a></li>
-                <li><a class="btn-floating teal lighten-3"><i class="material-icons">looks_3</i></a></li>
-              </ul>
+                <li><a id="upBtn1" class="btn-floating pink lighten-3"><i class="material-icons">looks_one</i></a></li>
+                <li><a id="upBtn2" class="btn-floating deep-orange accent-1"><i class="material-icons">looks_two</i></a></li>
+                <li><a id="upBtn3" class="btn-floating teal lighten-3"><i class="material-icons">looks_3</i></a></li>
+            </ul>
         </div>
         <!-- <h1>Content Editing System: Homepage</h1> -->
         <ul id="dropdown1" class="dropdown-content">
@@ -137,7 +137,7 @@
             <div class="row">
                 <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
-                        <p>Database | ASB</p>
+                        <p id="feedASB">Database | ASB</p>
                     </div>
                     <ul id="myUL1" class="collection">
                     </ul>
@@ -146,14 +146,14 @@
 
                 <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
-                        <p>District</p>
+                        <p id="feedDistrict">District</p>
                     </div>
                     <ul id="myUL2" class="collection"></ul>
                 </div>
 
                 <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
-                    <p>General Info</p>
+                    <p id="feedGeneral">General Info</p>
                     </div>
                     <ul id="myUL3" class="collection"></ul>
                 </div>
@@ -197,13 +197,25 @@
                 $('.fixed-action-btn').floatingActionButton();
 
                 $('.up-btn').click(moveUp);
-                function moveUp(){
-                    $(window).scrollTop(0);
-                }
 
                 function moveUp(){
                     $(window).scrollTop(0);
                 }
+
+                $('#upBtn1').click(function(){
+                    $("#feedASB")[0].scrollIntoView(); 
+                });
+
+
+                $('#upBtn2').click(function(){
+                    $("#feedDistrict")[0].scrollIntoView(); 
+                });
+
+
+                $('#upBtn3').click(function(){
+                    $("#feedGeneral")[0].scrollIntoView(); 
+                });
+
             });
         </script>
 

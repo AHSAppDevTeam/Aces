@@ -18,11 +18,11 @@
                 </a>
             </div>
             <ul>
-                <li><a class="btn-floating green lighten-2"><i class="material-icons">looks_one</i></a></li>
-                <li><a class="btn-floating light-green lighten-2"><i class="material-icons">looks_two</i></a></li>
-                <li><a class="btn-floating red accent-1"><i class="material-icons">looks_3</i></a></li>
-                <li><a class="btn-floating pink accent-1"><i class="material-icons">looks_4</i></a></li>
-                <li><a class="btn-floating purple accent-1"><i class="material-icons">looks_5</i></a></li>
+                <li><a id="upBtn1" class="btn-floating green lighten-2"><i class="material-icons">looks_one</i></a></li>
+                <li><a id="upBtn2" class="btn-floating light-green lighten-2"><i class="material-icons">looks_two</i></a></li>
+                <li><a id="upBtn3" class="btn-floating red accent-1"><i class="material-icons">looks_3</i></a></li>
+                <li><a id="upBtn4" class="btn-floating pink accent-1"><i class="material-icons">looks_4</i></a></li>
+                <li><a id="upBtn5" class="btn-floating purple accent-1"><i class="material-icons">looks_5</i></a></li>
               </ul>
         </div>
         <!-- <h1>Content Editing System: Bulletin</h1> -->
@@ -118,35 +118,35 @@
             <div class="row">
                 <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
-                        <p>Database | Academics</p>
+                        <p id="feed1">Database | Academics</p>
                     </div>
                     <ul id="myUL1" class="collection"></ul>
                 </div>
 
                 <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
-                        <p>Athletics</p>
+                        <p id="feed2">Athletics</p>
                     </div>
                     <ul id="myUL2" class="collection"></ul>
                 </div>
 
                 <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
-                        <p>Clubs</p>
+                        <p id="feed3">Clubs</p>
                     </div>
                     <ul id="myUL3" class="collection"></ul>
                 </div>
 
                 <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
-                        <p>Colleges</p>
+                        <p id="feed4">Colleges</p>
                     </div>
                     <ul id="myUL4" class="collection"></ul>
                 </div>
 
                 <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
-                        <p>Reference</p>
+                        <p id="feed5">Reference</p>
                     </div>
                     <ul id="myUL5" class="collection"></ul>
                 </div>
@@ -192,6 +192,31 @@
                 function moveUp(){
                     $(window).scrollTop(0);
                 }
+
+
+                $('#upBtn1').click(function(){
+                    $("#feed1")[0].scrollIntoView(); 
+                });
+
+
+                $('#upBtn2').click(function(){
+                    $("#feed2")[0].scrollIntoView(); 
+                });
+
+
+                $('#upBtn3').click(function(){
+                    $("#feed3")[0].scrollIntoView(); 
+                });
+
+
+                $('#upBtn4').click(function(){
+                    $("#feed4")[0].scrollIntoView(); 
+                });
+
+
+                $('#upBtn5').click(function(){
+                    $("#feed5")[0].scrollIntoView(); 
+                });
             });
         </script>
         
