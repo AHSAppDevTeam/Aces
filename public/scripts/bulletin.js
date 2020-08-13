@@ -19,6 +19,13 @@ function notif(){
     location.replace("notifs.html");
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.fixed-action-btn');
+    var instances = M.FloatingActionButton.init(elems, {
+      direction: 'left'
+    });
+  });
+
 //textarea autoexpand
 document.addEventListener('input', function (event) {
     if (event.target.tagName.toLowerCase() !== 'textarea') return;
@@ -54,7 +61,7 @@ function makeid(length) {
  }
 
 //bulletin constants
-const category = document.getElementById('category');
+const category = document.getElementById('topic');
 //const number = document.getElementById('number');
 const id = document.getElementById('id');
 const title = document.getElementById('title');
@@ -70,30 +77,36 @@ const removeBtn1 = document.getElementById('removeBtn1');
 
 const database = firebase.database();
 
+function timedRefresh(timeoutPeriod) {
+	setTimeout("location.reload(true);",timeoutPeriod);
+}
+
 //to add, update, remove, and read data from firebase
 addBtn1.addEventListener('click', (e) => {
     e.preventDefault();
 
     var htmlValue = body.value.includes("</"); 
+
      //convert date to unix timestamp
     var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));  
 
     var newPostRef = database.ref('/bulletin/' + category.value).push();
-    var postId = newPostRef.key;
+    // var postId = newPostRef.key;
 
-    newPostRef.set({
-        // articleAuthor: author.value,
-        articleBody: body.value,
-        articleTitle: title.value,
-        articleUnixEpoch: unixTimestamp,
-        hasHTML: htmlValue,
-    });
+    if(body.value != '' && title.value != '' && unixTimestamp != ''){
+        newPostRef.set({
+            articleBody: body.value,
+            articleTitle: title.value,
+            articleUnixEpoch: unixTimestamp,
+            hasHTML: htmlValue,
+        });
 
-    M.toast({html: 'Added Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 
-    // database.ref('/bulletin/' + category.value + '/' + postId + '/articleImages/').set({
-    //     0: image.value,
-    // });
+        M.toast({html: 'Added Article!', classes: 'rounded'}); 
+        timedRefresh(1000);
+    }else{
+        M.toast({html: 'Missing input(s)!', classes: 'rounded'}); 
+    }
 });
 
 var counter = 0; 
@@ -112,36 +125,35 @@ updateBtn1.addEventListener('click', (e) => {
         hasHTML: htmlValue,
     };
 
-    // const newImg1 = {
-    //     1: image.value,
-    // };
+    if(id.value){
+        database.ref('/bulletin/' + category.value + '/' + id.value).update(newData);
+        M.toast({html: 'Updated Article!', classes: 'rounded'});
+        timedRefresh(1000);
+    }else{
+        M.toast({html: 'Provide an ID first!', classes: 'rounded'});
+    }
 
-    // const newImg2 = {
-    //     2: image.value,
-    // };
-    // if(counter == 1){
-    //     database.ref('/bulletin/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
-    // }else{
-    // database.ref('/bulletin/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
-    // }
-    database.ref('/bulletin/' + category.value + '/' + id.value).update(newData);
-
-    M.toast({html: 'Updated Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
+
 
 removeBtn1.addEventListener('click', (e) => {
     e.preventDefault();
 
-    database.ref('/bulletin/' + category.value + '/' + id.value).remove()
-    .then(() => {
-        window.alert('Article ' + id.value + ' removed from database.');
-    })
-    .catch(error => {
-        console.error(error);
-    });
-    
-    M.toast({html: 'Removed Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
+    if(id.value){
+        database.ref('/bulletin/' + category.value + '/' + id.value).remove()
+        .then(() => {
+            M.toast({html: 'Removed Article!', classes: 'rounded'});
+            timedRefresh(1000);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }else{
+        M.toast({html: 'Provide an ID first!', classes: 'rounded'});
+    }
 });
+
+
 
 //id listener
 var postId; 
@@ -167,11 +179,8 @@ if(category.value = "Academics"){
         postId = snapshot.key; 
     });
 }
-// else{
-//     database.ref('bulletin').child('seniors').once('child_changed', snapshot => {
-//         postId = snapshot.key; 
-//     });
-// }
+
+
 
 function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
@@ -191,6 +200,7 @@ database.ref('bulletin').child('Academics').once('value', function (snapshot) {
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
 
         var a = document.createTextNode("ID: " + key);
         var b = document.createTextNode("Title: " + data.articleTitle);
@@ -224,6 +234,7 @@ database.ref('bulletin').child('Athletics').once('value', function (snapshot) {
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
 
         var a = document.createTextNode("ID: " + key);
         var b = document.createTextNode("Title: " + data.articleTitle);
@@ -258,6 +269,7 @@ database.ref('bulletin').child('Clubs').once('value', function (snapshot) {
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
 
         var a = document.createTextNode("ID: " + key);
         var b = document.createTextNode("Title: " + data.articleTitle);
@@ -291,35 +303,27 @@ database.ref('bulletin').child('Colleges').once('value', function (snapshot) {
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
 
         var a = document.createTextNode("ID: " + key);
-        // var b = document.createTextNode("Images: " + data.articleImages);
+        var b = document.createTextNode("Title: " + data.articleTitle);
         var c = document.createTextNode("Date: " + time);
-        var d = document.createTextNode("Title: " + data.articleTitle);
-        // var e = document.createTextNode("Author: " + data.articleAuthor);
-        var f = document.createTextNode("Body: " + data.articleBody);
-        var g = document.createTextNode("hasHTML: " + data.hasHTML);
-
+        var d = document.createTextNode("Body: " + data.articleBody);
+        var e = document.createTextNode("hasHTML: " + data.hasHTML);
 
         li.appendChild(a);
-        // var br1 = document.createElement("br");
-        // li.appendChild(br1);
-        // li.appendChild(b);
+        var br1 = document.createElement("br");
+        li.appendChild(br1);
+        li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        // var br4 = document.createElement("br");
-        // li.appendChild(br4);
-        // li.appendChild(e);
-        var br5 = document.createElement("br");
-        li.appendChild(br5);
-        li.appendChild(f);
-        var br6 = document.createElement("br");
-        li.appendChild(br6);
-        li.appendChild(g);
+        var br4 = document.createElement("br");
+        li.appendChild(br4);
+        li.appendChild(e);
 
 
         var list = document.getElementById("myUL4");
@@ -333,80 +337,30 @@ database.ref('bulletin').child('Reference').once('value', function (snapshot) {
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
 
         var a = document.createTextNode("ID: " + key);
-        // var b = document.createTextNode("Images: " + data.articleImages);
+        var b = document.createTextNode("Title: " + data.articleTitle);
         var c = document.createTextNode("Date: " + time);
-        var d = document.createTextNode("Title: " + data.articleTitle);
-        // var e = document.createTextNode("Author: " + data.articleAuthor);
-        var f = document.createTextNode("Body: " + data.articleBody);
-        var g = document.createTextNode("hasHTML: " + data.hasHTML);
-
+        var d = document.createTextNode("Body: " + data.articleBody);
+        var e = document.createTextNode("hasHTML: " + data.hasHTML);
 
         li.appendChild(a);
-        // var br1 = document.createElement("br");
-        // li.appendChild(br1);
-        // li.appendChild(b);
+        var br1 = document.createElement("br");
+        li.appendChild(br1);
+        li.appendChild(b);
         var br2 = document.createElement("br");
         li.appendChild(br2);
         li.appendChild(c);
         var br3 = document.createElement("br");
         li.appendChild(br3);
         li.appendChild(d);
-        // var br4 = document.createElement("br");
-        // li.appendChild(br4);
-        // li.appendChild(e);
-        var br5 = document.createElement("br");
-        li.appendChild(br5);
-        li.appendChild(f);
-        var br6 = document.createElement("br");
-        li.appendChild(br6);
-        li.appendChild(g);
+        var br4 = document.createElement("br");
+        li.appendChild(br4);
+        li.appendChild(e);
 
 
         var list = document.getElementById("myUL5");
         list.insertBefore(li, list.childNodes[0]);
        });
 });
-
-// database.ref('bulletin').child('seniors').once('value', function (snapshot) {
-//     snapshot.forEach(function (childSnapshot){
-//         var data = childSnapshot.val();
-//         var key = childSnapshot.key;
-//         var time = timeConverter(data.articleUnixEpoch); 
-//         var li = document.createElement("li");
-
-//         var a = document.createTextNode("ID: " + key);
-//         // var b = document.createTextNode("Images: " + data.articleImages);
-//         var c = document.createTextNode("Date: " + time);
-//         var d = document.createTextNode("Title: " + data.articleTitle);
-//         // var e = document.createTextNode("Author: " + data.articleAuthor);
-//         var f = document.createTextNode("Body: " + data.articleBody);
-//         var g = document.createTextNode("hasHTML: " + data.hasHTML);
-
-
-//         li.appendChild(a);
-//         // var br1 = document.createElement("br");
-//         // li.appendChild(br1);
-//         // li.appendChild(b);
-//         var br2 = document.createElement("br");
-//         li.appendChild(br2);
-//         li.appendChild(c);
-//         var br3 = document.createElement("br");
-//         li.appendChild(br3);
-//         li.appendChild(d);
-//         // var br4 = document.createElement("br");
-//         // li.appendChild(br4);
-//         // li.appendChild(e);
-//         var br5 = document.createElement("br");
-//         li.appendChild(br5);
-//         li.appendChild(f);
-//         var br6 = document.createElement("br");
-//         li.appendChild(br6);
-//         li.appendChild(g);
-
-
-//         var list = document.getElementById("myUL6");
-//         list.insertBefore(li, list.childNodes[0]);
-//        });
-// });

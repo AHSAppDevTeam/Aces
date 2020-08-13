@@ -14,6 +14,10 @@ const removeBtn = document.getElementById('removeBtn1');
 
 const database = firebase.database();
 
+function timedRefresh(timeoutPeriod) {
+	setTimeout("location.reload(true);",timeoutPeriod);
+}
+
 postBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
@@ -36,30 +40,39 @@ postBtn.addEventListener('click', (e) => {
 
     var newPostRef = database.ref('/notifications/').push();
     // var postId = newPostRef.key;
+    if(notifID.value == '' || notifBody.value == '' || notifTitle.value == '' || numberTopic == ''){
+        M.toast({html: 'Missing input(s)!', classes: 'rounded'}); 
+    }else{
+        newPostRef.set({
+            notificationArticleID: notifID.value,
+            notificationBody: notifBody.value,
+            notificationCategory: numberTopic,
+            notificationTitle: notifTitle.value,
+            notificationUnixEpoch: unixTimestamp,
+        });
 
-    newPostRef.set({
-        notificationArticleID: notifID.value,
-        notificationBody: notifBody.value,
-        notificationCategory: numberTopic,
-        notificationTitle: notifTitle.value,
-        notificationUnixEpoch: unixTimestamp,
-    });
+        M.toast({html: 'Sent Notification!', classes: 'rounded'}); 
+        timedRefresh(1000);
+    }
 
-    M.toast({html: 'Sent Notification! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
 
 removeBtn1.addEventListener('click', (e) => {
     e.preventDefault();
 
-    database.ref('/notifications/' + id.value).remove()
-    .then(() => {
-        window.alert('Article ' + id.value + ' removed from database.');
-    })
-    .catch(error => {
-        console.error(error);
-    });
+    if(id.value){
+        database.ref('/notifications/' + id.value).remove()
+        .then(() => {
+            M.toast({html: 'Removed Notification!', classes: 'rounded'});
+            timedRefresh(1000);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }else{
+        M.toast({html: 'Provide an ID first!', classes: 'rounded'});
+    }
     
-    M.toast({html: 'Removed Notification! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
 
 var postId; 
@@ -85,6 +98,8 @@ var postId;
         var key = childSnapshot.key;
         var time = timeConverter(data.notificationUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
+
 
         var a = document.createTextNode("Notification ID: " + key);
         var b = document.createTextNode("Title: " + data.notificationTitle);

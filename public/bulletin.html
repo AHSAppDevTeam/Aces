@@ -12,11 +12,40 @@
 
     <body>
         <div class="fixed-action-btn">
-            <a class="btn-floating btn-large red darken-4">
-              <i class="large material-icons">keyboard_arrow_up</i>
-            </a>
+            <div class="up-btn">
+                <a class="btn-floating btn-large red darken-4">
+                <i class="large material-icons">arrow_upward</i>
+                </a>
+            </div>
+            <ul>
+                <li><a class="btn-floating green lighten-2"><i class="material-icons">looks_one</i></a></li>
+                <li><a class="btn-floating light-green lighten-2"><i class="material-icons">looks_two</i></a></li>
+                <li><a class="btn-floating red accent-1"><i class="material-icons">looks_3</i></a></li>
+                <li><a class="btn-floating pink accent-1"><i class="material-icons">looks_4</i></a></li>
+                <li><a class="btn-floating purple accent-1"><i class="material-icons">looks_5</i></a></li>
+              </ul>
         </div>
         <!-- <h1>Content Editing System: Bulletin</h1> -->
+
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a href="https://www.facebook.com/ArcadiaUnified" target="_blank"><span class="amber-text text-accent-4">AUSD</span></a></li>
+            <li class="divider"></li>
+            <li><a href="https://drive.google.com/drive/folders/1GDcKxLYuZZhLlNK6Xb8q1mlJZ8_U6Twl" target="_blank"><span class="amber-text text-accent-4">Student Bulletin</span></a></li>
+            <li class="divider"></li>
+            <li><a href="https://www.instagram.com/arcadiaasb/" target="_blank"><span class="amber-text text-accent-4">ASB Instagram</span></a></li>
+            <li class="divider"></li>
+            <li><a href="https://asb.ausd.net/" target="_blank"><span class="amber-text text-accent-4">ASB Website</span></a></li>
+            <li class="divider"></li>
+            <li><a href="https://www.facebook.com/groups/1916270318637879/" target="_blank"><span class="amber-text text-accent-4">AHS Class of 2021</span></a></li>
+            <li class="divider"></li>
+            <li><a href="https://www.facebook.com/groups/apaches2022/" target="_blank"><span class="amber-text text-accent-4">AHS Class of 2022</span></a></li>
+            <li class="divider"></li>
+            <li><a href="https://www.facebook.com/groups/465390764048180/" target="_blank"><span class="amber-text text-accent-4">AHS Class of 2023</span></a></li>
+            <li class="divider"></li>
+            <li><a href="https://html-online.com/editor/" target="_blank"><span class="amber-text text-accent-4">HTML Editor</span></a></li>
+            <li class="divider"></li>
+            <li><a href="https://imgbb.com/" target="_blank"><span class="amber-text text-accent-4">Image Editor</span></a></li>
+        </ul>
 
         <nav class="white">
             <div class="nav-wrapper">
@@ -24,6 +53,9 @@
                     <img src="images/peacockfeather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
                 </a>
                 <a href="#" id ="navTitle" class="brand-logo" style="margin-left: 85px;">Content Editing System: Bulletin</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><span class="red-text text-darken-4">Sources</span><i class="material-icons right"><span class="red-text text-darken-4">arrow_drop_down</span></i></a></li>
+                  </ul>
             </div>
         </nav>
 
@@ -34,49 +66,40 @@
 
                         <div class="row">
                             <div class="input-field col s7">
-                                <select id="category">
-                                    <option value="" disabled selected>Choose your option</option>
-                                    <option value="Academics">Academics</option>
-                                    <option value="Athletics">Athletics</option>
-                                    <option value="Clubs">Clubs</option>
-                                    <option value="Colleges">Colleges</option>
-                                    <option value="Reference">Reference</option>
-                                    <!-- <option value="seniors">Seniors</option> -->
-                                </select>
-                                <label>Article Category</label>
+                                <label for="id"><span class="red-text text-darken-4">ID (for update/remove)</span></label><br>
+                                <input type="text" name="id" id="id"/>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="input-field col s7">
-                                <label for="id">ID (for update/remove)</label><br>
-                                <input type="text" name="id" id="id"/>
+                                <select id="topic">
+                                    <option value="" disabled selected>Choose category:</option>
+                                    <option value="Academics">Academics</option>
+                                    <option value="Athletics">Athletics</option>
+                                    <option value="Clubs">Clubs</option>
+                                    <option value="Colleges">Colleges</option>
+                                    <option value="Reference">Reference</option>
+                                </select>
+                                <label><span class="red-text text-darken-4">Article Category</span></label>
                             </div>
-                            <!-- <div class="input-field col s6">
-                                <label for="image">Image Link</label><br>
-                                <input type="text" name="image" id="image"/>
-                            </div> -->
                         </div>
 
                         <div class="row">
                             <div class="input-field col s6">
-                                <label for="timestamp">Date</label><br>
+                                <label for="timestamp"><span class="red-text text-darken-4">Date</span></label><br>
                                 <input type="text" class="datepicker" id="timestamp">
                             </div>
                             <div class="input-field col s6">
-                                <label for="title">Article Title</label><br>
+                                <label for="title"><span class="red-text text-darken-4">Article Title</span></label><br>
                                 <input type="text" name="title" id="title"/>
                             </div>
-                            <!-- <div class="input-field col s4">
-                                <label for="author">Author</label><br>
-                                <input type="text" name="author" id="author"/>
-                            </div> -->
                         </div>
 
                         <div class="row">
                             <div class="input-field col s12">
                                 <textarea id="textarea1" class="materialize-textarea" name="body"></textarea>
-                                <label for="textarea1">Article Body</label>
+                                <label for="textarea1"><span class="red-text text-darken-4">Article Body</span></label>
                             </div> 
                         </div>
                     </form>
@@ -84,56 +107,49 @@
             </div>    
         </div>
         <div class="input-field center">
-            <button id="addBtn1" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Add</span></button>
-            <button id="updateBtn1" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Update</span></button>
-            <button id="removeBtn1" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Remove</span></button>
-            <button onclick="back2()" class="btn waves-effect yellow lighten-4" id="back"><span class="black-text text-darken-4">Go to Directory</span></button>
+            <button id="addBtn1" class="btn waves-effect amber accent-1"><span class="black-text text-darken-4">Add</span></button>
+            <button id="updateBtn1" class="btn waves-effect amber accent-1"><span class="black-text text-darken-4">Update</span></button>
+            <button id="removeBtn1" class="btn waves-effect amber accent-1"><span class="black-text text-darken-4">Remove</span></button>
+            <button onclick="back2()" class="btn waves-effect amber accent-1" id="back"><span class="black-text text-darken-4">Go to Directory</span></button>
         </div>  
 
 
         <div id="feed" class="container">
             <div class="row">
-                <div id="addedArticles" class="col s12">
+                <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
                         <p>Database | Academics</p>
                     </div>
                     <ul id="myUL1" class="collection"></ul>
                 </div>
 
-                <div id="addedArticles" class="col s12">
+                <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
                         <p>Athletics</p>
                     </div>
                     <ul id="myUL2" class="collection"></ul>
                 </div>
 
-                <div id="addedArticles" class="col s12">
+                <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
                         <p>Clubs</p>
                     </div>
                     <ul id="myUL3" class="collection"></ul>
                 </div>
 
-                <div id="addedArticles" class="col s12">
+                <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
                         <p>Colleges</p>
                     </div>
                     <ul id="myUL4" class="collection"></ul>
                 </div>
 
-                <div id="addedArticles" class="col s12">
+                <div id="addedArticles" class="col s10">
                     <div id="sectionTitles">   
                         <p>Reference</p>
                     </div>
                     <ul id="myUL5" class="collection"></ul>
                 </div>
-<!-- 
-                <div id="addedArticles" class="col s12">
-                    <div id="sectionTitles">   
-                        <p>Seniors</p>
-                    </div>
-                    <ul id="myUL6" class="collection"></ul>
-                </div> -->
             </div>
         </div>
             
@@ -169,8 +185,10 @@
                 $('.datepicker').datepicker({
                     format: 'yyyy.mm.dd' 
                 });
-                $('.fixed-action-btn').floatingActionButton().click(moveUp);
+                $(".dropdown-trigger").dropdown();
+                $('.fixed-action-btn').floatingActionButton()
 
+                $('.up-btn').click(moveUp);
                 function moveUp(){
                     $(window).scrollTop(0);
                 }
@@ -227,6 +245,7 @@
             
         #feed{
             margin-top: 50px;
+            margin-left: 305px;
         }
 
         p {
@@ -246,7 +265,7 @@
             padding: 0;
         }
 
-        ul li{
+        li.forFeed {
             padding: 2rem;
             background-color: white;
             border: solid 2px #EBEBEB;

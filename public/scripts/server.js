@@ -19,6 +19,13 @@ function notif(){
     location.replace("notifs.html");
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.fixed-action-btn');
+    var instances = M.FloatingActionButton.init(elems, {
+      direction: 'left'
+    });
+  });
+
 //textarea autoexpand
 document.addEventListener('input', function (event) {
     if (event.target.tagName.toLowerCase() !== 'textarea') return;
@@ -54,7 +61,7 @@ function makeid(length) {
  }
 
 //homepage constants
-const category = document.getElementById('category');
+const category = document.getElementById('topic');
 const isFeatured = document.getElementById('isFeatured');
 //const number = document.getElementById('number');
 const id = document.getElementById('id');
@@ -72,6 +79,11 @@ const removeBtn = document.getElementById('removeBtn');
 
 const database = firebase.database(); 
 //const rootRef = database.ref('homepage');
+
+//for reloading
+function timedRefresh(timeoutPeriod) {
+	setTimeout("location.reload(true);",timeoutPeriod);
+}
 
 addBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -91,78 +103,52 @@ addBtn.addEventListener('click', (e) => {
     var newPostRef = database.ref('/homepage/' + category.value).push();
     var postId = newPostRef.key;
 
-    if(image.value != "" && video.value != ""){
+
+    if(author.value != '' && body.value != '' && title.value != '' && unixTimestamp != ''){
         newPostRef.set({
             articleAuthor: author.value,
             articleBody: body.value,
-            articleImages: [image.value],
             articleTitle: title.value,
-            articleUnixEpoch: unixTimestamp, 
-            articleVideoIDs: [video.value], 
+            articleUnixEpoch: unixTimestamp,
             hasHTML: htmlValue, 
             isFeatured: JSON.parse(isFeatured.value.toLowerCase()), 
         });
+
+        if(image.value){
+            database.ref('/homepage/' + category.value + '/' + postId + '/articleImages/').set({
+                0: image.value,
+            });
+        }
+    
+        if(video.value){
+            database.ref('/homepage/' + category.value + '/' + postId + '/articleVideoIDs/').set({
+                0: video.value,
+            });
+        }
+
+        M.toast({html: 'Added Article!', classes: 'rounded'}); 
+        timedRefresh(1000);
+
+    }else{
+        M.toast({html: 'Missing input(s)!', classes: 'rounded'}); 
     }
 
-    if(image.value != "" && video.value == ""){
-        newPostRef.set({
-            articleAuthor: author.value,
-            articleBody: body.value,
-            articleImages: [image.value],
-            articleTitle: title.value,
-            articleUnixEpoch: unixTimestamp, 
-            articleVideoIDs: [], 
-            hasHTML: htmlValue, 
-            isFeatured: JSON.parse(isFeatured.value.toLowerCase()), 
-        });
-    }
-
-    if(image.value == "" && video.value != ""){
-        newPostRef.set({
-            articleAuthor: author.value,
-            articleBody: body.value,
-            articleImages: [],
-            articleTitle: title.value,
-            articleUnixEpoch: unixTimestamp, 
-            articleVideoIDs: [video.value], 
-            hasHTML: htmlValue, 
-            isFeatured: JSON.parse(isFeatured.value.toLowerCase()), 
-        });
-    }
-
-
-    if(image.value == "" && video.value == ""){
-        newPostRef.set({
-            articleAuthor: author.value,
-            articleBody: body.value,
-            articleImages: [],
-            articleTitle: title.value,
-            articleUnixEpoch: unixTimestamp, 
-            articleVideoIDs: [], 
-            hasHTML: htmlValue, 
-            isFeatured: JSON.parse(isFeatured.value.toLowerCase()), 
-        });
-    }
-
-    // if(image.value){
-    //     database.ref('/homepage/' + category.value + '/' + postId + '/articleImages/').set({
-    //         0: image.value,
-    //     });
-    // }
-
-    // if(video.value){
-    //     database.ref('/homepage/' + category.value + '/' + postId + '/articleVideoIDs/').set({
-    //         0: video.value,
-    //     });
-    // }
-    M.toast({html: 'Added Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
 });
 
 
-var counter = 0; 
+var counter1 = 0; 
+var counter2 = 0; 
 updateBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    counter = counter + 1; 
+    
+    if(image.value != ''){
+        counter1 = counter1 + 1;
+    }
+        
+    if(video.value != ''){
+        counter2 = counter2 + 1;
+    }
+
 
     $('#isFeatured').on('change', function(){
         this.value = this.checked ? "true" : "false";
@@ -199,41 +185,54 @@ updateBtn.addEventListener('click', (e) => {
         2: video.value,
     };
 
-    if(counter == 1 && image.value != ""){
-        database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
-    }else if(counter == 2 && image.value != ""){
-        database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
-    }else{}
+    if(id.value){
+        if(counter1 == 1){
+            database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
+        }else if(counter1 == 2){
+            database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
+        }else{}
 
-    
-    if(counter == 1 && video.value != ""){
-        database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
-    }else if(counter == 2 && video.value != ""){
-        database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid2);
-    }else{}
-    
-    database.ref('/homepage/' + category.value + '/' + id.value).update(newData);
+        
+        if(counter2 == 1){
+            database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
+        }else if(counter2 == 2){
+            database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid2);
+        }else{}
+        
+        database.ref('/homepage/' + category.value + '/' + id.value).update(newData);
 
-    M.toast({html: 'Updated Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
+        M.toast({html: 'Updated Article!', classes: 'rounded'});
+        timedRefresh(1000);
+
+    }else{
+        M.toast({html: 'Provide an ID first!', classes: 'rounded'});
+    }
+
 });
 
     
 removeBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
-    database.ref('/homepage/' + category.value + '/' + id.value).remove()
-    .then(() => {
-        window.alert('Article ' + id.value + ' removed from database.');
-    })
-    .catch(error => {
-        console.error(error);
-    });
-
-    M.toast({html: 'Removed Article! Refresh the screen to see the updated feed!', classes: 'rounded'});
+    if(id.value){
+        database.ref('/homepage/' + category.value + '/' + id.value).remove()
+        .then(() => {
+            M.toast({html: 'Removed Article!', classes: 'rounded'});
+            timedRefresh(1000);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }else{
+        M.toast({html: 'Provide an ID first!', classes: 'rounded'});
+    }
 });
 
 //id listener
 var postId; 
+console.log(postId);
+// var imageData;
+// var videoData
 
 if(category.value = "ASB"){
     database.ref('homepage').child('ASB').once('child_changed', snapshot => {
@@ -260,6 +259,19 @@ function timeConverter(UNIX_timestamp){
     return time;
   }
 
+//   const generateTemplate = (todo) => {
+  
+//     const html = `<li>
+//                     <input type="checkbox" id="todo_${listLenght}">
+//                     <label for="todo_${listLenght}">
+//                       <span class="check"></span>
+//                       ${todo}
+//                     </label>
+//                     <i class="far fa-trash-alt delete"></i>
+//                   </li>`
+//     todoList.innerHTML += html;
+//   };
+{/* <i class="material-icons">cancel</i> */}
 
 //getting data from the server
 database.ref('homepage').child('ASB').once('value', function (snapshot) {
@@ -269,6 +281,7 @@ database.ref('homepage').child('ASB').once('value', function (snapshot) {
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
 
         var a = document.createTextNode("ID: " + key);
         var b = document.createTextNode("Title: " + data.articleTitle);
@@ -321,6 +334,7 @@ database.ref('homepage').child('District').once('value', function (snapshot) {
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
 
         var a = document.createTextNode("ID: " + key);
         var b = document.createTextNode("Title: " + data.articleTitle);
@@ -373,6 +387,7 @@ database.ref('homepage').child('General_Info').once('value', function (snapshot)
         var key = childSnapshot.key;
         var time = timeConverter(data.articleUnixEpoch); 
         var li = document.createElement("li");
+        li.setAttribute("class", "forFeed")
 
         var a = document.createTextNode("ID: " + key);
         var b = document.createTextNode("Title: " + data.articleTitle);

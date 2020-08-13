@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +14,14 @@
 <body>
     <div class="fixed-action-btn">
         <a class="btn-floating btn-large red darken-4">
-          <i class="large material-icons">keyboard_arrow_up</i>
+          <i class="large material-icons">arrow_upward</i>
         </a>
     </div>
+    <ul id="dropdown1" class="dropdown-content">
+        <li><a href="https://arcadia-high-mobile.web.app/homepage.html" target="_blank"><span class="amber-text text-accent-4">Homepage Feed</span></a></li>
+        <li class="divider"></li>
+        <li><a href="https://arcadia-high-mobile.web.app/bulletin.html" target="_blank"><span class="amber-text text-accent-4">Bulletin Feed</span></a></li>
+    </ul>
 
         <nav class="white">
             <div class="nav-wrapper">
@@ -24,6 +29,9 @@
                     <img src="images/peacockfeather.png" style="width: 60px; margin-top: 2px; margin-left: 30px;">
                 </a>
                 <a href="#" id ="navTitle" class="brand-logo" style="margin-left: 85px;">Content Editing System: Push Notifications</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><span class="red-text text-darken-4">Sources</span><i class="material-icons right"><span class="red-text text-darken-4">arrow_drop_down</span></i></a></li>
+                </ul>
             </div>
         </nav>
     <!-- <p id="token"></p> -->
@@ -34,12 +42,12 @@
                     <form class="col s12">
                         <div class="row">
                                 <div class="input-field col s6">
-                                    <label for="notifTitle">Notification Title</label><br>
+                                    <label for="notifTitle"><span class="red-text text-darken-4">Notification Title</span></label><br>
                                     <input type="text" name="notifTitle" id="notifTitle"/>
                                 </div>
 
                                 <div class="input-field col s6">
-                                    <label for="notifID">Article ID (for clicking on notif)</label><br>
+                                    <label for="notifID"><span class="red-text text-darken-4">Article ID (for clicking on notif)</span></label><br>
                                     <input type="text" name="notifID" id="notifID"/>
                                 </div>
                         </div>
@@ -54,20 +62,20 @@
                                     <option value="asb">ASB</option>
                                     <option value="bulletin">Bulletin</option>
                                 </select>
-                                <label>Topics</label>
+                                <label><span class="red-text text-darken-4">Topics</span></label>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="input-field col s12">
                                 <textarea id="notifBody" class="materialize-textarea" name="notifBody"></textarea>
-                                <label for="notifBody">Notification Body</label>
+                                <label for="notifBody"><span class="red-text text-darken-4">Notification Body</span></label>
                             </div> 
                         </div>
 
                         <div class="row">
                             <div class="input-field col s7">
-                                <label for="id">Notification ID (for remove only)</label><br>
+                                <label for="id"><span class="red-text text-darken-4">Notification ID (for remove only)</span></label><br>
                                 <input type="text" name="id" id="id"/>
                             </div> 
                         </div>
@@ -77,14 +85,14 @@
             </div>
         </div> 
                     <div class="input-field center">
-                <button id='postnotif' class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Send Notification</span></button>
-                <button id="removeBtn1" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Remove</span></button>
-                <button onclick="back()" class="btn waves-effect yellow lighten-4"><span class="black-text text-darken-4">Go to Directory</span></button>
+                <button id='postnotif' class="btn waves-effect amber accent-1"><span class="black-text text-darken-4">Send Notification</span></button>
+                <button id="removeBtn1" class="btn waves-effect amber accent-1"><span class="black-text text-darken-4">Remove</span></button>
+                <button onclick="back()" class="btn waves-effect amber accent-1"><span class="black-text text-darken-4">Go to Directory</span></button>
             </div> 
 
         <div id="feed" class="container">
             <div class="row">
-                <div id="addedArticles" class="col s12">
+                <div id="addedArticles" class="col s8">
                     <div id="sectionTitles">   
                         <p>Database | Notifications</p>
                     </div>
@@ -184,16 +192,16 @@
         });
     </script>
     
-            <script>
-                $(document).ready(function(){
-                    $('select').formSelect();
-                    $('.fixed-action-btn').floatingActionButton().click(moveUp);
-
-                    function moveUp(){
-                        $(window).scrollTop(0);
-                    }
-                });
-            </script>
+    <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+            $(".dropdown-trigger").dropdown();
+            $('.fixed-action-btn').floatingActionButton().click(moveUp)
+            function moveUp(){
+                $(window).scrollTop(0);
+            }
+        });
+    </script>
 
 
     <script src="scripts/persistauth.js"></script>
@@ -251,6 +259,7 @@
             
         #feed{
             margin-top: 50px;
+            margin-left: 385px;
         }
 
         p {
@@ -270,7 +279,7 @@
             padding: 0;
         }
 
-        ul li{
+        li.forFeed {
             padding: 2rem;
             background-color: white;
             border: solid 2px #EBEBEB;
@@ -283,7 +292,6 @@
         button{
             margin-top: 1px;
         }
-
 </style>
 
 
