@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+
 //textarea autoexpand
 document.addEventListener('input', function (event) {
     if (event.target.tagName.toLowerCase() !== 'textarea') return;
@@ -77,15 +78,45 @@ const removeBtn1 = document.getElementById('removeBtn1');
 
 const database = firebase.database();
 
+//timed refresh
 function timedRefresh(timeoutPeriod) {
 	setTimeout("location.reload(true);",timeoutPeriod);
 }
+
+// //string to HTML
+// var support = (function () {
+// 	if (!window.DOMParser) return false;
+// 	var parser = new DOMParser();
+// 	try {
+// 		parser.parseFromString('x', 'text/html');
+// 	} catch(err) {
+// 		return false;
+// 	}
+// 	return true;
+// })();
+
+// var stringToHTML = function (str) {
+
+// 	// If DOMParser is supported, use it
+// 	if (support) {
+// 		var parser = new DOMParser();
+// 		var doc = parser.parseFromString(str, 'text/html');
+// 		return doc.body;
+// 	}
+
+// 	// Otherwise, fallback to old-school method
+// 	var dom = document.createElement('div');
+// 	dom.innerHTML = str;
+// 	return dom;
+
+// };
+
 
 //to add, update, remove, and read data from firebase
 addBtn1.addEventListener('click', (e) => {
     e.preventDefault();
 
-    var htmlValue = body.value.includes("</"); 
+    var htmlValue = body.value.includes("</");
 
      //convert date to unix timestamp
     var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));  
@@ -109,10 +140,8 @@ addBtn1.addEventListener('click', (e) => {
     }
 });
 
-var counter = 0; 
 updateBtn1.addEventListener('click', (e) => {
     e.preventDefault();
-    counter = counter + 1;
     
     var htmlValue = body.value.includes("</"); 
     var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));  

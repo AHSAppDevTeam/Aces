@@ -85,6 +85,60 @@ function timedRefresh(timeoutPeriod) {
 	setTimeout("location.reload(true);",timeoutPeriod);
 }
 
+// firebase.auth().onAuthStateChanged(function(user) {
+//     if (user) {
+//       // User is signed in.
+//         addBtn.addEventListener('click', (e) => {
+//             e.preventDefault();
+        
+//             $('#isFeatured').on('change', function(){
+//                 this.value = this.checked ? "true" : "false";
+//                 // alert(this.value);
+//             }).change();
+        
+//             //detect html tags
+//             var htmlValue = body.value.includes("</"); 
+        
+//             //convert date to unix timestamp
+//             var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));  
+//             //var unixTimestamp = new Date().getTime();
+        
+//             var newPostRef = database.ref('/homepage/' + category.value).push();
+//             var postId = newPostRef.key;
+        
+        
+//             if(author.value != '' && body.value != '' && title.value != '' && unixTimestamp != ''){
+//                 newPostRef.set({
+//                     articleAuthor: author.value,
+//                     articleBody: body.value,
+//                     articleTitle: title.value,
+//                     articleUnixEpoch: unixTimestamp,
+//                     hasHTML: htmlValue, 
+//                     isFeatured: JSON.parse(isFeatured.value.toLowerCase()), 
+//                 });
+        
+//                 if(image.value){
+//                     database.ref('/homepage/' + category.value + '/' + postId + '/articleImages/').set({
+//                         0: image.value,
+//                     });
+//                 }
+            
+//                 if(video.value){
+//                     database.ref('/homepage/' + category.value + '/' + postId + '/articleVideoIDs/').set({
+//                         0: video.value,
+//                     });
+//                 }
+        
+//                 M.toast({html: 'Added Article!', classes: 'rounded'}); 
+//                 timedRefresh(1000);
+        
+//             }else{
+//                 M.toast({html: 'Missing input(s)!', classes: 'rounded'}); 
+//             }
+        
+//         });
+//     }
+//   });
 addBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
@@ -136,18 +190,18 @@ addBtn.addEventListener('click', (e) => {
 });
 
 
-var counter1 = 0; 
-var counter2 = 0; 
+// var counter1 = 0; 
+// var counter2 = 0; 
 updateBtn.addEventListener('click', (e) => {
     e.preventDefault();
     
-    if(image.value != ''){
-        counter1 = counter1 + 1;
-    }
+    // if(image.value != ''){
+    //     counter1 = counter1 + 1;
+    // }
         
-    if(video.value != ''){
-        counter2 = counter2 + 1;
-    }
+    // if(video.value != ''){
+    //     counter2 = counter2 + 1;
+    // }
 
 
     $('#isFeatured').on('change', function(){
@@ -170,35 +224,35 @@ updateBtn.addEventListener('click', (e) => {
     };
     
     const newImg1 = {
-        1: image.value,
+        0: image.value,
     };
-
-    const newImg2 = {
-        2: image.value,
-    };
+    // const newImg2 = {
+    //     2: image.value,
+    // };
 
     const newVid1 = {
-        1: video.value,
+        0: video.value,
     };
 
-    const newVid2 = {
-        2: video.value,
-    };
+    // const newVid2 = {
+    //     2: video.value,
+    // };
 
     if(id.value){
-        if(counter1 == 1){
-            database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
-        }else if(counter1 == 2){
-            database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
-        }else{}
+    //     if(counter1 == 1){
+    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
+    //     }else if(counter1 == 2){
+    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
+    //     }else{}
 
         
-        if(counter2 == 1){
-            database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
-        }else if(counter2 == 2){
-            database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid2);
-        }else{}
-        
+    //     if(counter2 == 1){
+    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
+    //     }else if(counter2 == 2){
+    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid2);
+    //     }else{}
+        database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
+        database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
         database.ref('/homepage/' + category.value + '/' + id.value).update(newData);
 
         M.toast({html: 'Updated Article!', classes: 'rounded'});

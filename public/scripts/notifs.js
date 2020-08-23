@@ -34,15 +34,15 @@ postBtn.addEventListener('click', (e) => {
         numberTopic = 2;
     }else if(topic.value == "district"){
         numberTopic = 3;
-    }else{
+    }else if(topic.value == "bulletin"){
         numberTopic = 4; 
+    }else{
+        numberTopic = 5;
     }
 
     var newPostRef = database.ref('/notifications/').push();
     // var postId = newPostRef.key;
-    if(notifID.value == '' || notifBody.value == '' || notifTitle.value == '' || numberTopic == ''){
-        M.toast({html: 'Missing input(s)!', classes: 'rounded'}); 
-    }else{
+    if(notifBody.value != '' && notifTitle.value != ''){
         newPostRef.set({
             notificationArticleID: notifID.value,
             notificationBody: notifBody.value,
@@ -53,6 +53,8 @@ postBtn.addEventListener('click', (e) => {
 
         M.toast({html: 'Sent Notification!', classes: 'rounded'}); 
         timedRefresh(1000);
+    }else{
+        M.toast({html: 'Missing input(s)!', classes: 'rounded'}); 
     }
 
 });
@@ -100,13 +102,30 @@ var postId;
         var li = document.createElement("li");
         li.setAttribute("class", "forFeed")
 
+            //change topic to numbers (0...4)
+        var newTopic;
+        if(data.notificationCategory == 0){
+            newTopic = "Mandatory";
+        }else if(data.notificationCategory == 1){
+            newTopic = "General";
+        }else if(data.notificationCategory == 2){
+            newTopic = "Asb";
+        }else if(data.notificationCategory == 3){
+            newTopic = "District";
+        }else if(data.notificationCategory == 4){
+            newTopic = "Bulletin"; 
+        }else{
+            newTopic = "Testing";
+        }
 
         var a = document.createTextNode("Notification ID: " + key);
         var b = document.createTextNode("Title: " + data.notificationTitle);
-        var c = document.createTextNode("Article ID: " + data.notificationArticleID);
+        var c = document.createTextNode("Category: " + newTopic);
         var d = document.createTextNode("Date: " + time);
         var e = document.createTextNode("Body: " + data.notificationBody);
-        var f = document.createTextNode("Category: " + data.notificationCategory);
+        var f = document.createTextNode("Category Number: " + data.notificationCategory);
+        var g = document.createTextNode("Article ID: " + data.notificationArticleID);
+
 
         li.appendChild(a);
         var br1 = document.createElement("br");
@@ -124,6 +143,9 @@ var postId;
         var br5 = document.createElement("br");
         li.appendChild(br5);
         li.appendChild(f);
+        var br6 = document.createElement("br");
+        li.appendChild(br6);
+        li.appendChild(g);
 
 
         var list = document.getElementById("myUL1");
