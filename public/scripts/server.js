@@ -192,8 +192,6 @@ addBtn.addEventListener('click', (e) => {
 
 // var counter1 = 0; 
 // var counter2 = 0; 
-updateBtn.addEventListener('click', (e) => {
-    e.preventDefault();
     
     // if(image.value != ''){
     //     counter1 = counter1 + 1;
@@ -203,12 +201,24 @@ updateBtn.addEventListener('click', (e) => {
     //     counter2 = counter2 + 1;
     // }
 
+    //     if(counter1 == 1){
+    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
+    //     }else if(counter1 == 2){
+    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
+    //     }else{}
+
+        
+    //     if(counter2 == 1){
+    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
+    //     }else if(counter2 == 2){
+    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid2);
+    //     }else{}
+updateBtn.addEventListener('click', (e) => {
+    e.preventDefault();
 
     $('#isFeatured').on('change', function(){
         this.value = this.checked ? "true" : "false";
-        // alert(this.value);
      }).change();
-    
 
     var htmlValue = body.value.includes("</"); 
     var unixTimestamp = parseInt((new Date(timestamp.value).getTime() / 1000).toFixed(0));
@@ -226,40 +236,26 @@ updateBtn.addEventListener('click', (e) => {
     const newImg1 = {
         0: image.value,
     };
-    // const newImg2 = {
-    //     2: image.value,
-    // };
 
     const newVid1 = {
         0: video.value,
     };
 
-    // const newVid2 = {
-    //     2: video.value,
-    // };
+    if(id.value != '' && author.value != '' && body.value != '' && title.value != '' && unixTimestamp != ''){
+        if(image.value){
+            database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
+        }
+        if(video.value){
+            database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
+        }
 
-    if(id.value){
-    //     if(counter1 == 1){
-    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
-    //     }else if(counter1 == 2){
-    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg2);
-    //     }else{}
-
-        
-    //     if(counter2 == 1){
-    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
-    //     }else if(counter2 == 2){
-    //         database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid2);
-    //     }else{}
-        database.ref('/homepage/' + category.value + '/' + id.value + '/articleImages/').update(newImg1);
-        database.ref('/homepage/' + category.value + '/' + id.value + '/articleVideoIDs/').update(newVid1);
         database.ref('/homepage/' + category.value + '/' + id.value).update(newData);
 
         M.toast({html: 'Updated Article!', classes: 'rounded'});
         timedRefresh(1000);
 
     }else{
-        M.toast({html: 'Provide an ID first!', classes: 'rounded'});
+        M.toast({html: 'Provide ID or input(s) first!', classes: 'rounded'});
     }
 
 });
