@@ -183,7 +183,7 @@
                         "Authorization": "key=AAAAmFLl2Hg:APA91bE_LA-QY1JMJJjQpr_HGsCkcizU3sl_uNXI2inT1LgSXGaSOMbevOjRUzITq_8e8Tk2qLioUyMUdWQ2Im-92qhbgKhLG3PvQA8luQWmBtZ2NKZgYs4dM9kwsyDC-ubb5asSM3td",
                         "Content-Type": "application/json"
                     },
-                    "data": JSON.stringify({"notification":{"title": $('#notifTitle').val(),"body": $('#notifBody').val(), "tag": "test_tag"},"data":{"articleID": $('#notifID').val()},"to": "/topics/" + $('#topic').val()}),
+                    "data": JSON.stringify({"notification":{"title": $('#notifTitle').val(),"body": $('#notifBody').val()},"data":{"articleID": $('#notifID').val()},"to": "/topics/" + $('#topic').val()}),
                     };
 
                     $.ajax(settings).done(function (response) {

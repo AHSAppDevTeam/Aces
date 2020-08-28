@@ -37,7 +37,7 @@ postBtn.addEventListener('click', (e) => {
     }else if(topic.value == "bulletin"){
         numberTopic = 4; 
     }else{
-        numberTopic = 5;
+        numberTopic = null;
     }
 
     var newPostRef = database.ref('/notifications/').push();
