@@ -41,7 +41,7 @@ postBtn.addEventListener('click', (e) => {
     }
 
     var newPostRef = database.ref('/notifications/').push();
-    var postId = newPostRef.key;
+    //var postId = newPostRef.key;
     if(notifBody.value != '' && notifTitle.value != ''){
         newPostRef.set({
             notificationArticleID: notifID.value,
@@ -49,7 +49,7 @@ postBtn.addEventListener('click', (e) => {
             notificationCategory: numberTopic,
             notificationTitle: notifTitle.value,
             notificationUnixEpoch: unixTimestamp,
-            notificationPostID: postId,
+          //  notificationPostID: postId,
         });
 
         M.toast({html: 'Sent Notification!', classes: 'rounded'}); 
