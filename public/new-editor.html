@@ -7,113 +7,187 @@
     <link rel='icon' type='image/png' href='images/favicon.png' />
     <link rel='stylesheet' href='https://necolas.github.io/normalize.css/8.0.1/normalize.css'>
     <style>
- html {
+html {
 	 font-family: Helvetica, Roboto, Sans-serif;
 	 font-size: 14pt;
 }
- html * {
+ html body {
+	 display: flex;
+}
+ html body > * {
+	 height: 100vh;
+	 overflow: hidden scroll;
+}
+ html body * {
 	 transition-duration: 100ms;
 	 box-sizing: border-box;
 }
- #articles {
-	 display: flex;
+ html body h1 {
+	 font-size: 1rem;
+	 font-weight: normal;
 }
- article {
-	 min-height: 100vh;
+ .editor {
 	 display: flex;
+	 width: 24rem;
+	 max-width: 90vw;
+	 min-width: 10vw;
 	 flex-direction: column;
+	 padding: 1rem;
+	 resize: horizontal;
 }
- article * {
-	 margin-bottom: 0.2rem !important;
+ .editor * {
+	 margin-bottom: 1rem !important;
 }
- article input {
+ .editor input, .editor textArea {
 	 outline: 0;
 	 border: 0;
 }
- article ::placeholder {
+ .editor ::placeholder {
 	 color: #888;
 }
- article .id {
+ .editor .id {
 	 font-family: monospace;
-	 width: 10rem;
-	 border-radius: 4pt;
+	 border-radius: 1rem;
 	 cursor: pointer;
+	 color: #26734d;
+	 background: #cffce6;
 }
- article .title {
+ .editor .title {
 	 font-size: 2rem;
 }
- article .author {
+ .editor .author {
 	 font-size: 1rem;
 }
- article .media {
+ .editor .media {
 	 display: flex;
 	 overflow-x: scroll;
 }
- article .media * {
-	 flex-basis: 10rem;
-	 height: 10rem;
+ .editor .media > * {
+	 flex: 0 0 8rem;
+	 height: 8rem;
+	 background: lightgray;
+	 margin: 0.1rem;
 }
- article .media .new {
+ .editor .media .new {
 	 display: flex;
-	 padding: 1rem;
 	 flex-direction: column;
 }
- article .media .new .upload {
-	 background: red;
+ .editor .media .new .upload {
+	 cursor: pointer;
 }
- article .media .new .upload input {
+ .editor .media .new .upload input {
 	 display: none;
 }
- article .media .new .upload::before {
-	 content: 'Upload image';
+ .editor .media .new .upload::before {
+	 content: 'Upload an image';
 }
- article .media .file {
+ .editor .media .file {
 	 position: relative;
 }
- article .media .file :first-child {
+ .editor .media .file :first-child {
 	 width: 100%;
 }
- article .body {
+ .editor .body {
 	 white-space: pre-wrap;
 	 flex-grow: 1;
 }
+ .browser {
+	 flex: 1;
+	 display: grid;
+	 padding: 4pt;
+	 grid-gap: 4pt;
+	 align-items: center;
+	 grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	 background: #faa;
+}
+ .browser > * {
+	 height: 10rem;
+	 padding: 8pt;
+}
+ .browser > article {
+	 display: flex;
+	 flex-direction: column;
+	 background-size: cover;
+	 cursor: pointer;
+	 opacity: 0.8;
+}
+ .browser > article > * {
+	 width: 100%;
+	 margin: 2pt 0;
+}
+ .browser > article > .title {
+	 font-size: 1rem;
+}
+ .browser > article > .author {
+	 font-size: 0.8rem;
+	 font-style: normal;
+}
+ .browser > article > .author::before {
+	 content: 'By ';
+}
+ .browser > article > .body {
+	 overflow: hidden;
+	 flex-grow: 1;
+	 -webkit-mask-image: linear-gradient(#000 50%, #000 0);
+}
+ .browser > article > .body * {
+	 display: contents;
+}
+ .browser > article:hover {
+	 opacity: 1;
+}
+ 
+      
     </style>
   </head>
   <body>
-    <template id='article-template'>
-      <article>
-        <section class='actions'>
-          <input class='id' type='button' title='Copy article ID' value='article-id'>
-          <select class='topic'>
-            <option>ASB</option>
-            <option>District</option>
-            <option>General Info</option>
-          </select>
-          <input class='publish' type='button' value='Submit article'>
+    <main class='editor'>
+      <input class='id' type='button' title='Copy article ID' value='placeholder-article-id'>
+      <section class='actions'>
+        <input class='delete' type='button' value='Delete'>
+        <input class='publish' type='button' value='Publish'>
+      </section>
+      <select class='topic'>
+        <option default>General Info</option>
+        <option>ASB</option>
+        <option>District</option>
+      </select>
+      <input class='title' placeholder='Title'>
+      <input class='author' placeholder='John Doe'>
+      <section class='media'>
+        <section class='new'>
+          <label class='upload'>
+            <input type='file'>
+          </label>
+          <input class='url' placeholder='Or enter an URL'>
         </section>
-        <input class='title' placeholder='Title'>
-        <input class='author' placeholder='John Doe'>
-        <section class='media'>
-          <section class='new'>
-            <label class='upload'>
-              <input type='file'>
-            </label>
-            <input class='url' placeholder='Enter an URL'>
-          </section>
-          <section class='file'>
-            <img src='https://upload.wikimedia.org/wikipedia/commons/9/97/Feral_cat_Virginia_crop.jpg'>
-          </section>
-        </section>
-        <textArea class='body' contenteditable>
-This is the article content. Lorem ipsum. [Links](https://example.com).
+      </section>
+      <textArea class='body'>Hello world! 
+        This is the article content. Lorem ipsum. [Links](https://example.com).
 
-## This is a heading
+        ## This is a heading
 
-**Bold text** and *italic text*
-        </textArea>
-      </article>
-    </template>
-    <section id='articles'></section>
+        **Bold text** and *italic text*
+      </textArea>
+    </main>
+    <aside class='browser'>
+      <nav>
+        <h1>
+          AHS App Content Editor
+        </h1>
+        <button>
+          New article
+        </button>
+        <input placeholder='Search...'>
+      </nav>
+      <template class='article-preview'>
+        <article>
+            <h3 class='title'></h3>
+            <address class='author'></address>
+            <p class='body'></p>
+        </article>
+      </template>
+    </aside>
     
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
@@ -131,31 +205,99 @@ This is the article content. Lorem ipsum. [Links](https://example.com).
       }
       firebase.initializeApp(firebaseConfig)
     </script>
-    <script>
     
+    <script>
+      
 const database = firebase.database()
+let articles = {}
 const topics = ['ASB', 'District', 'General Info']
-const map = {
-	title: 'articleTitle',
-  media: 'articleImages',
-  author: 'articleAuthor',
-  body: 'articleBody',
-}
-const template = document.querySelector('#article-template')
-const articles = document.querySelector('#articles')
 
-topics.forEach(topic=>{
-	database.ref('homepage').child(topic).once('value',container=>{
-  	container.forEach(snapshot=>{
-    	const article = snapshot.val()
-      const articleElement = template.content.cloneNode(true)
-      for (const [key, value] of Object.entries(map)) {
-      	articleElement.querySelector(`.${key}`).value = article[value]      	
+const map = [
+  ['title', 'articleTitle'],
+  ['images', 'articleImages'],
+  ['author', 'articleAuthor'],
+  ['body', 'articleBody'],
+]
+
+
+topics.forEach(topic => {
+  database.ref('homepage').child(topic).once('value', container => {
+    container.forEach(snapshot => {
+      // Save article to custom format
+      const article_remote = snapshot.val()
+      let article = {
+        id: snapshot.key,
+        topic: topic,
       }
-      articles.append(articleElement)
+      for (const [local, remote] of map) {
+        article[local] = article_remote[remote]
+      }
+      articles[article.id] = article
+
+      // Load article properties into a preview
+      const preview = template.content.cloneNode(true).querySelector('article')
+      for (const property in article) {
+        const element = preview.querySelector(`.${property}`)
+        if (element) element.innerHTML = article[property]
+      }
+
+      // Background image
+      preview.style.backgroundImage = `linear-gradient(#fffd,#fffd), url(${article.images[0]})`
+
+      preview.addEventListener('click', () => {
+        editArticle(article)
+      })
+
+      browser.append(preview)
     })
   })
 })
+
+const template = document.querySelector('template.article-preview')
+const browser = document.querySelector('.browser')
+let editor = document.querySelector('.editor')
+const editorEmpty = editor.cloneNode(true)
+
+function editArticle(article) {
+
+  const editorEmptyClone = editorEmpty.cloneNode(true)
+	editor.replaceWith(editorEmptyClone)
+  editor = editorEmptyClone
+  
+  for (const property in article) {
+    const element = editor.querySelector(`.${property}`)
+    if (element) element.value = article[property]
+  }
+  for(const url of article.images) {
+    const image = document.createElement('img')
+    image.src = url
+    editor.querySelector('.media').append(image)
+  }
+}
+
+//newArticleElement.addEventListener('click',newArticle)
+
+function newArticle() {
+  const newArticle = template.content.cloneNode(true)
+
+  const urlElement = newArticle.querySelector('.url')
+  const mediaElement = newArticle.querySelector('.media')
+  urlElement.addEventListener('change', e => {
+    const url = e.target.value
+    const imageElement = document.createElement('img')
+    imageElement.src = url
+    mediaElement.append(imageElement)
+  })
+
+  articles.prepend(newArticle)
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  })
+}
+//newArticle()
+
     </script>
   </body>
 </html>
