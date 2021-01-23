@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang='en-us' dir='ltr'>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Content Editing System: Homepage</title>
+    <link rel='icon' type='image/png' href='images/favicon.png' />
+    <link rel='stylesheet' href='https://necolas.github.io/normalize.css/8.0.1/normalize.css'>
+    <style>
+ html {
+	 font-family: Helvetica, Roboto, Sans-serif;
+	 font-size: 14pt;
+}
+ html * {
+	 transition-duration: 100ms;
+	 box-sizing: border-box;
+}
+ #articles {
+	 display: flex;
+}
+ article {
+	 min-height: 100vh;
+	 display: flex;
+	 flex-direction: column;
+}
+ article * {
+	 margin-bottom: 0.2rem !important;
+}
+ article input {
+	 outline: 0;
+	 border: 0;
+}
+ article ::placeholder {
+	 color: #888;
+}
+ article .id {
+	 font-family: monospace;
+	 width: 10rem;
+	 border-radius: 4pt;
+	 cursor: pointer;
+}
+ article .title {
+	 font-size: 2rem;
+}
+ article .author {
+	 font-size: 1rem;
+}
+ article .media {
+	 display: flex;
+	 overflow-x: scroll;
+}
+ article .media * {
+	 flex-basis: 10rem;
+	 height: 10rem;
+}
+ article .media .new {
+	 display: flex;
+	 padding: 1rem;
+	 flex-direction: column;
+}
+ article .media .new .upload {
+	 background: red;
+}
+ article .media .new .upload input {
+	 display: none;
+}
+ article .media .new .upload::before {
+	 content: 'Upload image';
+}
+ article .media .file {
+	 position: relative;
+}
+ article .media .file :first-child {
+	 width: 100%;
+}
+ article .body {
+	 white-space: pre-wrap;
+	 flex-grow: 1;
+}
+    </style>
+  </head>
+  <body>
+    <template id='article-template'>
+      <article>
+        <section class='actions'>
+          <input class='id' type='button' title='Copy article ID' value='article-id'>
+          <select class='topic'>
+            <option>ASB</option>
+            <option>District</option>
+            <option>General Info</option>
+          </select>
+          <input class='publish' type='button' value='Submit article'>
+        </section>
+        <input class='title' placeholder='Title'>
+        <input class='author' placeholder='John Doe'>
+        <section class='media'>
+          <section class='new'>
+            <label class='upload'>
+              <input type='file'>
+            </label>
+            <input class='url' placeholder='Enter an URL'>
+          </section>
+          <section class='file'>
+            <img src='https://upload.wikimedia.org/wikipedia/commons/9/97/Feral_cat_Virginia_crop.jpg'>
+          </section>
+        </section>
+        <textArea class='body' contenteditable>
+This is the article content. Lorem ipsum. [Links](https://example.com).
+
+## This is a heading
+
+**Bold text** and *italic text*
+        </textArea>
+      </article>
+    </template>
+    <section id='articles'></section>
+    
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE",
+        authDomain: "arcadia-high-mobile.firebaseapp.com",
+        databaseURL: "https://arcadia-high-mobile.firebaseio.com",
+        projectId: "arcadia-high-mobile",
+        storageBucket: "arcadia-high-mobile.appspot.com",
+        messagingSenderId: "654225823864",
+        appId: "1:654225823864:web:944772a5cadae0c8b7758d"
+      }
+      firebase.initializeApp(firebaseConfig)
+    </script>
+    <script>
+    
+const database = firebase.database()
+const topics = ['ASB', 'District', 'General Info']
+const map = {
+	title: 'articleTitle',
+  media: 'articleImages',
+  author: 'articleAuthor',
+  body: 'articleBody',
+}
+const template = document.querySelector('#article-template')
+const articles = document.querySelector('#articles')
+
+topics.forEach(topic=>{
+	database.ref('homepage').child(topic).once('value',container=>{
+  	container.forEach(snapshot=>{
+    	const article = snapshot.val()
+      const articleElement = template.content.cloneNode(true)
+      for (const [key, value] of Object.entries(map)) {
+      	articleElement.querySelector(`.${key}`).value = article[value]      	
+      }
+      articles.append(articleElement)
+    })
+  })
+})
+    </script>
+  </body>
+</html>
