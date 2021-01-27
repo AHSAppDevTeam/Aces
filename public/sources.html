@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang='en-us' dir='ltr'>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>AHS App Content Sources</title>
+  </head>
+  <body>
+    <ul></ul>
+    <script>
+const sources = {
+  'AUSD': 'https://www.facebook.com/ArcadiaUnified',
+  'Student Bulletin': 'https://drive.google.com/drive/folders/1GDcKxLYuZZhLlNK6Xb8q1mlJZ8_U6Twl',
+  'ASB Instagram': 'https://www.instagram.com/arcadiaasb/',
+  'ASB Website': 'https://asb.ausd.net/',
+  'AHS Website': 'https://ahs.ausd.net/',
+  'AHS Class of 2021': 'https://www.facebook.com/groups/1916270318637879/',
+  'AHS Class of 2022': 'https://www.facebook.com/groups/apaches2022/',
+  'AHS Class of 2023': 'https://www.facebook.com/groups/465390764048180/',
+}
+const parent = document.querySelector('ul')
+for(const name in sources){
+  parent.innerHTML += `<li><a href='${sources[name]}' target='_blank'>${name}</a></li>`
+}
+    </script>
+  </body>
+</html>
