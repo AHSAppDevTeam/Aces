@@ -7,43 +7,62 @@ const DEBUG = true
 //////////
 
 const database = firebase.database()
-const categories = ['ASB', 'District', 'General Info']
+const locations = {
+	homepage: ['ASB', 'District', 'General Info'],
+	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference']
+}
 const map = [
 	['title', 'articleTitle'],
 	['images', 'articleImages'],
 	['author', 'articleAuthor'],
 	['body', 'articleBody'],
 	['md', 'articleMd'],
+	['hasHTML', 'hasHTML'],
+	['featured', 'isFeatured'],
+	['timestamp', 'articleUnixEpoch'],
 ]
 
-categories.forEach(category => {
-	database.ref('homepage').child(category).once('value', container => {
-		container.forEach(snapshot => {
-			// Save article to custom format
-			const article_remote = snapshot.val()
-			let article = new Article(snapshot.key)
-			
-			// Transfer public properties to local format
-			article.public.category = category
-			for (const [local, remote] of map)
-				article.public[local] = article_remote[remote]
-				
-			// Use HTML if markdown isn't available
-			if (!article.public.hasMd) {
-				article.public.md = article.public.body
-				article.public.hasMd = true
-			}
+for(const location in locations){
+	for(const category of locations[location]){
+		database.ref(location).child(category).once('value', container => {
+			container.forEach(snapshot => {
+				// Save article to custom format
+				const article_remote = snapshot.val()
+				let article = new Article(snapshot.key)
 
-			// Make preview
-			makePreview(article, 1)
+				// Transfer public properties to local format
+				article.public.location = location
+				article.public.category = category
+				for (const [local, remote] of map)
+					if(article_remote[remote])
+						article.public[local] = article_remote[remote]
 
-			article.published = true
+				// Use HTML if markdown isn't available
+				article.public.md = article.public.md || article.public.body
+
+				// Make preview
+				makePreview(article, 1)
+
+				article.published = true
+			})
 		})
-	})
-})
+	}
+}
+
 
 let articles = {}
 let editor, preview
+
+
+////////////
+/* SEARCH */
+////////////
+
+const search = document.querySelector('.search')
+const regex = '{(\w+) (.*?)}'
+search.addEventListener('input',event=>{
+	const val = event.target.value
+})
 
 ////////////
 /* EDITOR */
@@ -110,6 +129,10 @@ function makeEditor(article) {
 				)
 			}
 			
+			if(property == 'category'){
+				// lotation
+			}
+			
 			updatePreview(article)
 		}
 	})
@@ -119,22 +142,27 @@ function makeEditor(article) {
 			.querySelector('.'+action)
 			.addEventListener('click', _=> remoteArticle(article,action))
 	}
+	editor.querySelector('.render').addEventListener('click',event=>{
+		const previewing = event.target.value == 'Preview'
+		event.target.value = previewing ? 'Edit' : 'Preview'
+		editor.classList.toggle('render',previewing)
+	})
 }
 
 function updateElement(element,content){
 	if (element)
-		element[
-			['INPUT','SELECT'].includes(element.tagName) ? 'value'
-			: element.className.includes('body') ? 'innerHTML'
-			: 'textContent'
-		] = content
+		element[elementProperty(element)] = content
+}
+
+function elementProperty(element){
+	return ['checkbox'].includes(element.type) ? 'checked'
+	: ['INPUT','SELECT'].includes(element.tagName) ? 'value'
+	: element.className.includes('body') ? 'innerHTML'
+	: 'textContent'
 }
 
 function elementContent(element){
-	return element[
-		['INPUT','SELECT'].includes(element.tagName) 
-		? 'value' : 'textContent'
-	]
+	return element[elementProperty(element)]
 }
 
 /////////////
@@ -152,7 +180,7 @@ function makePreview(article,order){
 	updatePreview(article)
 
 	// Background image
-	if(article.public.images) preview.style.backgroundImage = `linear-gradient(#fffd,#fffd), url(${article.public.images[0]})`
+	if(article.public.images.length) preview.style.backgroundImage = `linear-gradient(#fffd,#fffd), url(${article.public.images[0]})`
 
 	preview.addEventListener('click', _=> makeEditor(article))
 
@@ -164,7 +192,9 @@ function makePreview(article,order){
 function updatePreview(article){
 	for (const property in article.public) {
 		const element = article.preview.querySelector('.'+property)
-		if (element) element.innerHTML = article.public[property]
+		let val = article.public[property]
+		if(typeof val == 'string') val = val.substring(0,300)
+		if (element) element.innerHTML = val
 	}
 }
 
@@ -177,23 +207,14 @@ class Article {
 		this.media = []
 		this.public = { // Data to be passed to the server
 			id: id  || makeID(8),
-			topic: 'General Info',
+			location: 'homepage',
+			category: 'General Info',
 			title: 'Untitled Article',
-			author: 'Alice Bobson',
-			hasMd: false,
-			md: `Enter text here!
-
-Words can be **bolded** or *italicized* like so.
-
-## This is a heading
-
-Links look like [this](https://example.com)
-
-> This is a block quote
-
-HTML <div>tags</div> are fine too.
-
-For more info check out [an overview of Markdown](https://www.markdownguide.org/basic-syntax)`,
+			author: '',
+			md: '',
+			hasHTML: true,
+			featured: false,
+			timestamp: Date.now(),
 			body: '',
 			images: []
 		}
@@ -216,8 +237,21 @@ makeArticle()
 function makeArticle() {
 	let article = new Article()
 	article.published = false
-	article.public.hasMd = true
+	article.public.md = `Enter text here!
+
+Words can be **bolded** or *italicized* like so.
+
+## This is a heading
+
+Links look like [this](https://example.com)
+
+> This is a block quote
+
+HTML <s>tags</s> are fine too.
+
+For more info check out [an overview of Markdown](https://www.markdownguide.org/basic-syntax)`
 	article.public.body = marked(article.public.md)
+	article.public.author =  'Alice Bobson'
 	makePreview(article, 0)
 	makeEditor(article)
 }
@@ -230,7 +264,7 @@ function makeID(length=8){
 }
 
 function remoteArticle(article, action){
-	if(DEBUG) article.public.category = 'DEBUG'
+	if(DEBUG) article.public.location = 'DEBUG'
 
 	let article_remote = {}
 
@@ -238,7 +272,7 @@ function remoteArticle(article, action){
 		article_remote[remote] = article.public[local]
 	}
 	
-	const reference = database.ref(`/homepage/${article.public.category}/${article.public.id}`)
+	const reference = database.ref([,article.public.location,article.public.category,article.public.id].join('/'))
 	
 	switch(action){
 		case 'publish':

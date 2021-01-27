@@ -20,6 +20,24 @@ body h1 {
 	font-size: 1rem;
 	font-weight: normal;
 }
+
+.editor > *,
+.preview {
+	border: solid 2pt #ddd;
+	padding: 8pt;
+	border-radius: 4pt;
+	background-color: white;
+}
+.editor > :hover,
+.preview:hover {
+	border-color: #aaa;
+}
+.editor > :focus,
+.editor > :focus-within,
+.preview.open {
+	border-color: black;
+}
+
 .editor {
 	display: flex;
 	position: relative;
@@ -31,10 +49,14 @@ body h1 {
 	padding: 1rem;
 	resize: horizontal;
 }
-.editor * {
+.editor > * {
 	margin: 0 0 1rem 0;
 }
-.editor input, .editor textArea {
+.editor.render > * {
+	padding: 0;
+	border-color: transparent;
+}
+.editor input {
 	outline: 0;
 	border: 0;
 }
@@ -43,6 +65,8 @@ body h1 {
 }
 .editor header {
 	display: flex;
+	position: sticky;
+	top: 0;
 }
 .editor header * {
 	--lum: 90%;
@@ -51,7 +75,8 @@ body h1 {
 	cursor: pointer;
 	color: black;
 	padding: 2pt 8pt;
-	flex: 0 0 5rem;
+	flex: 1 0 0;
+	width: 0;
 }
 .editor header :hover,
 .editor header :focus {
@@ -63,29 +88,18 @@ body h1 {
 .editor header .remove {
 	--hue: 000deg;
 }
-.editor header .id {
-	font-family: monospace;
-	width: 0;
-	flex: 1 0 0;
+.editor header .render {
+	--hue: -120deg;
 	margin-inline: 0.5rem;
+}
+.editor header .publish {
+	--hue: -240deg;
+}
+.editor .id {
+	font-family: monospace;
 	--hue: 240deg;
 	text-align: center;
 	user-select: none;
-}
-.editor header .publish {
-	--hue: 120deg;
-}
-.editor [contenteditable],
-.editor .body{
-	border: solid 2pt #ddd;
-	padding: 8pt;
-	border-radius: 4pt;
-}
-.editor [contenteditable]:hover{
-	border-color: #aaa;
-}
-.editor [contenteditable]:focus{
-	border-color: black;
 }
 .editor .title {
 	font-size: 1.6rem;
@@ -107,6 +121,9 @@ body h1 {
 	display: flex;
 	flex-direction: column;
 }
+.editor.render .media .new {
+	display: none;
+}
 .editor .media .new .upload {
 	flex-grow: 1;
 	cursor: pointer;
@@ -122,35 +139,16 @@ body h1 {
 }
 .editor .body{
 	display: none;
-	border-color: blue;
 }
 .editor .md {
 	white-space: pre-wrap;
 	flex-grow: 1;
+	line-height: 1;
 }
-.editor .render{
-	margin-bottom: 1.6rem;
-	transform: translateX(1rem);
-	width: content;
-}
-.editor .render::after{
-	content: 'preview';
-	position: absolute;
-	background: white;
-	cursor: pointer;
-	border-radius: 1rem;
-	border: 2pt solid blue;
-	padding: 0 4pt;
-	transform: translateX(-1rem);
-}
-.editor .render:checked::after{
-	background: blue;
-	color: white;
-}
-.editor .render:checked ~ .body {
+.editor.render .body{
 	display: block;
 }
-.editor .render:checked ~ .md {
+.editor.render .md{
 	display: none;
 }
 .browser {
@@ -176,12 +174,7 @@ body h1 {
 	background-size: cover;
 	cursor: pointer;
 	opacity: 0.6;
-	background: #aaa;
 	padding-bottom: 0;
-	border: solid 2pt transparent;
-}
-.preview.open{
-	border-color: black;
 }
 .preview > .status{
 	background: orange;

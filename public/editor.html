@@ -12,16 +12,30 @@
 			<main class='editor'>
 				<header>
 					<input class='remove' type='button' value='Remove'>
-					<input class='id' title='Copy article ID'>
+					<input class='render' type='button' value='Preview'>
 					<input class='publish' type='button' value='Publish'>
 				</header>
-				<select class='topic'>
+				<input class='id' title='Copy article ID'>
+				<select class='category'>
+				<optgroup label='Homepage'>
 					<option default>General Info</option>
 					<option>ASB</option>
 					<option>District</option>
+				</optgroup>
+				<optgroup label='Bulletin'>
+					<option>Academics</option>
+					<option>Athletics</option>
+					<option>Clubs</option>
+					<option>Colleges</option>
+					<option>Reference</option>
+				</optgroup>
 				</select>
 				<h3 class='title' contenteditable></h3>
 				<address class='author' contenteditable></address>
+				<label>
+					<input class='featured' type='checkbox' value='featured'>
+					featured
+				</label>
 				<section class='media'>
 					<section class='new'>
 						<label class='upload'>
@@ -30,7 +44,6 @@
 						<input class='url' placeholder='Or enter an URL'>
 					</section>
 				</section>
-				<input type='checkbox' name='render' class='render'>
 				<section class='md' contenteditable></section>
 				<section class='body'></section>
 			</main>
@@ -43,7 +56,7 @@
 				<button class='new-article'>
 					New article
 				</button>
-				<input placeholder='Search...'>
+				<input class='search' placeholder='Search...'>
 			</nav>
 			<template class='template-preview'>
 				<article class='preview'>
