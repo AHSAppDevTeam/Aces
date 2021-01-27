@@ -110,12 +110,12 @@ body h1 {
 .editor .media {
 	display: flex;
 	flex: 0 0 10rem;
-	overflow-x: scroll;
+	overflow: scroll hidden;
 }
 .editor .media > * {
-	flex: 0 0 8rem;
-	background: lightgray;
-	margin: 0.1rem;
+	background: #ddd;
+	margin-right: 8pt;
+	width: 8rem;
 }
 .editor .media .new {
 	display: flex;
@@ -135,7 +135,7 @@ body h1 {
 	content: 'Upload an image';
 }
 .editor .media .file {
-	position: relative;
+	object-fit: contain;
 }
 .editor .body{
 	display: none;
@@ -193,6 +193,7 @@ body h1 {
 .preview > * {
 	width: 100%;
 	margin: 2pt 0;
+	pointer-events: none;
 }
 .preview > .title {
 	font-size: 1rem;

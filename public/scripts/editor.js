@@ -8,8 +8,8 @@ const DEBUG = true
 
 const database = firebase.database()
 const locations = {
+	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
 	homepage: ['ASB', 'District', 'General Info'],
-	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference']
 }
 const map = [
 	['title', 'articleTitle'],
@@ -62,7 +62,7 @@ const search = document.querySelector('.search')
 const regex = '{(\w+) (.*?)}'
 search.addEventListener('input',event=>{
 	const val = event.target.value
-})
+	})
 
 ////////////
 /* EDITOR */
@@ -99,50 +99,54 @@ function makeEditor(article) {
 	preview = article.preview
 	preview.classList.add('open')
 
-	for (const property in article.public) {
+	for (const property in article.public)
 		updateElement(
 			editor.querySelector('.'+property),
 			article.public[property]
 		)
-	}
 
-	for(const url of article.public.images) {
-		const image = document.createElement('img')
-		image.src = url
-		
-		editor
-			.querySelector('.media')
-			.append(image)
-	}
+	for(const url of article.public.images)
+		makeMedia(article,url)
 
 	editor.addEventListener('input',event=>{
 		const property = event.target.classList[0]
 		if(Object.keys(article.public).includes(property)){
 			article.public[property] = elementContent(event.target)
 			article.published = false
-			
-			if(property == 'md'){
-				article.public.body = marked(article.public.md)
-				updateElement(
-					editor.querySelector('.body'),
-					article.public.body
-				)
+
+			switch(property){
+				case 'md':
+					article.public.body = marked(article.public.md)
+					updateElement(
+						editor.querySelector('.body'),
+						article.public.body
+					)
+					break
+				case 'category':
+					//location
+					break
 			}
-			
-			if(property == 'category'){
-				// lotation
-			}
-			
+
 			updatePreview(article)
 		}
 	})
-	
+
+	editor.querySelector('.url')
+		.addEventListener('change',event=>{
+		const url = event.target.value
+		makeMedia(article,url)
+		article.public.images.push(url)
+		event.target.value = ''
+	})
+
 	for(const action of ['remove','publish']){
 		editor
 			.querySelector('.'+action)
 			.addEventListener('click', _=> remoteArticle(article,action))
 	}
-	editor.querySelector('.render').addEventListener('click',event=>{
+	editor
+		.querySelector('.render')
+		.addEventListener('click',event=>{
 		const previewing = event.target.value == 'Preview'
 		event.target.value = previewing ? 'Edit' : 'Preview'
 		editor.classList.toggle('render',previewing)
@@ -163,6 +167,22 @@ function elementProperty(element){
 
 function elementContent(element){
 	return element[elementProperty(element)]
+}
+
+function makeMedia(article,url){
+	const image = document.createElement('img')
+	image.src = url
+	image.classList.add('file')
+
+	editor
+		.querySelector('.media')
+		.append(image)
+	
+	image.addEventListener('click',_=>{
+		const index = article.public.images.indexOf(url)
+		article.public.images.splice(index,1)
+		image.remove()
+	})
 }
 
 /////////////
@@ -220,7 +240,7 @@ class Article {
 		}
 		articles[this.public.id] = this
 	}
-	
+
 	set published (state) {
 		this._published = state
 		if(this.preview)
@@ -271,9 +291,9 @@ function remoteArticle(article, action){
 	for(const [local,remote] of map){
 		article_remote[remote] = article.public[local]
 	}
-	
+
 	const reference = database.ref([,article.public.location,article.public.category,article.public.id].join('/'))
-	
+
 	switch(action){
 		case 'publish':
 			reference.update(article_remote)
