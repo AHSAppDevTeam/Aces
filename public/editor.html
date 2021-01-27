@@ -15,23 +15,23 @@
 					<input class='render' type='button' value='Preview'>
 					<input class='publish' type='button' value='Publish'>
 				</header>
-				<input class='id' title='Copy article ID'>
-				<select class='category'>
-				<optgroup label='Homepage'>
-					<option default>General Info</option>
-					<option>ASB</option>
-					<option>District</option>
-				</optgroup>
-				<optgroup label='Bulletin'>
-					<option>Academics</option>
-					<option>Athletics</option>
-					<option>Clubs</option>
-					<option>Colleges</option>
-					<option>Reference</option>
-				</optgroup>
-				</select>
 				<h3 class='title' contenteditable></h3>
 				<address class='author' contenteditable></address>
+				<input class='id' title='Click to copy' readonly>
+				<select class='category'>
+					<optgroup label='Homepage'>
+						<option default>General Info</option>
+						<option>ASB</option>
+						<option>District</option>
+					</optgroup>
+					<optgroup label='Bulletin'>
+						<option>Academics</option>
+						<option>Athletics</option>
+						<option>Clubs</option>
+						<option>Colleges</option>
+						<option>Reference</option>
+					</optgroup>
+				</select>
 				<label>
 					<input class='featured' type='checkbox' value='featured'>
 					featured
@@ -39,7 +39,7 @@
 				<section class='media'>
 					<section class='new'>
 						<label class='upload'>
-							<input type='file'>
+							<input type='file' multiple>
 						</label>
 						<input class='url' placeholder='Or enter an URL'>
 					</section>

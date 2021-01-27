@@ -56,10 +56,6 @@ body h1 {
 	padding: 0;
 	border-color: transparent;
 }
-.editor input {
-	outline: 0;
-	border: 0;
-}
 .editor ::placeholder {
 	color: #888;
 }
@@ -77,6 +73,8 @@ body h1 {
 	padding: 2pt 8pt;
 	flex: 1 0 0;
 	width: 0;
+	outline: 0;
+	border: 0;
 }
 .editor header :hover,
 .editor header :focus {
@@ -96,10 +94,7 @@ body h1 {
 	--hue: -240deg;
 }
 .editor .id {
-	font-family: monospace;
-	--hue: 240deg;
-	text-align: center;
-	user-select: none;
+	cursor: pointer;
 }
 .editor .title {
 	font-size: 1.6rem;
