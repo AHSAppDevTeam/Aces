@@ -1,5 +1,7 @@
 "use strict"
 
+const DEBUG = true
+
 //////////
 /* INIT */
 //////////
@@ -79,7 +81,10 @@ function makeEditor(article) {
 	for(const url of article.public.images) {
 		const image = document.createElement('img')
 		image.src = url
-		editor.querySelector('.media').append(image)
+		
+		editor
+			.querySelector('.media')
+			.append(image)
 	}
 
 	editor.addEventListener('input',event=>{
@@ -88,6 +93,10 @@ function makeEditor(article) {
 			article.public[property] = elementContent(event.target)
 		updatePreview(article)
 	})
+
+	editor
+		.querySelector('.publish')
+		.addEventListener('click', _=> publishArticle(article))
 }
 
 function updateElement(element,content){
@@ -122,9 +131,7 @@ function makePreview(article,order){
 	// Background image
 	if(article.public.images) preview.style.backgroundImage = `linear-gradient(#fffd,#fffd), url(${article.public.images[0]})`
 
-	preview.addEventListener('click', () => {
-		makeEditor(article)
-	})
+	preview.addEventListener('click', _=> makeArticle(article))
 
 	preview.style.order = order
 
@@ -144,8 +151,9 @@ function updatePreview(article){
 
 class Article {
 	constructor (id) {
+		this.published = Boolean(id) // If published before
 		this.media = []
-		this.public = {
+		this.public = { // Data to be passed to the server
 			id: id  || makeID(8),
 			topic: 'General Info',
 			title: 'Untitled Article',
@@ -183,4 +191,25 @@ function makeID(length=8){
 		.fill(0)
 		.map(_=>Math.floor(Math.random()*16).toString(16))
 		.join('')
+}
+
+function publishArticle(article){
+	if(DEBUG) article.public.category = 'DEBUG'
+
+	let article_remote = {}
+
+	for(const [local,remote] of map){
+		article_remote[remote] = article.public[local]
+	}
+	
+	if ( article.published ) {
+		database
+			.ref(`/homepage/${article.public.category}/${article.public.id}`)
+			.update(article_remote)
+	} else {
+		database
+			.ref(`/homepage/${article.public.category}`)
+			.child(article.public.id)
+			.set(article_remote)	
+	}
 }
