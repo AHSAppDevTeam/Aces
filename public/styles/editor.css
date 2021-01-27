@@ -1,165 +1,178 @@
 html {
-    font-family: Helvetica, Roboto, Sans-serif;
-    font-size: 14pt;
+	font-family: Helvetica, Roboto, Sans-serif;
+	font-size: 14pt;
 }
 body {
-    display: flex;
+	display: flex;
 }
 body > * {
-    height: 100vh;
-    overflow: hidden scroll;
+	height: 100vh;
+	overflow: hidden scroll;
 }
 body * {
-    transition-duration: 100ms;
-    box-sizing: border-box;
+	box-sizing: border-box;
+	transition-duration: 100ms;
 }
 [contenteditable]:focus{
-  outline: 0;
+	outline: 0;
 }
 body h1 {
-    font-size: 1rem;
-    font-weight: normal;
+	font-size: 1rem;
+	font-weight: normal;
 }
 .editor {
-    display: flex;
-    width: 24rem;
-    max-width: calc(100vw - 12rem);
-    min-width: 12rem;
-  min-height: 100vh;
-    flex-direction: column;
-    padding: 1rem;
-  padding-bottom: 0;
-    resize: horizontal;
+	display: flex;
+	width: 24rem;
+	max-width: calc(100vw - 12rem);
+	min-width: 12rem;
+	min-height: 100vh;
+	flex-direction: column;
+	padding: 1rem;
+	padding-bottom: 0;
+	resize: horizontal;
 }
 .editor * {
-    margin: 0 0 1rem 0;
+	margin: 0 0 1rem 0;
 }
 .editor input, .editor textArea {
-    outline: 0;
-    border: 0;
+	outline: 0;
+	border: 0;
 }
 .editor ::placeholder {
-    color: #888;
+	color: #888;
 }
 .editor header {
-  display: flex;
+	display: flex;
 }
 .editor header * {
-  --lum: 90%;
-  border-radius: 1rem;
-    background: hsl(var(--hue),100%,var(--lum));
-    cursor: pointer;
-  color: black;
-  padding: 2pt 8pt;
+	--lum: 90%;
+	border-radius: 1rem;
+	background: hsl(var(--hue),100%,var(--lum));
+	cursor: pointer;
+	color: black;
+	padding: 2pt 8pt;
 }
 .editor header :hover,
 .editor header :focus {
-  --lum: 85%;
+	--lum: 85%;
 }
 .editor header :active {
-  --lum: 80%;
+	--lum: 80%;
 }
 .editor header .delete {
-  --hue: 000deg;
+	--hue: 000deg;
 }
 .editor header .id {
-    font-family: monospace;
-  width: 0;
-  flex-grow: 1;
-  margin-inline: 0.5rem;
-  --hue: 240deg;
-  text-align: center;
-  user-select: none;
+	font-family: monospace;
+	width: 0;
+	flex-grow: 1;
+	margin-inline: 0.5rem;
+	--hue: 240deg;
+	text-align: center;
+	user-select: none;
 }
 .editor header .publish {
-  --hue: 120deg;
+	--hue: 120deg;
 }
 .editor .title {
-    font-size: 1.6rem;
+	font-size: 1.6rem;
 }
 .editor .author {
-    font-size: 1rem;
+	font-size: 1rem;
 }
 .editor .media {
-    display: flex;
-  flex: 0 0 10rem;
-    overflow-x: scroll;
+	display: flex;
+	flex: 0 0 10rem;
+	overflow-x: scroll;
 }
 .editor .media > * {
-    flex: 0 0 8rem;
-    background: lightgray;
-    margin: 0.1rem;
+	flex: 0 0 8rem;
+	background: lightgray;
+	margin: 0.1rem;
 }
 .editor .media .new {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 .editor .media .new .upload {
-  flex-grow: 1;
-    cursor: pointer;
+	flex-grow: 1;
+	cursor: pointer;
 }
 .editor .media .new .upload input {
-    display: none;
+	display: none;
 }
 .editor .media .new .upload::before {
-    content: 'Upload an image';
+	content: 'Upload an image';
 }
 .editor .media .file {
-    position: relative;
+	position: relative;
 }
 .editor .body {
-    white-space: pre-wrap;
-    flex-grow: 1;
+	white-space: pre-wrap;
+	flex-grow: 1;
 }
 .browser {
-    flex: 1;
-    display: grid;
-    padding: 4pt;
-    grid-gap: 4pt;
-    align-items: center;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	flex: 1;
+	display: grid;
+	padding: 4pt;
+	grid-gap: 4pt;
+	align-items: center;
+	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
 }
 .browser > * {
-    height: 10rem;
-    padding: 8pt;
-  border-radius: 4pt;
+	height: 10rem;
+	padding: 8pt;
+	border-radius: 4pt;
 }
 .browser > nav {
-  order: -1;
+	order: -1;
 }
-.browser > article {
-    display: flex;
-    flex-direction: column;
-    background-size: cover;
-    cursor: pointer;
-    opacity: 0.6;
-  background: #aaa;
-  padding-bottom: 0;
+.preview {
+	display: flex;
+	position: relative;
+	flex-direction: column;
+	background-size: cover;
+	cursor: pointer;
+	opacity: 0.6;
+	background: #aaa;
+	padding-bottom: 0;
+	border: solid 2pt transparent;
 }
-.browser > article > * {
-    width: 100%;
-    margin: 2pt 0;
+.preview:not(.published){
+	border-color: orange;
 }
-.browser > article > .title {
-    font-size: 1rem;
+.preview.open{
+	border-color: black;
 }
-.browser > article > .author {
-    font-size: 0.8rem;
+.preview:not(.published) > .title::after {
+	content: ' (not published)';
+	font-weight: normal;
+	color: black;
+}
+.preview > * {
+	width: 100%;
+	margin: 2pt 0;
+}
+.preview > .title {
+	font-size: 1rem;
+}
+.preview > .author {
+	font-size: 0.8rem;
 }
 .author {
-  font-style: normal;
+	font-style: normal;
 }
 .author::before {
-    content: 'by ';
+	content: 'by ';
 }
 .browser > article > .body {
-    overflow: hidden;
-    flex-grow: 1;
-    -webkit-mask-image: linear-gradient(#000 50%, #0000);
+	overflow: hidden;
+	flex-grow: 1;
+	-webkit-mask-image: linear-gradient(#000 50%, #0000);
 }
 .browser > article > .body * {
-    display: contents;
+	display: contents;
 }
 .browser > article:hover {
-    opacity: 1;
+	opacity: 1;
 }
