@@ -107,19 +107,9 @@
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>
 
-    <script>
-        var firebaseConfig = {
-          apiKey: "AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE",
-          authDomain: "arcadia-high-mobile.firebaseapp.com",
-          databaseURL: "https://arcadia-high-mobile.firebaseio.com",
-          projectId: "arcadia-high-mobile",
-          storageBucket: "arcadia-high-mobile.appspot.com",
-          messagingSenderId: "654225823864",
-          appId: "1:654225823864:web:944772a5cadae0c8b7758d"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+    <script src='scripts/firebase-config.js'></script>
 
+    <script>
         const messaging=firebase.messaging();
 
         function IntitalizeFireBaseMessaging() {
