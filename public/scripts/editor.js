@@ -21,7 +21,7 @@ categories.forEach(category => {
 			// Save article to custom format
 			const article_remote = snapshot.val()
 			let article = new Article(snapshot.key)
-
+			
 			// Transfer public properties to local format
 			article.public.category = category
 			for (const [local, remote] of map)
@@ -29,6 +29,8 @@ categories.forEach(category => {
 
 			// Make preview
 			makePreview(article, 1)
+
+			article.published = true
 		})
 	})
 })
@@ -89,14 +91,18 @@ function makeEditor(article) {
 
 	editor.addEventListener('input',event=>{
 		const property = event.target.classList[0]
-		if(Object.keys(article.public).includes(property))
+		if(Object.keys(article.public).includes(property)){
 			article.public[property] = elementContent(event.target)
-		updatePreview(article)
+			article.published = false
+			updatePreview(article)
+		}
 	})
-
-	editor
-		.querySelector('.publish')
-		.addEventListener('click', _=> publishArticle(article))
+	
+	for(const action of ['delete','publish']){
+		editor
+			.querySelector('.'+action)
+			.addEventListener('click', _=> remoteArticle(article,action))
+	}
 }
 
 function updateElement(element,content){
@@ -174,6 +180,14 @@ For more info check out [an overview of Markdown](https://www.markdownguide.org/
 		}
 		articles[this.public.id] = this
 	}
+	set published (state) {
+		this._published = state
+		if(this.preview)
+			this.preview.classList.toggle('published',state)
+	}
+	get published () {
+		return this._published
+	}
 }
 
 document.querySelector('.new-article').addEventListener('click',makeArticle)
@@ -181,6 +195,7 @@ makeArticle()
 
 function makeArticle() {
 	let article = new Article()
+	article.published = false
 	makePreview(article, 0)
 	makeEditor(article)
 }
@@ -192,7 +207,7 @@ function makeID(length=8){
 		.join('')
 }
 
-function publishArticle(article){
+function remoteArticle(article, action){
 	if(DEBUG) article.public.category = 'DEBUG'
 
 	let article_remote = {}
@@ -201,7 +216,16 @@ function publishArticle(article){
 		article_remote[remote] = article.public[local]
 	}
 	
-	database
-		.ref(`/homepage/${article.public.category}/${article.public.id}`)
-		.update(article_remote)
+	const reference = database.ref(`/homepage/${article.public.category}/${article.public.id}`)
+	
+	switch(action){
+		case 'publish':
+			reference.update(article_remote)
+			article.published = true
+			break
+		case 'delete':
+			reference.remove()
+			article.published = false
+			break
+	}	
 }
