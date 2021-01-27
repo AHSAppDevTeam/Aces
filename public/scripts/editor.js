@@ -151,7 +151,6 @@ function updatePreview(article){
 
 class Article {
 	constructor (id) {
-		this.published = Boolean(id) // If published before
 		this.media = []
 		this.public = { // Data to be passed to the server
 			id: id  || makeID(8),
@@ -202,14 +201,7 @@ function publishArticle(article){
 		article_remote[remote] = article.public[local]
 	}
 	
-	if ( article.published ) {
-		database
-			.ref(`/homepage/${article.public.category}/${article.public.id}`)
-			.update(article_remote)
-	} else {
-		database
-			.ref(`/homepage/${article.public.category}`)
-			.child(article.public.id)
-			.set(article_remote)	
-	}
+	database
+		.ref(`/homepage/${article.public.category}/${article.public.id}`)
+		.update(article_remote)
 }
