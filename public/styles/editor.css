@@ -22,13 +22,13 @@ body h1 {
 }
 .editor {
 	display: flex;
+	position: relative;
 	width: 24rem;
 	max-width: calc(100vw - 12rem);
 	min-width: 12rem;
 	min-height: 100vh;
 	flex-direction: column;
 	padding: 1rem;
-	padding-bottom: 0;
 	resize: horizontal;
 }
 .editor * {
@@ -51,6 +51,7 @@ body h1 {
 	cursor: pointer;
 	color: black;
 	padding: 2pt 8pt;
+	flex: 0 0 5rem;
 }
 .editor header :hover,
 .editor header :focus {
@@ -59,13 +60,13 @@ body h1 {
 .editor header :active {
 	--lum: 80%;
 }
-.editor header .delete {
+.editor header .remove {
 	--hue: 000deg;
 }
 .editor header .id {
 	font-family: monospace;
 	width: 0;
-	flex-grow: 1;
+	flex: 1 0 0;
 	margin-inline: 0.5rem;
 	--hue: 240deg;
 	text-align: center;
@@ -73,6 +74,18 @@ body h1 {
 }
 .editor header .publish {
 	--hue: 120deg;
+}
+.editor [contenteditable],
+.editor .body{
+	border: solid 2pt #ddd;
+	padding: 8pt;
+	border-radius: 4pt;
+}
+.editor [contenteditable]:hover{
+	border-color: #aaa;
+}
+.editor [contenteditable]:focus{
+	border-color: black;
 }
 .editor .title {
 	font-size: 1.6rem;
@@ -107,9 +120,38 @@ body h1 {
 .editor .media .file {
 	position: relative;
 }
-.editor .body {
+.editor .body{
+	display: none;
+	border-color: blue;
+}
+.editor .md {
 	white-space: pre-wrap;
 	flex-grow: 1;
+}
+.editor .render{
+	margin-bottom: 1.6rem;
+	transform: translateX(1rem);
+	width: content;
+}
+.editor .render::after{
+	content: 'preview';
+	position: absolute;
+	background: white;
+	cursor: pointer;
+	border-radius: 1rem;
+	border: 2pt solid blue;
+	padding: 0 4pt;
+	transform: translateX(-1rem);
+}
+.editor .render:checked::after{
+	background: blue;
+	color: white;
+}
+.editor .render:checked ~ .body {
+	display: block;
+}
+.editor .render:checked ~ .md {
+	display: none;
 }
 .browser {
 	flex: 1;
@@ -138,16 +180,22 @@ body h1 {
 	padding-bottom: 0;
 	border: solid 2pt transparent;
 }
-.preview:not(.published){
-	border-color: orange;
-}
 .preview.open{
 	border-color: black;
 }
-.preview:not(.published) > .title::after {
-	content: ' (not published)';
-	font-weight: normal;
-	color: black;
+.preview > .status{
+	background: orange;
+	border-radius: 2pt;
+	font-size: .9rem;
+	text-align: center;
+	flex: 0 1 auto;
+	overflow: hidden;
+	opacity: 0;
+}
+.preview:not(.published) > .status {
+	flex-shrink: 0;
+	margin-bottom: 8pt;
+	opacity: 1;
 }
 .preview > * {
 	width: 100%;
@@ -165,14 +213,16 @@ body h1 {
 .author::before {
 	content: 'by ';
 }
-.browser > article > .body {
+.preview > .body {
 	overflow: hidden;
 	flex-grow: 1;
-	-webkit-mask-image: linear-gradient(#000 50%, #0000);
+	mask-image: linear-gradient(black 50%, transparent);
+	-webkit-mask-image: linear-gradient(black 50%, transparent);
 }
-.browser > article > .body * {
+.preview > .body * {
 	display: contents;
 }
-.browser > article:hover {
+.preview:hover,
+.preview.open {
 	opacity: 1;
 }

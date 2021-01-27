@@ -13,6 +13,7 @@ const map = [
 	['images', 'articleImages'],
 	['author', 'articleAuthor'],
 	['body', 'articleBody'],
+	['md', 'articleMd'],
 ]
 
 categories.forEach(category => {
@@ -26,6 +27,12 @@ categories.forEach(category => {
 			article.public.category = category
 			for (const [local, remote] of map)
 				article.public[local] = article_remote[remote]
+				
+			// Use HTML if markdown isn't available
+			if (!article.public.hasMd) {
+				article.public.md = article.public.body
+				article.public.hasMd = true
+			}
 
 			// Make preview
 			makePreview(article, 1)
@@ -94,11 +101,20 @@ function makeEditor(article) {
 		if(Object.keys(article.public).includes(property)){
 			article.public[property] = elementContent(event.target)
 			article.published = false
+			
+			if(property == 'md'){
+				article.public.body = marked(article.public.md)
+				updateElement(
+					editor.querySelector('.body'),
+					article.public.body
+				)
+			}
+			
 			updatePreview(article)
 		}
 	})
 	
-	for(const action of ['delete','publish']){
+	for(const action of ['remove','publish']){
 		editor
 			.querySelector('.'+action)
 			.addEventListener('click', _=> remoteArticle(article,action))
@@ -108,8 +124,9 @@ function makeEditor(article) {
 function updateElement(element,content){
 	if (element)
 		element[
-			['INPUT','SELECT'].includes(element.tagName) 
-			? 'value' : 'textContent'
+			['INPUT','SELECT'].includes(element.tagName) ? 'value'
+			: element.className.includes('body') ? 'innerHTML'
+			: 'textContent'
 		] = content
 }
 
@@ -163,7 +180,8 @@ class Article {
 			topic: 'General Info',
 			title: 'Untitled Article',
 			author: 'Alice Bobson',
-			body: `Enter text here!
+			hasMd: false,
+			md: `Enter text here!
 
 Words can be **bolded** or *italicized* like so.
 
@@ -176,10 +194,12 @@ Links look like [this](https://example.com)
 HTML <div>tags</div> are fine too.
 
 For more info check out [an overview of Markdown](https://www.markdownguide.org/basic-syntax)`,
+			body: '',
 			images: []
 		}
 		articles[this.public.id] = this
 	}
+	
 	set published (state) {
 		this._published = state
 		if(this.preview)
@@ -196,6 +216,8 @@ makeArticle()
 function makeArticle() {
 	let article = new Article()
 	article.published = false
+	article.public.hasMd = true
+	article.public.body = marked(article.public.md)
 	makePreview(article, 0)
 	makeEditor(article)
 }
@@ -223,7 +245,7 @@ function remoteArticle(article, action){
 			reference.update(article_remote)
 			article.published = true
 			break
-		case 'delete':
+		case 'remove':
 			reference.remove()
 			article.published = false
 			break

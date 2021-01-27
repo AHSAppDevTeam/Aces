@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang='en-us' dir='ltr'>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Content Editing System: Homepage</title>
+		<link rel='stylesheet' href='styles/normalize.css'>
+    <link rel='stylesheet' href='styles/editor.css'>
+  </head>
+  <body>
+		<template class='template-editor'>
+			<main class='editor'>
+				<header>
+					<input class='remove' type='button' value='Remove'>
+					<input class='id' title='Copy article ID'>
+					<input class='publish' type='button' value='Publish'>
+				</header>
+				<select class='topic'>
+					<option default>General Info</option>
+					<option>ASB</option>
+					<option>District</option>
+				</select>
+				<h3 class='title' contenteditable></h3>
+				<address class='author' contenteditable></address>
+				<section class='media'>
+					<section class='new'>
+						<label class='upload'>
+							<input type='file'>
+						</label>
+						<input class='url' placeholder='Or enter an URL'>
+					</section>
+				</section>
+				<input type='checkbox' name='render' class='render'>
+				<section class='md' contenteditable></section>
+				<section class='body'></section>
+			</main>
+		</template>
+		<aside class='browser'>
+			<nav>
+				<h1>
+					AHS App Content Editor
+				</h1>
+				<button class='new-article'>
+					New article
+				</button>
+				<input placeholder='Search...'>
+			</nav>
+			<template class='template-preview'>
+				<article class='preview'>
+					<h3 class='title'></h3>
+					<address class='author'></address>
+					<p class='body'></p>
+					<p class='status'>unpublished changes</p>
+				</article>
+			</template>
+		</aside>
+    
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+
+    <script src='scripts/firebase-config.js'></script>
+    <script src='scripts/marked.min.js'></script>
+    <script src='scripts/editor.js'></script>
+  </body>
+</html>
