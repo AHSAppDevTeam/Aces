@@ -207,7 +207,7 @@ function elementProperty(element){
 	return ['checkbox'].includes(element.type) ? 'checked'
 	: ['INPUT','SELECT'].includes(element.tagName) ? 'value'
 	: element.className.includes('body') ? 'innerHTML'
-	: 'textContent'
+	: 'innerText'
 }
 
 function elementContent(element){
