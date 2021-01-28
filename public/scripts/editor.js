@@ -127,7 +127,7 @@ function makeEditor(article) {
 
 		switch(property){
 			case 'md':
-				article.public.body = marked(article.public.md)
+				article.public.body = renderMarkdown(article.public.md)
 				updateElement(
 					editor.querySelector('.body'),
 					article.public.body
@@ -196,6 +196,31 @@ function makeEditor(article) {
 		event.target.value = previewing ? 'Edit' : 'Preview'
 		editor.classList.toggle('render',previewing)
 	})
+}
+
+function typography(text) {
+	return text
+	// Smart quotes
+	
+	/* opening singles */
+		.replace(/(^|[-\u2014\s(\["])'/g, '$1\u2018')
+
+	/* closing singles & apostrophes */
+		.replace(/'/g, '\u2019')
+
+	/* opening doubles */
+		.replace(/(^|[-\u2014/\[(\u2018\s])"/g, '$1\u201c')
+
+	/* closing doubles */
+		.replace(/"/g, '\u201d')
+
+  // Dashes
+	/* em-dashes */
+		.replace(/--/g, '\u2014');
+}
+
+function renderMarkdown(text) {
+	return marked(typography(text))
 }
 
 function updateElement(element,content){
@@ -314,20 +339,26 @@ makeArticle()
 function makeArticle() {
 	let article = new Article()
 	article.published = false
-	article.public.md = `Enter text here!
+	article.public.md = `Type stuff here!
+
+Two presses of the enter key makes a new paragraph.
 
 Words can be **bolded** or *italicized* like so.
 
+"Quotes shall be made curly" -- And 2 normal dashes will be turned into a long em-dash.
+
+Click on **Preview** to view the formatted article.
+
 ## This is a heading
 
-Links look like [this](https://example.com)
+Links look like [this](https://example.com).
 
 > This is a block quote
 
 HTML <s>tags</s> are fine too.
 
-For more info check out [an overview of Markdown](https://www.markdownguide.org/basic-syntax)`
-	article.public.body = marked(article.public.md)
+For more info check out [an overview of Markdown](https://www.markdownguide.org/basic-syntax).`
+	article.public.body = renderMarkdown(article.public.md)
 	article.public.author =  'Alice Bobson'
 	makePreview(article, 0)
 	makeEditor(article)
