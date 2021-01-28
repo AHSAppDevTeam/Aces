@@ -8,7 +8,7 @@ const DEBUG = false
 
 const database = firebase.database()
 const locations = {
-	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
+	bulletin: ['Atolowecademics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
 	homepage: ['ASB', 'District', 'General_Info'],
 }
 const map = [
@@ -73,7 +73,7 @@ async function matchArticle(article,tags,rest){
 		return false
 	for(const [_,name,parameters] of tags)
 		for(const parameter of parameters.toLowerCase().split('|'))
-			if(!article.public[name].toLowerCase().includes(parameter.trim()))
+			if(!article.public[name].toString().toLowerCase().includes(parameter.trim()))
 				return false
 	return true
 }
@@ -287,7 +287,7 @@ function makePreview(article,order){
 	updatePreview(article)
 
 	// Background image
-	if(article.public.images.length) preview.style.backgroundImage = `linear-gradient(#fffd,#fffd), url(${article.public.images[0]})`
+	if(article.public.images.length) preview.style.backgroundImage = `linear-gradient(var(--cover),var(--cover)), url(${article.public.images[0]})`
 
 	preview.addEventListener('click', _=> makeEditor(article))
 	preview.style.order = order
