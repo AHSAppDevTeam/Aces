@@ -10,6 +10,7 @@ const database = firebase.database()
 const locations = {
 	bulletin: ['Atolowecademics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
 	homepage: ['ASB', 'District', 'General_Info'],
+	debug: ['Debug'],
 }
 const map = [
 	['title', 'articleTitle'],
@@ -382,7 +383,7 @@ function randomElement(array){
 }
 
 function remoteArticle(article, action){
-	if(DEBUG) article.public.location = 'DEBUG'
+	if(DEBUG) article.public.location = 'Debug'
 
 	let article_remote = {}
 
