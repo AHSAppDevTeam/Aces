@@ -2,9 +2,8 @@
 :root{
 	--radius: 4pt;
 	--border: solid 2pt #ddd;
-	--background: #f8f8f8;
+	--background: white;
 	--cover: #fffd;
-	--element: white;
 	--text: black;
 }
 
@@ -13,7 +12,6 @@
 		--border: solid 2pt #333;
 		--background: hsl(220deg,20%,8%);
 		--cover: #000d;
-		--element: hsl(220deg,10%,10%);
 		--text: #ddd;
 	}
 }
@@ -51,6 +49,7 @@ body h1 {
 	height: 3rem;
 	gap: 0.5rem;
 	z-index: 1;
+	background-color: var(--background);
 }
 .editor > header > *,
 .browser > header > * {
@@ -71,7 +70,7 @@ header > * {
 	border: var(--border);
 	padding: 8pt;
 	border-radius: var(--radius);
-	background-color: var(--element);
+	background-color: transparent;
 }
 .editor :not(header):hover,
 .browser :not(header):hover {
@@ -195,12 +194,27 @@ header > [type=button] {
 	flex-direction: column;
 	background-size: cover;
 	cursor: pointer;
-	opacity: 0.6;
 	padding-bottom: 0;
 	text-align: left;
 }
 .preview[hidden] {
 	display: none;
+}
+.preview > * {
+	width: 100%;
+	margin: 2pt 0;
+	pointer-events: none;
+	opacity: 0.6;
+}
+.preview:hover > *,
+.preview.open > * {
+	opacity: 1;
+}
+.preview > .title {
+	font-size: 1rem;
+}
+.preview > .author {
+	font-size: 0.8rem;
 }
 .preview > .status{
 	background: orange;
@@ -217,17 +231,6 @@ header > [type=button] {
 	margin-bottom: 8pt;
 	opacity: 1;
 }
-.preview > * {
-	width: 100%;
-	margin: 2pt 0;
-	pointer-events: none;
-}
-.preview > .title {
-	font-size: 1rem;
-}
-.preview > .author {
-	font-size: 0.8rem;
-}
 .author {
 	font-style: normal;
 }
@@ -242,8 +245,4 @@ header > [type=button] {
 }
 .preview > .body * {
 	display: contents;
-}
-.preview:hover,
-.preview.open {
-	opacity: 1;
 }
