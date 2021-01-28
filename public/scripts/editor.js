@@ -133,6 +133,7 @@ function makeEditor(article) {
 
 		switch(property){
 			case 'md':
+				// Render HTML version of the Markdown text
 				article.public.body = renderMarkdown(article.public.md)
 				updateElement(
 					editor.querySelector('.body'),
@@ -140,7 +141,10 @@ function makeEditor(article) {
 				)
 				break
 			case 'category':
-				//location
+				// Assign the location of the category to the article
+				article.public.location = Object
+					.keys(locations)
+					.find(location => locations[location].includes(article.public.category))
 				break
 		}
 
