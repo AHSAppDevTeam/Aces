@@ -17,27 +17,49 @@ body h1 {
 	font-weight: normal;
 }
 
+:root{
+	--radius: 4pt;
+	--border: solid 2pt #ddd;
+}
+
+.editor > header,
+.browser > header {
+	position: sticky;
+	display: flex;
+	top: 0;
+	margin-inline: -1rem;
+	border-inline: 0;
+	border-top: 0;
+	border-radius: 0;
+	height: 3rem;
+	gap: 0.5rem;
+}
+.editor > header > *,
+.browser > header > * {
+	border-radius: var(--radius);
+	padding: 2pt 4pt;
+}
+
 .editor,
 .browser {
 	height: 100vh;
 	overflow: hidden scroll;
-	padding: 1rem;
+	padding-inline: 1rem;
 }
 .editor > *,
-.browser > * {
-	border: solid 2pt #ddd;
+.browser > *,
+header > * {
+	border: var(--border);
 	padding: 8pt;
-	border-radius: 4pt;
+	border-radius: var(--radius);
 	background-color: white;
 }
-.editor > :hover,
-.browser > :hover {
+.editor :not(header):hover,
+.browser :not(header):hover {
 	border-color: #aaa;
 }
-.editor > :focus,
-.editor > :focus-within,
-.browser > :focus,
-.browser > :focus-within,
+.editor :not(header):focus,
+.preview:focus,
 .preview.open {
 	border-color: black;
 }
@@ -51,52 +73,29 @@ body h1 {
 	min-height: 100vh;
 	flex-direction: column;
 	resize: horizontal;
-	border-right: solid 2pt #ddd;
+	border-right: var(--border);
 }
 .editor > * {
 	margin: 0 0 1rem 0;
 }
-.editor.render > * {
+.editor.render > :not(header) {
 	padding: 0;
 	border-color: transparent;
 }
 .editor ::placeholder {
 	color: #888;
 }
-.editor header {
-	display: flex;
-	position: sticky;
-	top: 0;
-}
-.editor header * {
-	--lum: 90%;
-	border-radius: 1rem;
-	background: hsl(var(--hue),100%,var(--lum));
-	cursor: pointer;
+.editor header > * {
 	color: black;
-	padding: 2pt 8pt;
 	flex: 1 0 0;
 	width: 0;
-	outline: 0;
-	border: 0;
 }
-.editor header :hover,
-.editor header :focus {
-	--lum: 85%;
+header > [type=button] {
+	cursor: pointer;
+	text-decoration: none;
+	color: black;
 }
-.editor header :active {
-	--lum: 80%;
-}
-.editor header .remove {
-	--hue: 000deg;
-}
-.editor header .render {
-	--hue: -120deg;
-	margin-inline: 0.5rem;
-}
-.editor header .publish {
-	--hue: -240deg;
-}
+
 .editor .id {
 	cursor: pointer;
 }
@@ -140,9 +139,8 @@ body h1 {
 	display: none;
 }
 .editor .md {
-	white-space: pre-wrap;
 	flex-grow: 1;
-	line-height: 1;
+	line-height: 1.3;
 }
 .editor.render .body{
 	display: block;
@@ -161,19 +159,15 @@ body h1 {
 }
 .browser > * {
 	padding: 8pt;
-	border-radius: 4pt;
+	border-radius: var(--radius);
 }
-.browser > nav {
+.browser > header {
 	order: -1;
-	display: flex;
 	flex-wrap: wrap;
 	grid-column: 1 / -1;
-	height: 3rem;
-	position: sticky;
-	top: 0;
 }
-.browser > nav > .search {
-	width: auto;
+.browser > header > .search {
+	width: 0;
 	flex-grow: 1;
 }
 .preview {
@@ -186,6 +180,9 @@ body h1 {
 	opacity: 0.6;
 	padding-bottom: 0;
 	text-align: left;
+}
+.preview[hidden] {
+	display: none;
 }
 .preview > .status{
 	background: orange;

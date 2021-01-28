@@ -61,17 +61,22 @@ let editor, preview
 
 const search = document.querySelector('.search')
 const regex = /{(\w+) (.*?)}/g
-search.addEventListener('input',event=>{
-	const val = event.target.value
-	const tags = Array.from(val.matchAll(regex))
-	for(const article of Object.values(articles)){
-		article.preview.hidden = false
-		for(const [_,name,parameters] of tags)
-			for(const parameter of parameters.toLowerCase().split('|'))
-				if(!article.public[name].toLowerCase().includes(parameter))
-					article.preview.hidden = true
-	}
+search.addEventListener('input',async event=>{
+	const query = search.value
+	const tags = Array.from(query.matchAll(regex))
+	const rest = query.replaceAll(regex,'').trim()
+	for await(const article of Object.values(articles))
+		article.preview.hidden = !(await matchArticle(article,tags,rest))
 })
+async function matchArticle(article,tags,rest){
+	if(!article.public.md.toLowerCase().includes(rest))
+		return false
+	for(const [_,name,parameters] of tags)
+		for(const parameter of parameters.toLowerCase().split('|'))
+			if(!article.public[name].toLowerCase().includes(parameter.trim()))
+				return false
+	return true
+}
 
 ////////////
 /* EDITOR */
@@ -191,7 +196,7 @@ function makeEditor(article) {
 	// Toggle rendered article
 	editor
 		.querySelector('.render')
-		.addEventListener('click',event=>{
+		.addEventListener('click',async event=>{
 		const previewing = event.target.value == 'Preview'
 		event.target.value = previewing ? 'Edit' : 'Preview'
 		editor.classList.toggle('render',previewing)
@@ -345,13 +350,11 @@ Two presses of the enter key makes a new paragraph.
 
 Words can be **bolded** or *italicized* like so.
 
+Links look like [this](https://example.com).
+
 "Quotes shall be made curly" -- And 2 normal dashes will be turned into a long em-dash.
 
 Click on **Preview** to view the formatted article.
-
-## This is a heading
-
-Links look like [this](https://example.com).
 
 > This is a block quote
 
@@ -370,7 +373,7 @@ function makeID(){
 	.split(',')
 	const animals = `aardvark,albatross,alligator,alpaca,ant,anteater,antelope,ape,armadillo,baboon,badger,barracuda,bat,bear,beaver,bee,bird,bison,boar,butterfly,camel,caribou,cassowary,cat,caterpillar,cattle,chamois,cheetah,chicken,chimpanzee,chinchilla,chough,coati,cobra,cockroach,cod,cormorant,coyote,crab,crocodile,crow,curlew,deer,dinosaur,dog,dolphin,donkey,dotterel,dove,dragonfly,duck,dugong,dunlin,eagle,echidna,eel,elephant,elk,emu,falcon,ferret,finch,fish,flamingo,fly,fox,frog,gaur,gazelle,gerbil,giraffe,gnat,goat,goose,gorilla,goshawk,grasshopper,grouse,guanaco,gull,hamster,hare,hawk,hedgehog,heron,herring,hippopotamus,hornet,horse,hummingbird,hyena,ibex,ibis,jackal,jaguar,jay,jellyfish,kangaroo,kinkajou,koala,kouprey,kudu,lapwing,lark,lemur,leopard,lion,llama,lobster,locust,loris,louse,lyrebird,magpie,mallard,manatee,mandrill,mink,mongoose,monkey,moose,mouse,mosquito,narwhal,newt,nightingale,octopus,okapi,opossum,ostrich,otter,owl,oyster,parrot,panda,partridge,peafowl,pelican,penguin,pheasant,pork,pigeon,pony,porcupine,porpoise,quail,quelea,quetzal,rabbit,raccoon,rat,raven,reindeer,rhinoceros,salamander,salmon,sandpiper,sardine,seahorse,shark,sheep,shrew,skunk,sloth,snail,snake,spider,squirrel,starling,swan,tapir,tarsier,termite,tiger,toad,turtle,wallaby,walrus,wasp,weasel,whale,wolf,wolverine,wombat,wren,yak,zebra`
 	.split(',')
-
+	
 	return [randomElement(adjectives),randomElement(adjectives),randomElement(animals)].join('-')
 }
 
