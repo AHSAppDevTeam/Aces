@@ -10,7 +10,6 @@
 
 @media (prefers-color-scheme: dark){
 	:root{
-		--radius: 4pt;
 		--border: solid 2pt #333;
 		--background: hsl(220deg,20%,8%);
 		--cover: #000d;
