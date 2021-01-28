@@ -5,10 +5,6 @@ html {
 body {
 	display: flex;
 }
-body > * {
-	height: 100vh;
-	overflow: hidden scroll;
-}
 body * {
 	box-sizing: border-box;
 	transition-duration: 100ms;
@@ -21,19 +17,27 @@ body h1 {
 	font-weight: normal;
 }
 
+.editor,
+.browser {
+	height: 100vh;
+	overflow: hidden scroll;
+	padding: 1rem;
+}
 .editor > *,
-.preview {
+.browser > * {
 	border: solid 2pt #ddd;
 	padding: 8pt;
 	border-radius: 4pt;
 	background-color: white;
 }
 .editor > :hover,
-.preview:hover {
+.browser > :hover {
 	border-color: #aaa;
 }
 .editor > :focus,
 .editor > :focus-within,
+.browser > :focus,
+.browser > :focus-within,
 .preview.open {
 	border-color: black;
 }
@@ -46,8 +50,8 @@ body h1 {
 	min-width: 12rem;
 	min-height: 100vh;
 	flex-direction: column;
-	padding: 1rem;
 	resize: horizontal;
+	border-right: solid 2pt #ddd;
 }
 .editor > * {
 	margin: 0 0 1rem 0;
@@ -148,21 +152,32 @@ body h1 {
 }
 .browser {
 	flex: 1;
+	max-height: 100vh;
 	display: grid;
-	padding: 4pt;
-	grid-gap: 4pt;
+	grid-gap: 1rem;
 	align-items: center;
 	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	grid-template-rows: repeat(99,auto) 1fr;
 }
 .browser > * {
-	height: 10rem;
 	padding: 8pt;
 	border-radius: 4pt;
 }
 .browser > nav {
 	order: -1;
+	display: flex;
+	flex-wrap: wrap;
+	grid-column: 1 / -1;
+	height: 3rem;
+	position: sticky;
+	top: 0;
+}
+.browser > nav > .search {
+	width: auto;
+	flex-grow: 1;
 }
 .preview {
+	height: 10rem;
 	display: flex;
 	position: relative;
 	flex-direction: column;
@@ -170,6 +185,7 @@ body h1 {
 	cursor: pointer;
 	opacity: 0.6;
 	padding-bottom: 0;
+	text-align: left;
 }
 .preview > .status{
 	background: orange;
