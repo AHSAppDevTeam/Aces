@@ -9,7 +9,7 @@ const DEBUG = false
 const database = firebase.database()
 const locations = {
 	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
-	homepage: ['ASB', 'District', 'General Info'],
+	homepage: ['ASB', 'District', 'General_Info'],
 }
 const map = [
 	['title', 'articleTitle'],
