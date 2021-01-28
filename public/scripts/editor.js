@@ -284,7 +284,7 @@ class Article {
 		this.public = { // Data to be passed to the server
 			id: id  || makeID(),
 			location: 'homepage',
-			category: 'General Info',
+			category: 'General_Info',
 			title: 'Untitled Article',
 			author: '',
 			md: '',
