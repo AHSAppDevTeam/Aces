@@ -99,9 +99,11 @@ header > *,
 	width: 24rem;
 	min-height: 100vh;
 	flex-direction: column;
+	direction: rtl; /* scrollbar on the left */
 }
 .editor > * {
 	margin: 0 0 1rem 0;
+	direction: ltr;
 }
 .editor.render > :not(header) {
 	padding: 0;
