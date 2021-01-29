@@ -8,8 +8,9 @@ const DEBUG = false
 
 const database = firebase.database()
 const locations = {
-	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
+	bulletin: ['Atolowecademics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
 	homepage: ['ASB', 'District', 'General_Info'],
+	debug: ['Debug'],
 }
 const map = [
 	['title', 'articleTitle'],
@@ -73,10 +74,22 @@ async function matchArticle(article,tags,rest){
 		return false
 	for(const [_,name,parameters] of tags)
 		for(const parameter of parameters.toLowerCase().split('|'))
-			if(!article.public[name].toLowerCase().includes(parameter.trim()))
+			if(!article.public[name].toString().toLowerCase().includes(parameter.trim()))
 				return false
 	return true
 }
+
+////////////
+/* RESIZE */
+////////////
+const resize = document.querySelector('.resize')
+resize.addEventListener('mousedown',_=>{
+	document.body.style.pointerEvents = 'none'
+	window.addEventListener('mouseup',event=>{
+		editor.style.width = event.x/window.innerWidth*100+'vw'
+		document.body.style.pointerEvents = 'auto'
+	}, {once:true})
+})
 
 ////////////
 /* EDITOR */
@@ -132,6 +145,7 @@ function makeEditor(article) {
 
 		switch(property){
 			case 'md':
+				// Render HTML version of the Markdown text
 				article.public.body = renderMarkdown(article.public.md)
 				updateElement(
 					editor.querySelector('.body'),
@@ -139,7 +153,10 @@ function makeEditor(article) {
 				)
 				break
 			case 'category':
-				//location
+				// Assign the location of the category to the article
+				article.public.location = Object
+					.keys(locations)
+					.find(location => locations[location].includes(article.public.category))
 				break
 		}
 
@@ -287,7 +304,7 @@ function makePreview(article,order){
 	updatePreview(article)
 
 	// Background image
-	if(article.public.images.length) preview.style.backgroundImage = `linear-gradient(#fffd,#fffd), url(${article.public.images[0]})`
+	if(article.public.images.length) preview.style.backgroundImage = `linear-gradient(var(--cover),var(--cover)), url(${article.public.images[0]})`
 
 	preview.addEventListener('click', _=> makeEditor(article))
 	preview.style.order = order
@@ -382,7 +399,7 @@ function randomElement(array){
 }
 
 function remoteArticle(article, action){
-	if(DEBUG) article.public.location = 'DEBUG'
+	if(DEBUG) article.public.location = 'Debug'
 
 	let article_remote = {}
 
