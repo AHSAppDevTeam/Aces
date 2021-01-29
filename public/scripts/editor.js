@@ -82,6 +82,7 @@ async function matchArticle(article,tags,rest){
 ////////////
 /* RESIZE */
 ////////////
+
 const resize = document.querySelector('.resize')
 resize.addEventListener('mousedown',_=>{
 	document.body.style.pointerEvents = 'none'
