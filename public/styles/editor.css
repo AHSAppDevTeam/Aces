@@ -28,7 +28,7 @@ body * {
 	box-sizing: border-box;
 	color: var(--text);
 }
-[contenteditable]:focus{
+body :focus{
 	outline: 0;
 }
 body h1 {
@@ -74,15 +74,22 @@ header > * {
 	padding: 8pt;
 	border-radius: var(--radius);
 	background-color: transparent;
+}
+.editor > *,
+.browser > *,
+header > *,
+.resize {
 	transition-duration: 100ms;
 }
 .editor :not(header):hover,
-.browser :not(header):hover {
+.browser :not(header):hover,
+.resize:hover {
 	border-color: #aaa;
 }
 .editor :not(header):focus,
 .preview:focus,
-.preview.open {
+.preview.open,
+.resize:focus {
 	border-color: var(--text);
 }
 
@@ -90,8 +97,6 @@ header > * {
 	display: flex;
 	position: relative;
 	width: 24rem;
-	max-width: calc(100vw - 12rem);
-	min-width: 12rem;
 	min-height: 100vh;
 	flex-direction: column;
 }
