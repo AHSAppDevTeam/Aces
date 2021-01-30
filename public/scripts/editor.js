@@ -99,6 +99,7 @@ resize.addEventListener('pointerdown',_=>{
 ////////////
 
 const Editor = document.querySelector('.template-editor')
+const Image = document.querySelector('.template-image')
 
 function clearEditor(){
 
@@ -274,6 +275,7 @@ function makeMedia(article,url,novel=false){
 	let location = 'images'
 	let id = url
 	const youtube = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)(\w+)/)
+	const media = editor.querySelector('.media')
 	
 	if(youtube){
 		id = youtube[1]
@@ -283,18 +285,40 @@ function makeMedia(article,url,novel=false){
 	
 	if(novel) article.public[location].push(id)
 	
-	const image = document.createElement('img')
-	image.src = url
+	const image = Image.content.cloneNode(true).querySelector('section')
+	
+	image.id = id
+	image.querySelector('img').src = url
 
-	image.addEventListener('click',_=>{
+	image.querySelector('.delete').addEventListener('click',_=>{
 		const index = article.public[location].indexOf(id)
 		article.public[location].splice(index,1)
 		image.remove()
 		article.published = false
 	})
+	
+	image.addEventListener('dragover',event=>{
+		event.preventDefault()
+	},false)
+	image.addEventListener('dragstart',event=>{
+		image.classList.add('dragged')
+	},false)
+	image.addEventListener('drop',event=>{
+		const dragged = media.querySelector('.dragged')
+		dragged.classList.remove('dragged')
+		media.insertBefore(image,dragged)
+		
+		const oldIndex = article.public[location].indexOf(dragged.id)
+		const newIndex = article.public[location].indexOf(id)
+		
+		article.public[location].splice(oldIndex,1)
+		article.public[location].splice(newIndex,0,dragged.id)
+		
+		console.log(article.public[location])
+	},false)
 
-	image.classList.add('file')
-	editor.querySelector('.media').append(image)
+	image.classList.add('image')
+	media.append(image)
 }
 
 /////////////

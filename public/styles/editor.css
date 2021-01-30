@@ -158,8 +158,20 @@ header > [type=button] {
 .editor .media .new .upload::before {
 	content: 'Upload an image';
 }
-.editor .media .file {
+.media .image {
+	position: relative;
+	cursor: move;
+}
+.media .image img {
+	width: 100%;
+	height: 100%;
 	object-fit: contain;
+	pointer-events: none;
+}
+.media .image .delete {
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 .editor .body{
 	display: none;

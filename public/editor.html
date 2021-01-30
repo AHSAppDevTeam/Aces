@@ -8,66 +8,76 @@
     <link rel='stylesheet' href='styles/editor.css'>
   </head>
   <body>
-		<template class='template-editor'>
-			<main class='editor'>
-				<header>
-					<input class='remove' type='button' value='Remove' accesskey='r'>
-					<input class='render' type='button' value='Preview' accesskey='v'>
-					<input class='publish' type='button' value='Publish' accesskey='p'>
-				</header>
-				<h3 class='title' contenteditable accesskey='t'></h3>
-				<address class='author' contenteditable></address>
-				<input class='id' title='Click to copy' readonly>
-				<select class='category'>
-					<optgroup label='Homepage'>
-						<option default>General_Info</option>
-						<option>ASB</option>
-						<option>District</option>
-					</optgroup>
-					<optgroup label='Bulletin'>
-						<option>Academics</option>
-						<option>Athletics</option>
-						<option>Clubs</option>
-						<option>Colleges</option>
-						<option>Reference</option>
-					</optgroup>
-					<optgroup label='Debug'>
-						<option>Debug</option>
-					</optgroup>
-				</select>
-				<input class='date' type='datetime-local'>
-				<label>
-					<input class='featured' type='checkbox' value='featured'>
-					featured
+<!-- insert editor -->
+<div class='resize' tabindex='0'></div>
+<aside class='browser'>
+	<header>
+		<input type='button' class='new-article' value='+' accesskey='n'>
+		<input class='search' placeholder='Search {property match1|match2|match3}' accesskey='s'>
+		<a type='button' class='sources' href='sources.html' target='_blank'>Sources</a>
+	</header>
+	<!-- insert previews -->
+</aside>
+
+<template class='template-editor'>
+	<main class='editor'>
+		<header>
+			<input class='remove' type='button' value='Remove' accesskey='r'>
+			<input class='render' type='button' value='Preview' accesskey='v'>
+			<input class='publish' type='button' value='Publish' accesskey='p'>
+		</header>
+		<h3 class='title' contenteditable accesskey='t'></h3>
+		<address class='author' contenteditable></address>
+		<input class='id' title='Click to copy' readonly>
+		<select class='category'>
+			<optgroup label='Homepage'>
+				<option default>General_Info</option>
+				<option>ASB</option>
+				<option>District</option>
+			</optgroup>
+			<optgroup label='Bulletin'>
+				<option>Academics</option>
+				<option>Athletics</option>
+				<option>Clubs</option>
+				<option>Colleges</option>
+				<option>Reference</option>
+			</optgroup>
+			<optgroup label='Debug'>
+				<option>Debug</option>
+			</optgroup>
+		</select>
+		<input class='date' type='datetime-local'>
+		<label>
+			<input class='featured' type='checkbox' value='featured'>
+			featured
+		</label>
+		<section class='media'>
+			<section class='new'>
+				<label class='upload'>
+					<input type='file' multiple>
 				</label>
-				<section class='media'>
-					<section class='new'>
-						<label class='upload'>
-							<input type='file' multiple>
-						</label>
-						<input class='url' placeholder='Or enter an URL'>
-					</section>
-				</section>
-				<section class='md' contenteditable></section>
-				<section class='body'></section>
-			</main>
-		</template>
-		<div class='resize' tabindex='0'></div>
-		<aside class='browser'>
-			<header>
-				<input type='button' class='new-article' value='+' accesskey='n'>
-				<input class='search' placeholder='Search {property match1|match2|match3}' accesskey='s'>
-				<a type='button' class='sources' href='sources.html' target='_blank'>Sources</a>
-			</header>
-			<template class='template-preview'>
-				<button class='preview'>
-					<h3 class='title'></h3>
-					<address class='author'></address>
-					<p class='body'></p>
-					<p class='status'>unpublished changes</p>
-				</button>
-			</template>
-		</aside>
+				<input class='url' placeholder='Or enter an URL'>
+				<!-- insert images -->
+			</section>
+		</section>
+		<section class='md' contenteditable></section>
+		<section class='body'></section>
+	</main>
+</template>
+<template class='template-preview'>
+	<button class='preview'>
+		<h3 class='title'></h3>
+		<address class='author'></address>
+		<p class='body'></p>
+		<p class='status'>unpublished changes</p>
+	</button>
+</template>
+<template class='template-image'>
+	<section class='image' draggable='true'>
+		<img>
+		<input type='button' class='delete' value='X'>
+	</section>
+</template>
     
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
