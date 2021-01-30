@@ -128,6 +128,8 @@ function makeEditor(article) {
 	if(preview) preview.classList.remove('open')
 	preview = article.preview
 	preview.classList.add('open')
+	
+	article.public.date = new Date((article.public.timestamp-8*60*60)*1000).toISOString().slice(0,-1)
 
 	for (const property in article.public) {
 		updateElement(
@@ -149,6 +151,7 @@ function makeEditor(article) {
 		switch(property){
 			case 'md':
 				// Render HTML version of the Markdown text
+				article.public.md = article.public.md.replace('\n\n\n','\n\n') // fix weird newline bug
 				article.public.body = renderMarkdown(article.public.md)
 				updateElement(
 					editor.querySelector('.body'),
@@ -161,6 +164,8 @@ function makeEditor(article) {
 					.keys(locations)
 					.find(location => locations[location].includes(article.public.category))
 				break
+			case 'date':
+				article.public.timestamp = Math.floor(Date.parse(article.public.date)/1000)
 		}
 
 		article.published = false
@@ -340,7 +345,7 @@ class Article {
 			md: '',
 			hasHTML: true,
 			featured: false,
-			timestamp: Date.now(),
+			timestamp: Math.floor(Date.now()/1000),
 			body: '',
 			images: [],
 			videos: [],
