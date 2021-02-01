@@ -28,7 +28,6 @@
 		</header>
 		<h3 class='title' contenteditable accesskey='t'></h3>
 		<address class='author' contenteditable></address>
-		<input class='id' title='Click to copy' readonly>
 		<select class='category'>
 			<optgroup label='Homepage'>
 				<option default>General_Info</option>
@@ -46,11 +45,16 @@
 				<option>Debug</option>
 			</optgroup>
 		</select>
-		<input class='date' type='datetime-local'>
+		<input class='date' type='date'>
 		<label>
-			<input class='featured' type='checkbox' value='featured'>
-			featured
+			<input class='feature' type='checkbox'>
+			feature
 		</label>
+		<label>
+			<input class='notify' type='checkbox'>
+			notify
+		</label>
+		<section class='notif' contenteditable></section>
 		<section class='media'>
 			<section class='new'>
 				<label class='upload'>
@@ -62,6 +66,7 @@
 		</section>
 		<section class='md' contenteditable></section>
 		<section class='body'></section>
+		<input class='id' title='Click to copy' readonly>
 	</main>
 </template>
 <template class='template-preview'>

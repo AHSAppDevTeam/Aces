@@ -13,15 +13,19 @@ const locations = {
 	debug: ['Debug'],
 }
 const map = [
-	['title', 'articleTitle'],
-	['images', 'articleImages'],
-	['videos', 'articleVideoIDs'],
-	['author', 'articleAuthor'],
-	['body', 'articleBody'],
-	['md', 'articleMd'],
-	['hasHTML', 'hasHTML'],
-	['featured', 'isFeatured'],
-	['timestamp', 'articleUnixEpoch'],
+	['id', null, 'articleNotificationID'],
+	['title', 'articleTitle', 'notificationTitle'],
+	['category', null, 'notificationCategory'],
+	['images', 'articleImages', null],
+	['videos', 'articleVideoIDs', null],
+	['author', 'articleAuthor', null],
+	['body', 'articleBody', null],
+	['md', 'articleMd', null],
+	['hasHTML', 'hasHTML', null],
+	['feature', 'isFeatured', null],
+	['notify', 'isNotified', null],
+	['notif', null, 'notificationBody'],
+	['timestamp', 'articleUnixEpoch','notificationUnixEpoch'],
 ]
 
 for(const location in locations){
@@ -29,13 +33,13 @@ for(const location in locations){
 		database.ref(location).child(category).once('value', container => {
 			container.forEach(snapshot => {
 				// Save article to custom format
-				const article_remote = snapshot.val()
 				let article = new Article(snapshot.key)
+				const article_remote = snapshot.val()
 
 				// Transfer public properties to local format
 				article.public.location = location
 				article.public.category = category
-				for (const [local, remote] of map)
+				for (const [local, remote, _] of map)
 					if(article_remote[remote])
 						article.public[local] = article_remote[remote]
 
@@ -50,6 +54,19 @@ for(const location in locations){
 		})
 	}
 }
+
+database.ref('notifications').once('value', container=>{
+	container.forEach(snapshot => {
+		const notif_remote = snapshot.val()
+		const article = articles[notif_remote.notificationArticleID]
+		if(article){
+			article.public.notify = true
+			for(const [local, _, remote] of map)
+				if(notif_remote[remote] && !article.public[local])
+					article.public[local] = notif_remote[remote]
+		}
+	})
+})
 
 
 let articles = {}
@@ -130,13 +147,10 @@ function makeEditor(article) {
 	preview = article.preview
 	preview.classList.add('open')
 	
-	article.public.date = new Date((article.public.timestamp-8*60*60)*1000).toISOString().slice(0,-1)
+	article.public.date = new Date(article.public.timestamp*1000).toISOString().slice(0,10)
 
 	for (const property in article.public) {
-		updateElement(
-			editor.querySelector('.'+property),
-			article.public[property]
-		)
+		updateProperty(editor,article,property)
 	}
 
 	for(const url of article.public.images) {
@@ -145,7 +159,7 @@ function makeEditor(article) {
 
 	editor.addEventListener('input',event=>{
 		const property = event.target.classList[0]
-		if(!Object.keys(article.public).includes(property)) return
+		if(!(property in article.public)) return
 
 		article.public[property] = elementContent(event.target)
 
@@ -154,10 +168,7 @@ function makeEditor(article) {
 				// Render HTML version of the Markdown text
 				article.public.md = article.public.md.replace('\n\n\n','\n\n') // fix weird newline bug
 				article.public.body = renderMarkdown(article.public.md)
-				updateElement(
-					editor.querySelector('.body'),
-					article.public.body
-				)
+				updateProperty(editor,article,'body')
 				break
 			case 'category':
 				// Assign the location of the category to the article
@@ -167,6 +178,7 @@ function makeEditor(article) {
 				break
 			case 'date':
 				article.public.timestamp = Math.floor(Date.parse(article.public.date)/1000)
+				break
 		}
 
 		article.published = false
@@ -254,9 +266,10 @@ function renderMarkdown(text) {
 	return marked(typography(text))
 }
 
-function updateElement(element,content){
+function updateProperty(editor,article,property){
+	const element = editor.querySelector('.'+property)
 	if (element)
-		element[elementProperty(element)] = content
+		element[elementProperty(element)] = article.public[property]
 }
 
 function elementProperty(element){
@@ -313,8 +326,6 @@ function makeMedia(article,url,novel=false){
 		
 		article.public[location].splice(oldIndex,1)
 		article.public[location].splice(newIndex,0,dragged.id)
-		
-		console.log(article.public[location])
 	},false)
 
 	image.classList.add('image')
@@ -368,7 +379,9 @@ class Article {
 			author: '',
 			md: '',
 			hasHTML: true,
-			featured: false,
+			feature: false,
+			notify: false,
+			notif: '',
 			timestamp: Math.floor(Date.now()/1000),
 			body: '',
 			images: [],
@@ -412,6 +425,7 @@ HTML <s>tags</s> are fine too.
 For more info check out [an overview of Markdown](https://www.markdownguide.org/basic-syntax).`
 	article.public.body = renderMarkdown(article.public.md)
 	article.public.author =  'Alice Bobson'
+	article.public.notif = 'Click the "notify" checkbox, then "publish", to push this text as a notification.'
 	makePreview(article, 0)
 	makeEditor(article)
 }
@@ -431,24 +445,48 @@ function randomElement(array){
 }
 
 function remoteArticle(article, action){
-	if(DEBUG) article.public.location = 'Debug'
+	const location = DEBUG ? 'debug' : article.public.location
 
-	let article_remote = {}
-
-	for(const [local,remote] of map){
-		article_remote[remote] = article.public[local]
-	}
-
-	const reference = database.ref([null,article.public.location,article.public.category,article.public.id].join('/'))
+	const reference = database.ref([null,location,article.public.category,article.public.id].join('/'))
 
 	switch(action){
 		case 'publish':
+			let article_remote = {}
+
+			for(const [local,remote,_] of map)
+				if(local && remote)
+					article_remote[remote] = article.public[local]
+					
 			reference.update(article_remote)
 			article.published = true
+			
+			remoteNotif(article,article.public.notify ? 'publish' : 'remove')
 			break
+			
 		case 'remove':
 			reference.remove()
 			article.published = false
 			break
 	}	
+}
+
+function remoteNotif(article, action){
+	const location = DEBUG ? 'debug-notifs' : 'notifications'
+
+	const reference = database.ref([null,location,article.public.id].join('/'))
+		
+	switch(action){
+		case 'publish':
+			let notif_remote = {}
+
+			for(const [local,_,remote] of map)
+				if(local && remote)
+					notif_remote[remote] = article.public[local]
+					
+			reference.update(notif_remote)
+			break
+		case 'remove':
+			reference.remove()
+			break
+	}
 }
