@@ -1,7 +1,8 @@
 
 :root{
 	--radius: 4pt;
-	--border: solid 2pt #ddd;
+	--border-color: #ddd;
+	--border: solid 2pt var(--border-color);
 	--background: white;
 	--cover: #fffd;
 	--text: black;
@@ -9,7 +10,7 @@
 
 @media (prefers-color-scheme: dark){
 	:root{
-		--border: solid 2pt #333;
+		--border-color: #333;
 		--background: hsl(220deg,20%,8%);
 		--cover: #000d;
 		--text: #ddd;
@@ -56,11 +57,12 @@ body h1 {
 	padding: 2pt 4pt;
 	z-index: -1;
 }
-
+html,
+body,
 .editor,
 .resize,
 .browser {
-	height: 100vh;
+	height: 100%;
 }
 .editor,
 .browser {
@@ -70,7 +72,6 @@ body h1 {
 .editor > *,
 .browser > *,
 header > * {
-	border: var(--border);
 	padding: 8pt;
 	border-radius: var(--radius);
 	background-color: transparent;
@@ -80,17 +81,19 @@ header > * {
 header > *,
 .resize {
 	transition-duration: 100ms;
+	border: var(--border);
+	border-color: var(--border-color);
 }
 .editor :not(header):hover,
 .browser :not(header):hover,
 .resize:hover {
-	border-color: #aaa;
+	--border-color: #aaa;
 }
 .editor :not(header):focus,
 .preview:focus,
 .preview.open,
 .resize:focus {
-	border-color: var(--text);
+	--border-color: var(--text);
 }
 
 .editor {
@@ -101,6 +104,18 @@ header > *,
 }
 .editor > * {
 	margin: 0;
+	position: relative;
+}
+.editor > [name]::before {
+	position: absolute;
+	transform: translateY(-1.1rem);
+	text-transform: lowercase;
+	font-size: .8rem;
+	padding-inline: .2ch;
+	font-weight: 600;
+	background: var(--background);
+	color: var(--border-color);
+	content: attr(name);
 }
 .editor > header,
 .editor > .title,
@@ -115,6 +130,9 @@ header > *,
 .editor.render > :not(header) {
 	padding: 0;
 	border-color: transparent;
+}
+.editor.render > [name]::before{
+	opacity: 0;
 }
 .editor ::placeholder {
 	color: #888;
@@ -142,7 +160,7 @@ header > [type=button] {
 	display: flex;
 	flex: 0 0 10rem;
 	height: 10rem;
-	overflow: scroll hidden;
+	overflow-x: scroll hidden;
 }
 .editor .media > * {
 	background: #ddd;
@@ -196,7 +214,7 @@ header > [type=button] {
 }
 
 .resize{
-	border-inline: var(--border);
+`	border-block-width: 0;
 	flex: 0 0 8pt;
 	cursor: col-resize;
 }
@@ -267,10 +285,10 @@ header > [type=button] {
 	margin-bottom: 8pt;
 	opacity: 1;
 }
-.author {
+address {
 	font-style: normal;
 }
-.author::before {
+.preview .author::before {
 	content: 'by ';
 }
 .preview > .body {

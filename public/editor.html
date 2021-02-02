@@ -26,8 +26,8 @@
 			<input class='render' type='button' value='Preview' accesskey='v'>
 			<input class='publish' type='button' value='Publish' accesskey='p'>
 		</header>
-		<h3 class='title' contenteditable accesskey='t'></h3>
-		<address class='author' contenteditable></address>
+		<h3 class='title' contenteditable accesskey='t' name='title'></h3>
+		<address class='author' contenteditable name='author'></address>
 		<select class='category'>
 			<optgroup label='Homepage'>
 				<option default>General_Info</option>
@@ -54,8 +54,8 @@
 			<input class='notify' type='checkbox'>
 			notify
 		</label>
-		<section class='notif' contenteditable></section>
-		<section class='media'>
+		<section class='notif' contenteditable name='Notification body'></section>
+		<section class='media' name='Images and videos'>
 			<section class='new'>
 				<label class='upload'>
 					<input type='file' multiple>
@@ -64,9 +64,9 @@
 				<!-- insert images -->
 			</section>
 		</section>
-		<section class='md' contenteditable></section>
+		<section class='md' contenteditable name='Article body'></section>
 		<section class='body'></section>
-		<input class='id' title='Click to copy' readonly>
+		<input class='id' name='ID: Click to copy' readonly>
 	</main>
 </template>
 <template class='template-preview'>
