@@ -7,10 +7,13 @@ const DEBUG = false
 //////////
 
 const database = firebase.database()
+const messaging=firebase.messaging()
+let messaging_token
+
 const locations = {
-	bulletin: ['Atolowecademics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
+	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
 	homepage: ['ASB', 'District', 'General_Info'],
-	debug: ['Debug'],
+	debug: ['DEBUG'],
 }
 const map = [
 	['id', null, 'articleNotificationID'],
@@ -30,7 +33,7 @@ const map = [
 
 for(const location in locations){
 	for(const category of locations[location]){
-		database.ref(location).child(category).once('value', container => {
+		database.ref(location).child(category).orderByChild('articleUnixEpoch').once('value', container => {
 			container.forEach(snapshot => {
 				// Save article to custom format
 				let article = new Article(snapshot.key)
@@ -445,7 +448,7 @@ function randomElement(array){
 }
 
 function remoteArticle(article, action){
-	const location = DEBUG ? 'debug' : article.public.location
+	const location = DEBUG ? 'DEBUG' : article.public.location
 
 	const reference = database.ref([null,location,article.public.category,article.public.id].join('/'))
 
@@ -470,8 +473,21 @@ function remoteArticle(article, action){
 	}	
 }
 
+///////////////////
+/* NOTIFICATIONS */
+///////////////////
+
+
+function initMessaging() {
+	messaging
+		.requestPermission()
+		.then(()=>messaging.getToken())
+		.then(token=>messaging_token = token)
+}
+
+
 function remoteNotif(article, action){
-	const location = DEBUG ? 'debug-notifs' : 'notifications'
+	const location = DEBUG ? 'DEBUG-notifs' : 'notifications'
 
 	const reference = database.ref([null,location,article.public.id].join('/'))
 		

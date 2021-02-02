@@ -160,12 +160,11 @@ header > [type=button] {
 	display: flex;
 	flex: 0 0 10rem;
 	height: 10rem;
-	overflow-x: scroll hidden;
 }
 .editor .media > * {
 	background: #ddd;
 	margin-right: 8pt;
-	width: 8rem;
+	flex: 0 0 8rem;
 }
 .editor .media .new {
 	display: flex;
