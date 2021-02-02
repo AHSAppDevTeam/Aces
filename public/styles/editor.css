@@ -213,7 +213,7 @@ header > [type=button] {
 }
 
 .resize{
-`	border-block-width: 0;
+	border-block-width: 0;
 	flex: 0 0 8pt;
 	cursor: col-resize;
 }
