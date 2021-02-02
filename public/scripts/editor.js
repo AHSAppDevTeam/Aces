@@ -8,7 +8,7 @@ const DEBUG = false
 
 const database = firebase.database()
 const locations = {
-	bulletin: ['Atolowecademics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
+	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
 	homepage: ['ASB', 'District', 'General_Info'],
 	debug: ['Debug'],
 }
