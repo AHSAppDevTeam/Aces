@@ -185,7 +185,11 @@ function makeEditor(article) {
 					.find(location => locations[location].includes(article.public.category))
 				break
 			case 'date':
-				article.public.timestamp = Math.floor(Date.parse(article.public.date)/1000)
+				const timestamp_seconds = Math.floor(Date.parse(article.public.date)/1000)
+				const local_offset_minutes = new Date().getTimezoneOffset()
+				const local_timestamp_seconds = timestamp_seconds + local_offset_minutes*60
+
+				article.public.timestamp = local_timestamp_seconds
 				break
 		}
 
