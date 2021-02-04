@@ -150,8 +150,13 @@ function makeEditor(article) {
 	preview = article.preview
 	preview.classList.add('open')
 	
-	article.public.date = new Date(article.public.timestamp*1000).toISOString().slice(0,10)
-
+	{
+		const timestamp_seconds = article.public.timestamp
+		const local_offset_minutes = new Date().getTimezoneOffset()
+		const local_timestamp_seconds = timestamp_seconds - local_offset_minutes*60
+		article.public.date = new Date(local_timestamp_seconds*1000).toISOString().slice(0,10)
+	}
+	
 	for (const property in article.public) {
 		updateProperty(editor,article,property)
 	}

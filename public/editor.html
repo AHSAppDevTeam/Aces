@@ -12,7 +12,8 @@
 <div class='resize' tabindex='0'></div>
 <aside class='browser'>
 	<header>
-		<input type='button' class='new-article' value='+' accesskey='n'>
+		<input type='button' class='new-article' value='＋' accesskey='n'>
+		<input type='button' class='refresh' value='↻' accesskey='u'>
 		<input class='search' placeholder='Search {property match1|match2|match3}' accesskey='s'>
 		<a type='button' class='sources' href='sources.html' target='_blank'>Sources</a>
 	</header>
@@ -26,47 +27,71 @@
 			<input class='render' type='button' value='Preview' accesskey='v'>
 			<input class='publish' type='button' value='Publish' accesskey='p'>
 		</header>
-		<h3 class='title' contenteditable accesskey='t' name='title'></h3>
-		<address class='author' contenteditable name='author'></address>
-		<select class='category'>
-			<optgroup label='Homepage'>
-				<option default>General_Info</option>
-				<option>ASB</option>
-				<option>District</option>
-			</optgroup>
-			<optgroup label='Bulletin'>
-				<option>Academics</option>
-				<option>Athletics</option>
-				<option>Clubs</option>
-				<option>Colleges</option>
-				<option>Reference</option>
-			</optgroup>
-			<optgroup label='Debug'>
-				<option>Debug</option>
-			</optgroup>
-		</select>
-		<input class='date' type='date'>
 		<label>
+			<span>title</span>
+			<h3 class='title' contenteditable accesskey='t'></h3>
+		</label>
+		<label>
+			<span>author</span>
+			<address class='author' contenteditable></address>
+		</label>
+		<label class='half-width expand-inside'>
+			<span>category</span>
+			<select class='category'>
+				<optgroup label='Homepage'>
+					<option default>General_Info</option>
+					<option>ASB</option>
+					<option>District</option>
+				</optgroup>
+				<optgroup label='Bulletin'>
+					<option>Academics</option>
+					<option>Athletics</option>
+					<option>Clubs</option>
+					<option>Colleges</option>
+					<option>Reference</option>
+				</optgroup>
+				<optgroup label='Debug'>
+					<option>Debug</option>
+				</optgroup>
+			</select>
+		</label>
+		<label class='half-width expand-inside'>
+			<span>date</span>
+			<input class='date' type='date'>
+		</label>
+		<label class='half-width'>
 			<input class='feature' type='checkbox'>
 			feature
 		</label>
-		<label hidden>
+		<label hidden class='half-width'>
 			<input class='notify' type='checkbox'>
 			notify
 		</label>
-		<section hidden class='notif' contenteditable name='Notification body'></section>
-		<section class='media' name='Images and videos'>
-			<section class='new'>
-				<label class='upload'>
-					<input type='file' multiple>
-				</label>
-				<input class='url' placeholder='Or enter an URL'>
-				<!-- insert images -->
+		<label hidden>
+			<span>notification body</span>
+			<section class='notif' contenteditable></section>
+		</label>
+		<label>
+			<span>images and videos</span>
+			<section class='media'>
+				<section class='new'>
+					<label class='upload'>
+						<input type='file' multiple>
+					</label>
+					<input class='url' placeholder='Or enter an URL'>
+					<!-- insert images -->
+				</section>
 			</section>
-		</section>
-		<section class='md' contenteditable name='Article body'></section>
+		</label>
+		<label>
+			<span>article body</span>
+			<section class='md' contenteditable></section>
+		</label>
 		<section class='body'></section>
-		<input class='id' name='ID: Click to copy' readonly>
+		<label class='expand-inside'>
+			<span>ID (click to copy)</span>
+			<input class='id' readonly>
+		</label>
 	</main>
 </template>
 <template class='template-preview'>

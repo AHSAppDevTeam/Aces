@@ -85,11 +85,13 @@ header > *,
 	border-color: var(--border-color);
 }
 .editor :not(header):hover,
-.browser :not(header):hover,
+header > :hover,
+.preview:hover,
 .resize:hover {
 	--border-color: #aaa;
 }
 .editor :not(header):focus,
+header > :focus,
 .preview:focus,
 .preview.open,
 .resize:focus {
@@ -105,10 +107,15 @@ header > *,
 .editor > * {
 	margin: 0;
 	position: relative;
+	grid-column-end: span 2;
 }
-.editor > [name]::before {
+.editor > .expand-inside{
+	padding: 0;
+}
+.editor > label > span {
 	position: absolute;
-	transform: translateY(-1.1rem);
+	top: -0.5rem;
+	left: 0.3rem;
 	text-transform: lowercase;
 	font-size: .8rem;
 	padding-inline: .2ch;
@@ -117,15 +124,11 @@ header > *,
 	color: var(--border-color);
 	content: attr(name);
 }
-.editor > header,
-.editor > .title,
-.editor > .author,
-.editor > .notif,
-.editor > .media,
-.editor > .md,
-.editor > .body,
-.editor > .id{
-	grid-column-end: span 2;
+.editor > label > * {
+	margin: 0;
+}
+.editor > label.half-width {
+	grid-column-end: span 1;
 }
 .editor.render > :not(header) {
 	padding: 0;
@@ -156,14 +159,23 @@ header > [type=button] {
 .editor .author {
 	font-size: 1rem;
 }
+.editor > .expand-inside > :last-child {
+	border: 0;
+	background: transparent;
+	width: 100%;
+	height: 100%;
+	padding: 6pt;
+}
 .editor .media {
 	display: flex;
 	flex: 0 0 10rem;
 	height: 10rem;
+	overflow-x: scroll;
 }
 .editor .media > * {
 	background: #ddd;
 	margin-right: 8pt;
+	width: 8rem;
 	flex: 0 0 8rem;
 }
 .editor .media .new {
@@ -232,7 +244,7 @@ header > [type=button] {
 	border-radius: var(--radius);
 }
 .browser > header {
-	order: -1;
+	order: -10;
 	flex-wrap: wrap;
 	grid-column: 1 / -1;
 }
