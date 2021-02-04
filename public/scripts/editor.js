@@ -1,6 +1,6 @@
 "use strict"
 
-const DEBUG = true
+const DEBUG = false
 
 //////////
 /* INIT */
@@ -215,21 +215,19 @@ function makeEditor(article) {
 		.querySelector('.upload>input')
 		.addEventListener('change',async event=>{
 		for(const file of event.target.files){
-			if(!file.type.startsWith('image/')) continue // Skip if not an image
-
 			const formData = new FormData()
 			formData.append('image',file)
-
+			
 			const response = await fetch(
 				'https://api.imgbb.com/1/upload?key=f4cd106d84c863d956aa719ab531078e',
 				{
 					method: 'POST',
-					formData,
+					body: formData,
 				}
 			)
 			const result = await response.json()
 			const url = result.data.url
-
+		
 			makeMedia(article,url,true)
 		}
 
