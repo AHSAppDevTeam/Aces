@@ -24,6 +24,7 @@ html {
 body {
 	display: flex;
 	background: var(--background);
+	line-height: 1.3;
 }
 body * {
 	box-sizing: border-box;
@@ -68,40 +69,55 @@ body,
 .browser {
 	overflow: hidden scroll;
 	padding: 0 1rem 1rem 1rem;
-}
-.editor > *,
-.browser > *,
-header > * {
-	padding: 8pt;
-	border-radius: var(--radius);
-	background-color: transparent;
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-rows: repeat(99,auto) 1fr;
 }
 .editor > *,
 .browser > *,
 header > *,
+.media > *,
+.media .delete {
+	padding: 8pt;
+	border-radius: var(--radius);
+	background-color: var(--background);
+}
+.editor > *,
+.browser > *,
+header > *,
+.media > *,
+.media .delete,
 .resize {
 	transition-duration: 100ms;
 	border: var(--border);
 	border-color: var(--border-color);
 }
-.editor :not(header):hover,
+label:hover,
 header > :hover,
 .preview:hover,
-.resize:hover {
-	--border-color: #aaa;
+.media > :hover,
+.media .delete:hover,
+.resize:hover{
+	border-color: #aaa;
 }
-.editor :not(header):focus,
+.editor > label:hover > span{
+	color: #aaa;
+}
+
+label:focus-within,
 header > :focus,
 .preview:focus,
+.media > :focus-within,
 .preview.open,
 .resize:focus {
-	--border-color: var(--text);
+	border-color: var(--text);
+}
+.editor > label:focus-within > span{
+	color: var(--text);
 }
 
 .editor {
-	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 1rem;
 	width: 24rem;
 }
 .editor > * {
@@ -109,7 +125,7 @@ header > :focus,
 	position: relative;
 	grid-column-end: span 2;
 }
-.editor > .expand-inside{
+.editor > label:not(.pad) {
 	padding: 0;
 }
 .editor > label > span {
@@ -120,21 +136,27 @@ header > :focus,
 	font-size: .8rem;
 	padding-inline: .2ch;
 	font-weight: 600;
-	background: var(--background);
 	color: var(--border-color);
 	content: attr(name);
 }
+.editor > label:not(.pad) > :last-child {
+	border: 0;
+	width: 100%;
+	height: 100%;
+	padding: 8pt;
+}
 .editor > label > * {
 	margin: 0;
+	border-radius: var(--radius);
+	background: var(--background);
 }
 .editor > label.half-width {
 	grid-column-end: span 1;
 }
 .editor.render > :not(header) {
-	padding: 0;
 	border-color: transparent;
 }
-.editor.render > [name]::before{
+.editor.render > label > span{
 	opacity: 0;
 }
 .editor ::placeholder {
@@ -159,13 +181,6 @@ header > [type=button] {
 .editor .author {
 	font-size: 1rem;
 }
-.editor > .expand-inside > :last-child {
-	border: 0;
-	background: transparent;
-	width: 100%;
-	height: 100%;
-	padding: 6pt;
-}
 .editor .media {
 	display: flex;
 	flex: 0 0 10rem;
@@ -173,10 +188,12 @@ header > [type=button] {
 	overflow-x: scroll;
 }
 .editor .media > * {
-	background: #ddd;
 	margin-right: 8pt;
 	width: 8rem;
 	flex: 0 0 8rem;
+}
+.editor .media > img {
+	background: var(--border-color);
 }
 .editor .media .new {
 	display: flex;
@@ -188,12 +205,13 @@ header > [type=button] {
 .editor .media .new .upload {
 	flex-grow: 1;
 	cursor: pointer;
+	opacity: 0.2;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M4 1l-2 2zM4 1l2 2zM4 1v4zM2 7H6' fill='none' stroke='black' stroke-width='1' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 .editor .media .new .upload input {
 	display: none;
-}
-.editor .media .new .upload::before {
-	content: 'Upload an image';
 }
 .media .image {
 	position: relative;
@@ -207,15 +225,16 @@ header > [type=button] {
 }
 .media .image .delete {
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: 4pt;
+	right: 4pt;
+	padding: 4pt;
+	cursor: pointer;
 }
 .editor .body{
 	display: none;
 }
 .editor .md {
 	flex-grow: 1;
-	line-height: 1.3;
 }
 .editor.render .body{
 	display: block;
@@ -229,15 +248,9 @@ header > [type=button] {
 	flex: 0 0 8pt;
 	cursor: col-resize;
 }
-
 .browser {
-	flex: 1;
-	max-height: 100vh;
-	display: grid;
-	grid-gap: 1rem;
-	align-items: center;
 	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-	grid-template-rows: repeat(99,auto) 1fr;
+	flex: 1;
 }
 .browser > * {
 	padding: 8pt;

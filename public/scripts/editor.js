@@ -1,6 +1,6 @@
 "use strict"
 
-const DEBUG = false
+const DEBUG = true
 
 //////////
 /* INIT */
@@ -12,11 +12,11 @@ let messaging_token
 
 const locations = {
 	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
-	homepage: ['ASB', 'District', 'General_Info'],
+	homepage: ['General_Info', 'ASB', 'District'],
 	debug: ['DEBUG'],
 }
 const map = [
-	['id', null, 'articleNotificationID'],
+	['id', null, 'notificationArticleID'],
 	['title', 'articleTitle', 'notificationTitle'],
 	['category', null, 'notificationCategory'],
 	['images', 'articleImages', null],
@@ -110,7 +110,6 @@ resize.addEventListener('pointerdown',_=>{
 	window.addEventListener('pointerup',event=>{
 		editor.style.width = event.x/window.innerWidth*100+'vw'
 		document.body.style.pointerEvents = document.body.style.userSelect = 'auto'
-		resize.blur()
 	}, {once:true})
 })
 
@@ -149,6 +148,8 @@ function makeEditor(article) {
 	if(preview) preview.classList.remove('open')
 	preview = article.preview
 	preview.classList.add('open')
+	
+	article.old = article.public
 	
 	{
 		const timestamp_seconds = article.public.timestamp
@@ -216,14 +217,14 @@ function makeEditor(article) {
 		for(const file of event.target.files){
 			if(!file.type.startsWith('image/')) continue // Skip if not an image
 
-			const body = new FormData()
-			body.append('image',file)
+			const formData = new FormData()
+			formData.append('image',file)
 
 			const response = await fetch(
 				'https://api.imgbb.com/1/upload?key=f4cd106d84c863d956aa719ab531078e',
 				{
 					method: 'POST',
-					body,
+					formData,
 				}
 			)
 			const result = await response.json()
@@ -413,6 +414,13 @@ class Article {
 }
 
 document.querySelector('.new-article').addEventListener('click',makeArticle)
+document.querySelector('.download').addEventListener('click',_=>{
+	const data = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(articles))
+	const anchor = document.createElement('a')
+	anchor.setAttribute('href',data);
+	anchor.setAttribute('download', `articles-${Date.now()}.json`);
+	anchor.click()
+})
 makeArticle()
 
 function makeArticle() {
@@ -457,9 +465,20 @@ function randomElement(array){
 }
 
 function remoteArticle(article, action){
-	const location = DEBUG ? 'DEBUG' : article.public.location
 
-	const reference = database.ref([null,location,article.public.category,article.public.id].join('/'))
+	const old_reference = database.ref([
+		DEBUG ? 'DEBUG' : article.old.location,
+		article.old.category,
+		article.old.id
+	].join('/'))
+	
+	old_reference.remove()
+
+	const reference = database.ref([
+		DEBUG ? 'DEBUG' : article.public.location,
+		article.public.category,
+		article.public.id
+	].join('/'))
 
 	switch(action){
 		case 'publish':
@@ -473,6 +492,8 @@ function remoteArticle(article, action){
 			article.published = true
 			
 			remoteNotif(article,article.public.notify ? 'publish' : 'remove')
+			
+			article.old = article.public
 			break
 			
 		case 'remove':
@@ -495,20 +516,54 @@ function initMessaging() {
 }
 
 
-function remoteNotif(article, action){
-	const location = DEBUG ? 'DEBUG-notifs' : 'notifications'
+async function remoteNotif(article, action){
 
-	const reference = database.ref([null,location,article.public.id].join('/'))
+	const reference = database.ref([
+		DEBUG ? 'DEBUG-notifs' : 'notifications',
+		article.public.id
+	].join('/'))
 		
 	switch(action){
 		case 'publish':
 			let notif_remote = {}
+			
+			const topic = article.public.location == 'homepage'
+			? locations.indexOf(article.public.category)+1
+			: article.public.location == 'bulletin'
+			? article.public.location
+			: null
 
 			for(const [local,_,remote] of map)
-				if(local && remote)
-					notif_remote[remote] = article.public[local]
-					
+				if(local && remote){					
+					switch(local){
+						case 'category':
+							notif_remote[remote] = topic
+							break
+						default: 
+							notif_remote[remote] = article.public[local]
+					}
+				}
+			
 			reference.update(notif_remote)
+			
+			/*
+			const response = await fetch(
+				'https://fcm.googleapis.com/fcm/send',
+				{
+					method: 'POST',
+					headers: {
+						'Authorization': 'key=AAAAmFLl2Hg:APA91bE_LA-QY1JMJJjQpr_HGsCkcizU3sl_uNXI2inT1LgSXGaSOMbevOjRUzITq_8e8Tk2qLioUyMUdWQ2Im-92qhbgKhLG3PvQA8luQWmBtZ2NKZgYs4dM9kwsyDC-ubb5asSM3td',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						notification: notif_remote,
+						to: article.public,
+					}),
+				}
+			)
+			const result = await response.json()
+			console.log(result)
+			*/
 			break
 		case 'remove':
 			reference.remove()

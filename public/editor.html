@@ -13,8 +13,9 @@
 <aside class='browser'>
 	<header>
 		<input type='button' class='new-article' value='＋' accesskey='n'>
-		<input type='button' class='refresh' value='↻' accesskey='u'>
 		<input class='search' placeholder='Search {property match1|match2|match3}' accesskey='s'>
+		<input type='button' class='refresh' value='↻' accesskey='u'>
+		<input type='button' class='download' value='⤓' accesskey='d'>
 		<a type='button' class='sources' href='sources.html' target='_blank'>Sources</a>
 	</header>
 	<!-- insert previews -->
@@ -35,7 +36,7 @@
 			<span>author</span>
 			<address class='author' contenteditable></address>
 		</label>
-		<label class='half-width expand-inside'>
+		<label class='half-width'>
 			<span>category</span>
 			<select class='category'>
 				<optgroup label='Homepage'>
@@ -55,30 +56,30 @@
 				</optgroup>
 			</select>
 		</label>
-		<label class='half-width expand-inside'>
+		<label class='half-width'>
 			<span>date</span>
 			<input class='date' type='date'>
 		</label>
-		<label class='half-width'>
+		<label class='half-width pad'>
 			<input class='feature' type='checkbox'>
 			feature
 		</label>
-		<label hidden class='half-width'>
+		<label class='half-width pad'>
 			<input class='notify' type='checkbox'>
 			notify
 		</label>
-		<label hidden>
+		<label>
 			<span>notification body</span>
 			<section class='notif' contenteditable></section>
 		</label>
-		<label>
+		<label class='pad'>
 			<span>images and videos</span>
 			<section class='media'>
 				<section class='new'>
 					<label class='upload'>
-						<input type='file' multiple>
+						<input type='file' multiple accept='image/*'>
 					</label>
-					<input class='url' placeholder='Or enter an URL'>
+					<input class='url' placeholder='Image/YouTube URL'>
 					<!-- insert images -->
 				</section>
 			</section>
@@ -88,7 +89,7 @@
 			<section class='md' contenteditable></section>
 		</label>
 		<section class='body'></section>
-		<label class='expand-inside'>
+		<label>
 			<span>ID (click to copy)</span>
 			<input class='id' readonly>
 		</label>
@@ -105,7 +106,7 @@
 <template class='template-image'>
 	<section class='image' draggable='true'>
 		<img>
-		<input type='button' class='delete' value='X'>
+		<input type='button' class='delete' value='×'>
 	</section>
 </template>
 
