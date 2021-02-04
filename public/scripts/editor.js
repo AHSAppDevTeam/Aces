@@ -464,6 +464,8 @@ function randomElement(array){
 
 function remoteArticle(article, action){
 
+	if(article.public.title='Untitled Article') return
+	
 	const old_reference = database.ref([
 		DEBUG ? 'DEBUG' : article.old.location,
 		article.old.category,
