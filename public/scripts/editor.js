@@ -463,8 +463,6 @@ function randomElement(array){
 }
 
 function remoteArticle(article, action){
-
-	if(article.public.title='Untitled Article') return
 	
 	const old_reference = database.ref([
 		DEBUG ? 'DEBUG' : article.old.location,
@@ -482,6 +480,8 @@ function remoteArticle(article, action){
 
 	switch(action){
 		case 'publish':
+			if(article.public.title=='Untitled Article') return
+
 			let article_remote = {}
 
 			for(const [local,remote,_] of map)
