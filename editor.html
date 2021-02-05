@@ -9,128 +9,129 @@
 		<link rel='stylesheet' href='dist/editor.min.css'>
   </head>
   <body>
-<!-- insert editor -->
-<div class='resize' tabindex='0'></div>
-<aside class='browser'>
-	<header>
-		<input type='button' class='new-article' value='＋' accesskey='n'>
-		<input class='search' placeholder='Search {property match1|match2|match3}' accesskey='s'>
-		<input type='button' class='refresh' value='↻' accesskey='u'>
-		<input type='button' class='download' value='⤓' accesskey='d'>
-		<a type='button' class='sources' href='sources.html' target='_blank'>Sources</a>
-	</header>
-	<!-- insert previews -->
-</aside>
-<aside class='auth'>
-	<form class='sign-in'>
-		<label>
-			email
-			<input
-				class='email'
-				autocomplete
-				autofocus='on'
-				placeholder='human@example.com'
-			>
-		</label>
-		<label>
-			password
-			<input class='password' type='password' autocomplete='on'>
-		</label>
-		<input type='submit' value='sign in'>
-	</form>
-	<form class='sign-out'>
-		<input type='submit' value='sign out'>
-	</form>
-</aside>
 
-<template class='template-editor'>
-	<main class='editor'>
-		<header>
-			<input class='remove' type='button' value='Remove' accesskey='r'>
-			<input class='render' type='button' value='Preview' accesskey='v'>
-			<input class='publish' type='button' value='Publish' accesskey='p'>
-		</header>
-		<label>
-			<span>title</span>
-			<h3 class='title' contenteditable accesskey='t'></h3>
-		</label>
-		<label>
-			<span>author</span>
-			<address class='author' contenteditable></address>
-		</label>
-		<label class='half-width'>
-			<span>category</span>
-			<select class='category'>
-				<optgroup label='Homepage'>
-					<option default>General_Info</option>
-					<option>ASB</option>
-					<option>District</option>
-				</optgroup>
-				<optgroup label='Bulletin'>
-					<option>Academics</option>
-					<option>Athletics</option>
-					<option>Clubs</option>
-					<option>Colleges</option>
-					<option>Reference</option>
-				</optgroup>
-				<optgroup label='Debug'>
-					<option>Debug</option>
-				</optgroup>
-			</select>
-		</label>
-		<label class='half-width'>
-			<span>date</span>
-			<input class='date' type='date'>
-		</label>
-		<label class='half-width pad'>
-			<input class='feature' type='checkbox'>
-			feature
-		</label>
-		<label class='half-width pad' hidden>
-			<input class='notify' type='checkbox'>
-			notify
-		</label>
-		<label hidden>
-			<span>notification body</span>
-			<section class='notif' contenteditable></section>
-		</label>
-		<label class='pad'>
-			<span>images and videos</span>
-			<section class='media'>
-				<section class='new'>
-					<label class='upload'>
-						<input type='file' multiple accept='image/*'>
-					</label>
-					<input class='url' placeholder='Image/YouTube URL'>
-					<!-- insert images -->
-				</section>
+		<!-- insert editor -->
+		<div class='resize' tabindex='0'></div>
+		<aside class='browser'>
+			<header>
+				<input type='button' class='new-article' value='＋' accesskey='n'>
+				<input class='search' placeholder='Search {property match1|match2|match3}' accesskey='s'>
+				<input type='button' class='refresh' value='↻' accesskey='u'>
+				<input type='button' class='download' value='⤓' accesskey='d'>
+				<a type='button' class='sources' href='sources.html' target='_blank'>Sources</a>
+			</header>
+			<!-- insert previews -->
+		</aside>
+		<aside class='auth'>
+			<form class='sign-in'>
+				<label>
+					email
+					<input
+						class='email'
+						autocomplete
+						autofocus='on'
+						placeholder='human@example.com'
+					>
+				</label>
+				<label>
+					password
+					<input class='password' type='password' autocomplete='on'>
+				</label>
+				<input type='submit' value='sign in'>
+			</form>
+			<form class='sign-out'>
+				<input type='submit' value='sign out'>
+			</form>
+		</aside>
+
+		<template class='template-editor'>
+			<main class='editor'>
+				<header>
+					<input class='remove' type='button' value='Remove' accesskey='r'>
+					<input class='render' type='button' value='Preview' accesskey='v'>
+					<input class='publish' type='button' value='Publish' accesskey='p'>
+				</header>
+				<label>
+					<span>title</span>
+					<h3 class='title' contenteditable accesskey='t'></h3>
+				</label>
+				<label>
+					<span>author</span>
+					<address class='author' contenteditable></address>
+				</label>
+				<label class='half-width'>
+					<span>category</span>
+					<select class='category'>
+						<optgroup label='Homepage'>
+							<option default value='General_Info'>General Info</option>
+							<option>ASB</option>
+							<option>District</option>
+						</optgroup>
+						<optgroup label='Bulletin'>
+							<option>Academics</option>
+							<option>Athletics</option>
+							<option>Clubs</option>
+							<option>Colleges</option>
+							<option>Reference</option>
+						</optgroup>
+						<optgroup label='Debug'>
+							<option>Debug</option>
+						</optgroup>
+					</select>
+				</label>
+				<label class='half-width'>
+					<span>date</span>
+					<input class='date' type='date'>
+				</label>
+				<label class='half-width pad'>
+					<input class='feature' type='checkbox'>
+					feature
+				</label>
+				<label class='half-width pad' hidden>
+					<input class='notify' type='checkbox'>
+					notify
+				</label>
+				<label hidden>
+					<span>notification body</span>
+					<section class='notif' contenteditable></section>
+				</label>
+				<label class='pad'>
+					<span>images and videos</span>
+					<section class='media'>
+						<section class='new'>
+							<label class='upload'>
+								<input type='file' multiple accept='image/*'>
+							</label>
+							<input class='url' placeholder='Image/YouTube URL'>
+							<!-- insert images -->
+						</section>
+					</section>
+				</label>
+				<label>
+					<span>article body</span>
+					<section class='md' contenteditable></section>
+				</label>
+				<section class='body'></section>
+				<label>
+					<span>ID (click to copy)</span>
+					<input class='id' readonly>
+				</label>
+			</main>
+		</template>
+		<template class='template-preview'>
+			<button class='preview'>
+				<h3 class='title'></h3>
+				<address class='author'></address>
+				<p class='body'></p>
+				<p class='status'>unpublished changes</p>
+			</button>
+		</template>
+		<template class='template-image'>
+			<section class='image' draggable='true'>
+				<img>
+				<input type='button' class='delete' value='×'>
 			</section>
-		</label>
-		<label>
-			<span>article body</span>
-			<section class='md' contenteditable></section>
-		</label>
-		<section class='body'></section>
-		<label>
-			<span>ID (click to copy)</span>
-			<input class='id' readonly>
-		</label>
-	</main>
-</template>
-<template class='template-preview'>
-	<button class='preview'>
-		<h3 class='title'></h3>
-		<address class='author'></address>
-		<p class='body'></p>
-		<p class='status'>unpublished changes</p>
-	</button>
-</template>
-<template class='template-image'>
-	<section class='image' draggable='true'>
-		<img>
-		<input type='button' class='delete' value='×'>
-	</section>
-</template>
+		</template>
 
     <script src='https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js'></script>
     <script src='https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js'></script>
