@@ -17,6 +17,7 @@ document
 		auth.email.value,
 		auth.password.value,
 	)
+	auth.modal.reset()
 	auth.modal.classList.add('loading')
 })
 
@@ -41,6 +42,10 @@ firebase.auth().onAuthStateChanged((user)=>{
 	document.body.classList.toggle('signed-in',signedIn)
 	auth.sign.value = `Sign ${signedIn ? 'out' : 'in'}`
 	document.activeElement.blur()
+
+	document.querySelector('.editor .remove').disabled
+	= document.querySelector('.editor .publish').disabled
+	= !signedIn
 })
 
 function signIn(email,password) {

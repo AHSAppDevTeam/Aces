@@ -36,7 +36,6 @@
 	border-color: red;
 }
 
-body:not(.signed-in) > .editor .remove,
-body:not(.signed-in) > .editor .publish {
+input[disabled] {
 	display: none;
 }
