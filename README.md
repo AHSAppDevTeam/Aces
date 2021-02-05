@@ -1,2 +1,4 @@
-# AHS Website
-Content Editing System for the AHS 2020 Mobile App 
+# AHS|ACES
+
+Content editing system for Arcadia High School's mobile app.
+(2021)
