@@ -691,8 +691,20 @@ address {
 	background:var(--background);
 	z-index: 10;
 
-	box-shadow: 0 0 0 100vmax #000a;
+	box-shadow: 0 0 0 100vmax #0004;
 }
+.sign-in:not(:focus):not(:focus-within){
+	pointer-events: none;
+	opacity: 0;
+}
+.sign-in .cancel {
+	position: absolute;
+	top: 8pt;
+	right: 8pt;
+	background: transparent;
+	border: 0;
+}
+
 .sign-in input {
 	color: black;
 }
@@ -701,10 +713,6 @@ address {
 }
 .sign-in.invalid{
 	border-color: red;
-}
-
-body.signed-in > .sign-in {
-	width: 6rem;
 }
 
 body:not(.signed-in) > .editor .remove,

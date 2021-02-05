@@ -7,7 +7,6 @@ const DEBUG = false
 //////////
 
 const database = firebase.database()
-const messaging=firebase.messaging()
 let messaging_token
 
 const locations = {

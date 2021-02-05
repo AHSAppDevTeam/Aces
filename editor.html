@@ -23,15 +23,18 @@
 			</header>
 			<!-- insert previews -->
 		</aside>
-		<form class='sign-in' hidden>
+		<form class='sign-in' tabindex='0'>
 			<label>
 				email
-				<input class='email' autocomplete='on' placeholder='human@example.com'>
+				<input class='email' type='email'
+				autocomplete='on' required>
 			</label>
 			<label>
 				password
-				<input class='password' type='password' autocomplete='on'>
+				<input class='password' type='password'
+				autocomplete='on' required>
 			</label>
+			<input type='button' class='cancel' value='✕'>
 			<input type='submit' value='sign in'>
 		</form>
 

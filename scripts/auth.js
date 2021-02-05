@@ -2,6 +2,7 @@ let user
 let signedIn = false
 
 const auth = {
+	sign: document.querySelector('.sign'),
 	modal: document.querySelector('.sign-in'),
 
 	email: document.querySelector('.email'),
@@ -17,22 +18,29 @@ document
 		auth.password.value,
 	)
 	auth.modal.classList.add('loading')
-},false)
+})
 
-document
- .querySelector('.sign')
+auth.sign
  .addEventListener('click', event=>{
+	event.preventDefault()
 	if(signedIn){
 		firebase.auth().signOut()
 	} else{
-		auth.modal.hidden = false
 		auth.email.focus()
 	}
  })
+auth.modal
+ .querySelector('.cancel')
+ .addEventListener('click', ()=>{
+	document.activeElement.blur()
+})
 
 
-firebase.auth().onAuthStateChanged(function(user) {
-	document.body.classList.toggle('signed-in',Boolean(user))
+firebase.auth().onAuthStateChanged((user)=>{
+	signedIn = Boolean(user)
+	document.body.classList.toggle('signed-in',signedIn)
+	auth.sign.value = `Sign ${signedIn ? 'out' : 'in'}`
+	document.activeElement.blur()
 })
 
 function signIn(email,password) {
