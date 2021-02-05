@@ -3,9 +3,10 @@
   <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>AHS App Content Editing System</title>
-		<link rel='stylesheet' href='styles/normalize.css'>
-    <link rel='stylesheet' href='styles/editor.css'>
+    <title>AHS|ACES</title>
+		<meta name='description' content='Arcadia High School App Content Editing System'>
+		<meta name='author' content='AHS App Development Team'>
+		<link rel='stylesheet' href='dist/editor.min.css'>
   </head>
   <body>
 <!-- insert editor -->
@@ -19,6 +20,27 @@
 		<a type='button' class='sources' href='sources.html' target='_blank'>Sources</a>
 	</header>
 	<!-- insert previews -->
+</aside>
+<aside class='auth'>
+	<form class='sign-in'>
+		<label>
+			email
+			<input
+				class='email'
+				autocomplete
+				autofocus='on'
+				placeholder='human@example.com'
+			>
+		</label>
+		<label>
+			password
+			<input class='password' type='password' autocomplete='on'>
+		</label>
+		<input type='submit' value='sign in'>
+	</form>
+	<form class='sign-out'>
+		<input type='submit' value='sign out'>
+	</form>
 </aside>
 
 <template class='template-editor'>
@@ -110,13 +132,11 @@
 	</section>
 </template>
 
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>    
+    <script src='https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js'></script>
+    <script src='https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js'></script>
+    <script src='https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js'></script>
+		<script src='https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js'></script>    
 
-    <script src='scripts/firebase-config.js'></script>
-    <script src='scripts/marked.min.js'></script>
-    <script src='scripts/editor.js'></script>
+		<script src='dist/editor.min.js'></script>
   </body>
 </html>

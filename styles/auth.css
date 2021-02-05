@@ -1,0 +1,42 @@
+.auth {
+  position: fixed;
+  width: 24rem;
+  max-width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-inline: auto;
+
+  display: flex;
+  flex-direction: column;
+  
+  background:var(--background);
+  z-index: 10;
+
+  border-bottom: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.auth > form {
+  display: contents;
+}
+.auth input {
+  color: black;
+}
+.auth.loading{
+  border-color: blue;
+}
+.auth.invalid{
+  border-color: red;
+}
+
+body.signed-in > .auth {
+  width: 6rem;
+}
+
+body.signed-in > .auth > .sign-in,
+body:not(.signed-in) > .auth > .sign-out,
+body:not(.signed-in) > .editor .remove,
+body:not(.signed-in) > .editor .publish {
+  display: none;
+}

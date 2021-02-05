@@ -1,0 +1,40 @@
+:root{
+	--radius: 4pt;
+	--border-color: #ddd;
+	--border: solid 2pt var(--border-color);
+	--background: white;
+	--cover: #fffd;
+	--text: black;
+}
+
+@media (prefers-color-scheme: dark){
+	:root{
+		--border-color: #333;
+		--background: hsl(220deg,20%,8%);
+		--cover: #000d;
+		--text: #ddd;
+	}
+}
+
+html {
+	font-family: Helvetica, Roboto, Sans-serif;
+	font-size: 14pt;
+}
+body {
+	display: flex;
+	background: var(--background);
+	line-height: 1.3;
+}
+body * {
+	box-sizing: border-box;
+	color: var(--text);
+}
+body :focus{
+	outline: 0;
+}
+
+button,
+[type=button],
+[type=submit] {
+  cursor: pointer;
+}
