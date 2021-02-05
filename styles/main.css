@@ -38,3 +38,7 @@ button,
 [type=submit] {
   cursor: pointer;
 }
+
+[hidden]{
+	display: none !important;
+}

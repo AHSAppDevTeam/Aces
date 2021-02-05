@@ -3,15 +3,6 @@
 /* NOTIFICATIONS */
 ///////////////////
 
-
-function initMessaging() {
-	messaging
-		.requestPermission()
-		.then(()=>messaging.getToken())
-		.then(token=>messaging_token = token)
-}
-
-
 async function remoteNotif(article, action){
 
 	const reference = database.ref([

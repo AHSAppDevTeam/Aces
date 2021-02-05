@@ -38,7 +38,7 @@ body,
 header > *,
 .media > *,
 .media .delete,
-.auth {
+.sign-in {
 	padding: 8pt;
 	border-radius: var(--radius);
 	background-color: var(--background);
@@ -49,7 +49,7 @@ header > *,
 .media > *,
 .media .delete,
 .resize,
-.auth {
+.sign-in {
 	transition-duration: 100ms;
 	border: var(--border);
 	border-color: var(--border-color);
