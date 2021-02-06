@@ -1,6 +1,6 @@
 #!/bin/sh
 cd scripts
-cat modules/*.js config.js auth.js init.js search.js resize.js editor.js preview.js article.js notif.js \
+cat modules/*.js config.js auth.js init.js search.js resize.js editor.js preview.js article.js remote.js \
 > ../dist/editor.min.js
 
 cd ../styles
