@@ -72,4 +72,5 @@ database.ref('notifications').once('value', container=>{
 
 
 let articles = {}
-let editor, preview
+let preview
+const editor = document.querySelector('.editor')

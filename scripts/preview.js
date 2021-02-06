@@ -16,7 +16,7 @@ function makePreview(article,order){
 	// Background image
 	if(article.public.images.length) preview.style.backgroundImage = `linear-gradient(var(--cover),var(--cover)), url(${article.public.images[0]})`
 
-	preview.addEventListener('click', _=> makeEditor(article))
+	preview.addEventListener('click', _=> updateEditor(article))
 	preview.style.order = order
 
 	previewContainer.prepend(preview)
