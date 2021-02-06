@@ -7,7 +7,7 @@ async function postWebhook(article){
 	for(const [property] of map)
 		if(article.public[property] != article.old[property])
 			diffs.push(property)
-	if(!diffs) return false
+	if(!diffs.length) return false
 
 	const payload = {
 		username: 'ACES edit log',
