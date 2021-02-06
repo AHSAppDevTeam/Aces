@@ -12,9 +12,21 @@
 	<body>
 		<main class='editor'>
 			<header>
-				<input class='remove' type='button' value='Remove' accesskey='r'>
-				<input class='render' type='button' value='Preview' accesskey='v'>
-				<input class='publish' type='button' value='Publish' accesskey='p'>
+				<input type='button'
+					class='remove'
+					title='remove article (alt+r)'
+					value='Remove'
+					accesskey='r'>
+				<input type='button'
+					class='render'
+					title='toggle preview/edit mode (alt+v)'
+					value='Preview'
+					accesskey='v'>
+				<input type='button'
+					class='publish'
+					title='publish article (alt+p)'
+					value='Publish'
+					accesskey='p'>
 			</header>
 			<label>
 				<span>title</span>
@@ -67,7 +79,7 @@
 						<label class='upload'>
 							<input type='file' multiple accept='image/*'>
 						</label>
-						<input class='url' placeholder='Image/YouTube URL'>
+						<input class='url' type='url' placeholder='Image/YouTube URL'>
 						<!-- insert images -->
 					</section>
 				</section>
@@ -85,12 +97,36 @@
 		<div class='resize' tabindex='0'></div>
 		<aside class='browser'>
 			<header>
-				<input type='button' class='new-article' value='＋' accesskey='n'>
-				<input class='search' placeholder='Search {property match1|match2|match3}' accesskey='s'>
-				<input type='button' class='refresh' value='↻' accesskey='u'>
-				<input type='button' class='download' value='⤓' accesskey='d'>
-				<a type='button' class='sources' href='sources.html' target='_blank'>🕮</a>
-				<input type='button' class='sign' value='Sign in' accesskey='s'>
+				<input type='button'
+					class='new-article'
+					title='new article (alt+n)'
+					value='＋'
+					accesskey='n'>
+				<input type='text'
+					class='search'
+					title='search articles (alt+/)'
+					placeholder='Search {property value}'
+					accesskey='/'>
+				<input type='button'
+					class='refresh'
+					title='refresh articles (alt+u)'
+					value='↻'
+					accesskey='u'>
+				<input type='button'
+					class='download'
+					title='download articles (alt+d)'
+					value='⤓'
+					accesskey='d'>
+				<a type='button'
+					class='sources'
+					title='view resources'
+					href='sources.html'
+					target='_blank'>🕮</a>
+				<input type='button'
+					class='sign'
+					title='sign in/out (alt+s)'
+					value='Sign in'
+					accesskey='s'>
 			</header>
 			<!-- insert previews -->
 		</aside>
