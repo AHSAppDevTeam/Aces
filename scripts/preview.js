@@ -4,7 +4,7 @@
 /////////////
 
 const Preview = document.querySelector('.template-preview')
-const previewContainer = document.querySelector('.browser')
+const browser = document.querySelector('.browser')
 
 function makePreview(article,order){
 	// Load article properties into a preview
@@ -19,7 +19,7 @@ function makePreview(article,order){
 	preview.addEventListener('click', _=> updateEditor(article))
 	preview.style.order = order
 
-	previewContainer.prepend(preview)
+	browser.prepend(preview)
 }
 
 function updatePreview(article){
