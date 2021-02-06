@@ -37,7 +37,9 @@ auth.modal
 })
 
 
-firebase.auth().onAuthStateChanged((user)=>{
+firebase.auth().onAuthStateChanged(_user=>{
+	user = _user	
+
 	signedIn = Boolean(user)
 	document.body.classList.toggle('signed-in',signedIn)
 	auth.sign.value = `Sign ${signedIn ? 'out' : 'in'}`
@@ -46,12 +48,14 @@ firebase.auth().onAuthStateChanged((user)=>{
 	document.querySelector('.editor .remove').disabled
 	= document.querySelector('.editor .publish').disabled
 	= !signedIn
+
+	if(signedIn)
+		updateSecrets()
 })
 
 function signIn(email,password) {
 	firebase.auth().signInWithEmailAndPassword(email, password)
-		.then((userCredential) => {
-			user = userCredential.user			
+		.then(() => {
 			auth.modal.classList.remove('loading')
 		})
 		.catch((error) => {

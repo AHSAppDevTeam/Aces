@@ -6,7 +6,10 @@ sed -i -e "s/\?v=\w\+/\?v=$rand/g" editor.html
 
 # merge scripts
 cd scripts
-cat modules/*.js config.js auth.js init.js search.js resize.js editor.js preview.js article.js remote.js \
+cat modules/*.js \
+config.js auth.js init.js secrets.js \
+search.js resize.js editor.js preview.js \
+article.js remote.js webhook.js \
 > ../dist/editor.min.js
 
 # merge styles

@@ -33,15 +33,15 @@ function remoteArticle(article, action){
 			article.published = true
 			
 			remoteNotif(article,article.public.notify ? 'publish' : 'remove')
+			postWebhook(article)
 			
 			article.old = article.public
 			break
-			
 		case 'remove':
 			reference.remove()
 			article.published = false
 			break
-	}	
+	}
 }
 
 async function remoteNotif(article, action){

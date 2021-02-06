@@ -25,7 +25,7 @@ function updateEditor(article) {
 	preview = article.preview
 	preview.classList.add('open')
 
-	article.old = article.public
+	article.old = Object.assign({},article.public)
 	
 	{
 		const timestamp_seconds = article.public.timestamp
@@ -89,14 +89,14 @@ function updateEditor(article) {
 	// Add media via upload
 	editor.querySelector('.upload>input').onchange = async event=>{
 		for(const file of event.target.files){
-			const formData = new FormData()
-			formData.append('image',file)
+			const payload = new FormData()
+			payload.append('image',file)
 			
 			const response = await fetch(
-				'https://api.imgbb.com/1/upload?key=f4cd106d84c863d956aa719ab531078e',
+				secrets.imgbb,
 				{
 					method: 'POST',
-					body: formData,
+					body: payload,
 				}
 			)
 			const result = await response.json()
