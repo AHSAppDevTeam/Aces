@@ -22,10 +22,8 @@ async function postWebhook(article){
 			url: `https://internal.ahs.app/editor?id=${article.public.id}`,
 			description: `Modified properties: ${diffs.join(', ') || 'None'}.`,
 		}],
-			
+
 	}
-	console.log(article.public,article.old)
-	console.log(payload)
 	const response = await fetch(
 		secrets.webhook,
 		{
