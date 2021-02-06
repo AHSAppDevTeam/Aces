@@ -12,7 +12,7 @@ async function postWebhook(article){
 	const payload = {
 		username: 'ACES edit log',
 		avatar_url: '',
-		content: 'h',
+		content: '',
 		embeds: [{
 			color: 11730954,
 			author: {

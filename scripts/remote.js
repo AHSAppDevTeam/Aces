@@ -35,7 +35,7 @@ function remoteArticle(article, action){
 			remoteNotif(article,article.public.notify ? 'publish' : 'remove')
 			postWebhook(article)
 			
-			article.old = article.public
+			article.old = Object.assign({},article.public)
 			break
 		case 'remove':
 			reference.remove()
