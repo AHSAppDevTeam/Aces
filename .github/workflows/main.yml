@@ -1,0 +1,15 @@
+name: build
+on: push
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: run bash script
+        run: sh build.sh
+      - name: commit changes
+        run: |
+          git config --global user.name 'Auto-builder'
+          git config --global user.email 'action@github.com'
+          git commit -am 'automated build'
+          git push
