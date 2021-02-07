@@ -12,7 +12,7 @@ let messaging_token
 const locations = {
 	bulletin: ['Academics', 'Athletics', 'Clubs', 'Colleges', 'Reference'],
 	homepage: ['General_Info', 'ASB', 'District'],
-	debug: ['DEBUG'],
+	debug: ['Debug'],
 }
 const map = [
 	['id', null, 'notificationArticleID'],
