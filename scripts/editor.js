@@ -46,7 +46,7 @@ function updateEditor(article) {
 		const property = event.target.classList[0]
 		if(!(property in article.public)) return
 
-		article.public[property] = elementContent(event.target)
+		article.public[property] = elementContent(event.target).trim()
 
 		switch(property){
 			case 'md':
@@ -70,6 +70,7 @@ function updateEditor(article) {
 				break
 			case 'title':
 				updatePageTitle(article)
+				break
 		}
 
 		article.published = false
