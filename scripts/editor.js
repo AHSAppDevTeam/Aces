@@ -46,8 +46,7 @@ function updateEditor(article) {
 		const property = event.target.classList[0]
 		if(!(property in article.public)) return
 
-		const content = elementContent(event.target)
-		article.public[property] = content.trim() || content
+		article.public[property] =  trim(elementContent(event.target))
 
 		switch(property){
 			case 'md':
@@ -212,4 +211,10 @@ function makeMedia(article,url,novel=false){
 
 	image.classList.add('image')
 	media.append(image)
+}
+
+function trim(x){
+	return typeof x == 'string'
+	? x.replace(/^[\s\uFEFF\xA0\n]+|[\s\uFEFF\xA0\n]+$/g, '')
+	: x
 }

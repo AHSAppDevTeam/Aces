@@ -22,16 +22,22 @@ function searchURL(){
 async function searchArticles(){
 	const query = search.value
 	const tags = Array.from(query.matchAll(regex))
-	const rest = query.replaceAll(regex,'').trim()
+	const rest = query.replaceAll(regex,'')
+	tags.push(
+		[,'md',rest],
+		[,'title',rest],
+	)
+
 	for await(const article of Object.values(articles))
-		article.preview.hidden = !(await matchArticle(article,tags,rest))
+		article.preview.hidden = !(await matchArticle(article,tags))
 }
-async function matchArticle(article,tags,rest){
-	if(!article.public.md.toLowerCase().includes(rest))
-		return false
-	for(const [_,name,parameters] of tags)
-		for(const parameter of parameters.toLowerCase().split('|'))
-			if(!article.public[name].toString().toLowerCase().includes(parameter.trim()))
-				return false
+async function matchArticle(article,tags){
+	for(const [,name,params] of tags)
+		if(params.split('|').every(param=>!format(article.public[name]).includes(format(param))))
+			return false
 	return true
+}
+
+function format(x){
+	return x.toString().trim().toLowerCase()
 }
