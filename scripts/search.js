@@ -23,10 +23,7 @@ async function searchArticles(){
 	const query = search.value
 	const tags = Array.from(query.matchAll(regex))
 	const rest = query.replaceAll(regex,'')
-	tags.push(
-		[,'md',rest],
-		[,'title',rest],
-	)
+	tags.push([,'md',rest],)
 
 	for await(const article of Object.values(articles))
 		article.preview.hidden = !(await matchArticle(article,tags))
