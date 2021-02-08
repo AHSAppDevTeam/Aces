@@ -27,6 +27,7 @@ const map = [
 	['feature', 'isFeatured', null],
 	['notify', 'isNotified', null],
 	['notif', null, 'notificationBody'],
+	['date', 'articleDate', null],
 	['timestamp', 'articleUnixEpoch','notificationUnixEpoch'],
 ]
 
@@ -45,9 +46,7 @@ for(const location in locations){
 					if(article_remote[remote])
 						article.public[local] = article_remote[remote]
 
-				// Use HTML if markdown isn't available
-				article.public.md = article.public.md || article.public.body
-
+				article.finishConstruction()
 				// Make preview
 				makePreview(article, 1)
 

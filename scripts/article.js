@@ -33,6 +33,11 @@ class Article {
 	get published () {
 		return this._published
 	}
+
+	finishConstruction(){
+		this.public.md = this.public.md || this.public.body
+		this.public.date = timestampToDate(this.public.timestamp)	
+	}
 }
 
 document.querySelector('.new-article').addEventListener('click',makeArticle)

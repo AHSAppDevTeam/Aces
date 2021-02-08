@@ -15,6 +15,9 @@ editor.querySelector('.id').addEventListener('click', event=>{
 function updatePageTitle(article){
 	document.title = 'AHS|ACES: '+article.public.title
 }
+function timestampToDate(timestamp){
+	return new Date(timestamp*1000).toISOString().slice(0,10)
+}
 function updateEditor(article) {
 
 	editor.querySelectorAll('.media > .image').forEach(image=>image.remove())
@@ -31,7 +34,7 @@ function updateEditor(article) {
 		const timestamp_seconds = article.public.timestamp
 		const local_offset_minutes = new Date().getTimezoneOffset()
 		const local_timestamp_seconds = timestamp_seconds - local_offset_minutes*60
-		article.public.date = new Date(local_timestamp_seconds*1000).toISOString().slice(0,10)
+		article.public.date = timestampToDate(local_timestamp_seconds)
 	}
 	
 	for (const property in article.public) {
