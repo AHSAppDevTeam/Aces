@@ -20,6 +20,7 @@ function makePreview(article,order){
 	preview.style.order = order
 
 	browser.prepend(preview)
+	searchArticles()
 }
 
 function updatePreview(article){

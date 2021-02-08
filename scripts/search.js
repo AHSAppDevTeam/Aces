@@ -17,8 +17,8 @@ function searchURL(){
 			tags.push(name+': '+params)
 	}
 	search.value = tags.join('; ')
-	setTimeout(searchArticles,1000) // wait for articles to load (HACK)
 }
+
 async function searchArticles(){
 	const query = search.value
 	const tags = Array.from(query.matchAll(regex))
