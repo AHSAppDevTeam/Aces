@@ -5,12 +5,12 @@
 const secrets = {
 	imgbb: '',
 	webhook: '',
+	messaging: '',
 }
 
 function updateSecrets(){
-	database.ref('secrets').once('value',container => {
-		container.forEach(snapshot => {
-			secrets[snapshot.key] = snapshot.val()
-		})
-	})
+	for(const key of secrets)
+		database.ref('secrets/'+key).once('value',
+			snapshot=>secrets[key]=snapshot.val()
+		)
 }

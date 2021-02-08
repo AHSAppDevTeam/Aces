@@ -53,19 +53,25 @@ async function remoteNotif(article, action){
 		
 	switch(action){
 		case 'publish':
+			// Upload notification to Realtime Database
+			
 			let notif_remote = {}
 			
 			const topic = article.public.location == 'homepage'
+			? article.public.category
+			: article.public.location
+
+			const topicIndex = article.public.location == 'homepage'
 			? locations.indexOf(article.public.category)+1
 			: article.public.location == 'bulletin'
-			? article.public.location
+			? 4
 			: null
 
 			for(const [local,_,remote] of map)
 				if(local && remote){					
 					switch(local){
 						case 'category':
-							notif_remote[remote] = topic
+							notif_remote[remote] = topicIndex
 							break
 						default: 
 							notif_remote[remote] = article.public[local]
@@ -73,6 +79,31 @@ async function remoteNotif(article, action){
 				}
 			
 			reference.update(notif_remote)
+			
+			// Send push notification to FCM
+			const payload = {
+				notification:{
+					title: article.public.title,
+					body: article.public.notification,
+				},
+				data:{
+					articleID: article.public.id, 
+					notificationPostID: article.public.id,
+					to: '/topics/'+topic,
+				},
+			}
+			const response = await fetch(
+				'https://fcm.googleapis.com/fcm/send',
+				{
+					method: 'POST',
+					headers: {
+						'Authorization': secrets.messaging,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(payload),
+				}
+			)
+			console.log(response)
 			break
 		case 'remove':
 			reference.remove()

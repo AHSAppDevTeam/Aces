@@ -100,7 +100,7 @@ function updateEditor(article) {
 				{
 					method: 'POST',
 					body: payload,
-				}
+				},
 			)
 			const result = await response.json()
 			const url = result.data.url

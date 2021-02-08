@@ -32,7 +32,7 @@ async function postWebhook(article){
 			},
 			method: 'POST',
 			body: JSON.stringify(payload),
-		}
+		},
 	)
 	console.log(response)
 }
