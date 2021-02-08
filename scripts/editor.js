@@ -46,7 +46,9 @@ function updateEditor(article) {
 		const property = event.target.classList[0]
 		if(!(property in article.public)) return
 
-		article.public[property] = elementContent(event.target).trim()
+		const content = elementContent(event.target)
+
+		article.public[property] = typeof content == 'string' ? content.trim() : content
 
 		switch(property){
 			case 'md':
