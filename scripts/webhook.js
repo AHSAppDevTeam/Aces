@@ -22,7 +22,7 @@ async function postWebhook(article){
 			url: `https://internal.ahs.app/editor?id=${article.public.id}`,
 			description: `Modified properties: ${diffs.join(', ') || 'None'}.`,
 			footer: {
-				text: article.public.location + '>' + article.public.category,
+				text: `${article.public.location} > ${article.public.category}`,
 			},			
 		}],
 	}

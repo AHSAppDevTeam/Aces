@@ -83,12 +83,12 @@ async function remoteNotif(article, action){
 			const payload = {
 				notification:{
 					title: article.public.title,
-					body: article.public.notification,
+					body: article.public.notif,
 				},
 				data:{
 					articleID: article.public.id, 
-					to: '/topics/'+topic,
 				},
+				to: '/topics/'+topic,
 			}
 			const response = await fetch(
 				'https://fcm.googleapis.com/fcm/send',
