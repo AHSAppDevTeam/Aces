@@ -75,7 +75,7 @@ For more info check out [an overview of Markdown](https://www.markdownguide.org/
 	article.public.body = renderMarkdown(article.public.md)
 	article.public.author =  'Alice Bobson'
 	article.public.notif = 'Click the "notify" checkbox, then "publish", to push this text as a notification.'
-	makePreview(article, 0)
+	makePreview(article)
 	updateEditor(article)
 }
 

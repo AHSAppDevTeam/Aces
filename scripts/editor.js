@@ -127,7 +127,7 @@ function updateEditor(article) {
 
 function typography(text) {
 	return text
-		.replaceAll(`//`,`https://`)
+		.replaceAll(`(//`,`(https://`)
 	// Smart quotes
 		/* opening singles */
 		.replace(/(^|[-\u2014\s(\["])'/g,'$1&lsquo;')

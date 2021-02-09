@@ -33,7 +33,7 @@ const map = [
 
 for(const location in locations){
 	for(const category of locations[location]){
-		database.ref(location).child(category).orderByChild('articleUnixEpoch').once('value', container => {
+		database.ref(location).child(category).once('value', container => {
 			container.forEach(snapshot => {
 				// Save article to custom format
 				let article = new Article(snapshot.key)
@@ -48,7 +48,7 @@ for(const location in locations){
 
 				article.finishConstruction()
 				// Make preview
-				makePreview(article, 1)
+				makePreview(article)
 
 				article.published = true
 			})
