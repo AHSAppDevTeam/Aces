@@ -127,23 +127,21 @@ function updateEditor(article) {
 
 function typography(text) {
 	return text
+		.replaceAll(`//`,`https://`)
 	// Smart quotes
-	
-	/* opening singles */
-		.replace(/(^|[-\u2014\s(\["])'/g, '$1\u2018')
-
-	/* closing singles & apostrophes */
-		.replace(/'/g, '\u2019')
-
-	/* opening doubles */
-		.replace(/(^|[-\u2014/\[(\u2018\s])"/g, '$1\u201c')
-
-	/* closing doubles */
-		.replace(/"/g, '\u201d')
-
-  // Dashes
-	/* em-dashes */
-		.replace(/--/g, '\u2014');
+		/* opening singles */
+		.replace(/(^|[-\u2014\s(\["])'/g,'$1&lsquo;')
+		/* closing singles & apostrophes */
+		.replace(/'/g,'&rsquo;')
+		/* opening doubles */
+		.replace(/(^|[-\u2014/\[(\u2018\s])"/g,'$1&ldquo;')
+		/* closing doubles */
+		.replace(/"/g,'&rdquo;')
+	// Dashes
+		/* em-dashes */
+		.replace(/\s?--\s?/g,'&thinsp;&mdash;&thinsp;')
+		/* en-dashes */
+		.replace(/(\d)\s?-\s?(\d)/g,'$1&ndash;$2')
 }
 
 function renderMarkdown(text) {
