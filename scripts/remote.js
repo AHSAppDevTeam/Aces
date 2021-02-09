@@ -87,8 +87,6 @@ async function remoteNotif(article, action){
 				},
 				data:{
 					articleID: article.public.id, 
-					notificationPostID: article.public.id,
-					notificationID: article.public.id,
 					to: '/topics/'+topic,
 				},
 			}

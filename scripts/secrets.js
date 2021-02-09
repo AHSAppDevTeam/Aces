@@ -9,7 +9,7 @@ const secrets = {
 }
 
 function updateSecrets(){
-	for(const key of secrets)
+	for(const key in secrets)
 		database.ref('secrets/'+key).once('value',
 			snapshot=>secrets[key]=snapshot.val()
 		)
