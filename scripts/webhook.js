@@ -11,13 +11,12 @@ async function postWebhook(article){
 
 	const payload = {
 		username: 'ACES edit log',
-		avatar_url: '',
+		avatar_url: 'https://internal.ahs.app/icon.png',
 		content: '',
 		embeds: [{
 			color: 11730954,
 			author: {
 				name: user.email,
-				icon_url: 'https://internal.ahs.app/icon.png'
 			},
 			title: `New changes to ${article.public.title}`,
 			url: `https://internal.ahs.app/editor?id=${article.public.id}`,
