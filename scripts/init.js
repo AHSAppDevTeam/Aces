@@ -73,3 +73,5 @@ database.ref('notifications').once('value', container=>{
 let articles = {}
 let preview
 const editor = document.querySelector('.editor')
+
+const timeAtLoad = Math.floor(Date.now()/1000)

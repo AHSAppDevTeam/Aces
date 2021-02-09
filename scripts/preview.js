@@ -17,7 +17,6 @@ function makePreview(article){
 	if(article.public.images.length) preview.style.backgroundImage = `linear-gradient(var(--cover),var(--cover)), url(${article.public.images[0]})`
 
 	preview.addEventListener('click', _=> updateEditor(article))
-	preview.style.order = Math.floor(Date.now()/1000)+1e8-article.public.timestamp
 
 	browser.prepend(preview)
 	searchArticles() // terribly inefficient
@@ -30,4 +29,5 @@ function updatePreview(article){
 		if(typeof val == 'string') val = val.substring(0,300)
 		if (element) element.innerHTML = val
 	}
+	article.preview.style.order = timeAtLoad+1e8-article.public.timestamp
 }
