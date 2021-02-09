@@ -59,7 +59,9 @@ Two presses of the enter key makes a new paragraph.
 
 Words can be **bolded** or *italicized* like so.
 
-Links look like [this](https://example.com).
+Website links look like [this](//example.com). Be sure to include the two slashes in front!
+
+Email addresses are automatically linked.
 
 "Quotes shall be made curly" -- And 2 normal dashes will be turned into a long em-dash.
 
