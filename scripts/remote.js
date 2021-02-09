@@ -54,7 +54,6 @@ async function remoteNotif(article, action){
 	switch(action){
 		case 'publish':
 			// Upload notification to Realtime Database
-			
 			let notif_remote = {}
 			
 			const topic = article.public.location == 'homepage'
@@ -89,6 +88,7 @@ async function remoteNotif(article, action){
 				data:{
 					articleID: article.public.id, 
 					notificationPostID: article.public.id,
+					notificationID: article.public.id,
 					to: '/topics/'+topic,
 				},
 			}
