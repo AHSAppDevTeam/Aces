@@ -1,3 +1,19 @@
-<head>
-  <meta http-equiv='Refresh' content='0; URL=https://internal.ahs.app/editor'>
-</head>
+<!doctype html>
+<html><head><script>
+let query = ''
+switch('/homepage'){
+	case '/homepage':
+		query = '?location=homepage'
+		break
+	case '/bulletin':
+		query = '?location=bulletin'
+		break
+	case '/featured':
+		query = '?feature=true'
+		break
+	case '/notified':
+		query = '?notify=true'
+		break
+}
+window.location.replace('editor'+query)
+</script></head></html>

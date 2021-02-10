@@ -17,6 +17,7 @@ const locations = {
 const map = [
 	['id', null, 'notificationArticleID'],
 	['title', 'articleTitle', 'notificationTitle'],
+	['location', null, null],
 	['category', null, 'notificationCategory'],
 	['images', 'articleImages', null],
 	['videos', 'articleVideoIDs', null],
