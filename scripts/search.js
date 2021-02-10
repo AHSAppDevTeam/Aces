@@ -34,7 +34,6 @@ async function matchArticle(article,tags){
 			return false
 	return true
 }
-
 function format(x){
 	return x.toString().trim().toLowerCase()
 }

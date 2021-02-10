@@ -6,7 +6,7 @@
 const Preview = document.querySelector('.template-preview')
 const browser = document.querySelector('.browser')
 
-function makePreview(article,order){
+function makePreview(article){
 	// Load article properties into a preview
 	const preview = Preview.content.cloneNode(true).querySelector('button')
 	article.preview = preview
@@ -17,7 +17,6 @@ function makePreview(article,order){
 	if(article.public.images.length) preview.style.backgroundImage = `linear-gradient(var(--cover),var(--cover)), url(${article.public.images[0]})`
 
 	preview.addEventListener('click', _=> updateEditor(article))
-	preview.style.order = order
 
 	browser.prepend(preview)
 	searchArticles() // terribly inefficient
@@ -30,4 +29,5 @@ function updatePreview(article){
 		if(typeof val == 'string') val = val.substring(0,300)
 		if (element) element.innerHTML = val
 	}
+	article.preview.style.order = timeAtLoad+1e8-article.public.timestamp
 }

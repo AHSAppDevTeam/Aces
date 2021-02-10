@@ -46,4 +46,4 @@ The Article class
 
 ### `remote.js`
 
-Write articles & notifications to remote
+Writes articles & notifications to the remote Firebase Realtime Database. For the notifications, it also posts them to a separate Firebase Cloud Messaging database.
