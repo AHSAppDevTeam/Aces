@@ -69,7 +69,7 @@ async function remoteNotif(article, action){
 				'district',
 				'bulletin',
 				'testing',
-			][topicIndex]
+			][topicIndex || 5]
 
 			for(const [local,_,remote] of map)
 				if(local && remote){					
