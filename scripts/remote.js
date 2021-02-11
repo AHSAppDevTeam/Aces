@@ -39,6 +39,7 @@ function remoteArticle(article, action){
 			break
 		case 'remove':
 			reference.remove()
+			remoteNotif(article,'remove')
 			article.published = false
 			break
 	}
