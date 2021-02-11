@@ -63,12 +63,12 @@ async function remoteNotif(article, action){
 			: null
 
 			const topic = [
-				'Mandatory',
-				'General',
-				'Asb',
-				'District',
-				'Bulletin',
-				'Testing',
+				'mandatory',
+				'general',
+				'asb',
+				'district',
+				'bulletin',
+				'testing',
 			][topicIndex]
 
 			for(const [local,_,remote] of map)
@@ -107,7 +107,7 @@ async function remoteNotif(article, action){
 					body: JSON.stringify(payload),
 				}
 			)
-			console.log(response)
+			console.log(payload,response)
 			break
 		case 'remove':
 			reference.remove()
