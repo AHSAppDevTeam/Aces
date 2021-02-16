@@ -53,6 +53,10 @@ async function remoteNotif(article, action){
 		
 	switch(action){
 		case 'publish':
+			
+			// Send push notification to FCM if one doesn't already exist
+			const push = (article.public.notify == article.old.notify)
+
 			// Upload notification to Realtime Database
 			let notif_remote = {}
 			
@@ -77,6 +81,11 @@ async function remoteNotif(article, action){
 						case 'category':
 							notif_remote[remote] = topicIndex
 							break
+						case 'timestamp':
+							if(push){
+								notif_remote[remote] = getTimestamp()
+								break
+							}
 						default: 
 							notif_remote[remote] = article.public[local]
 					}
@@ -84,8 +93,7 @@ async function remoteNotif(article, action){
 			
 			reference.update(notif_remote)
 			
-			if(article.public.notify == article.old.notify) break
-			// Send push notification to FCM if one doesn't already exist
+			if(push) break
 			const payload = {
 				notification:{
 					title: article.public.title,

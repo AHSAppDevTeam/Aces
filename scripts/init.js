@@ -70,9 +70,12 @@ database.ref('notifications').once('value', container=>{
 	})
 })
 
+function getTimestamp(){
+	return Math.floor(Date.now()/1000)
+}
 
 let articles = {}
 let preview
 const editor = document.querySelector('.editor')
 
-const timeAtLoad = Math.floor(Date.now()/1000)
+const timeAtLoad = getTimestamp()
