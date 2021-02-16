@@ -39,6 +39,7 @@ function remoteArticle(article, action){
 			break
 		case 'remove':
 			reference.remove()
+			remoteNotif(article,'remove')
 			article.published = false
 			break
 	}
@@ -73,7 +74,7 @@ async function remoteNotif(article, action){
 				'district',
 				'bulletin',
 				'testing',
-			][topicIndex]
+			][topicIndex || 5]
 
 			for(const [local,_,remote] of map)
 				if(local && remote){					
