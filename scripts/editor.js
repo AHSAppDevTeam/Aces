@@ -92,20 +92,12 @@ function updateEditor(article) {
 	// Add media via upload
 	editor.querySelector('.upload>input').onchange = async event=>{
 		for(const file of event.target.files){
-			const payload = new FormData()
-			payload.append('image',file)
-			
-			const response = await fetch(
-				secrets.imgbb,
-				{
-					method: 'POST',
-					body: payload,
-				},
-			)
-			const result = await response.json()
-			const url = result.data.url
-		
-			makeMedia(article,url,true)
+			const id = makeID()
+			const ref = storage.child('images/'+article.public.id+'/'+id)
+			const task = ref.put(file)
+			task.on('state_changed',{ 'complete': ()=>{
+					ref.getDownloadURL().then(url=>makeMedia(article,url,true))
+			} })
 		}
 
 		event.target.files = []
