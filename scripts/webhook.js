@@ -16,7 +16,7 @@ async function postWebhook(article){
 		embeds: [{
 			color: 11730954,
 			author: {
-				name: user.email,
+				name: user,
 			},
 			title: `New changes to ${article.public.title}`,
 			url: `https://internal.ahs.app/editor?id=${article.public.id}`,

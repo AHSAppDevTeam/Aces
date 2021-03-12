@@ -1,5 +1,7 @@
-let user
-let signedIn = false
+let user = ''
+let token = ''
+
+sign_in_with_token(localStorage.get('refresh_token'))
 
 const auth = {
 	sign: document.querySelector('.sign'),
@@ -13,19 +15,18 @@ document
  .querySelector('.sign-in')
  .addEventListener('submit',event=>{
 	event.preventDefault()
-	signIn(
+	sign_in_with_email(
 		auth.email.value,
 		auth.password.value,
 	)
 	auth.modal.reset()
 	auth.modal.classList.add('loading')
 })
-
 auth.sign
  .addEventListener('click', event=>{
 	event.preventDefault()
-	if(signedIn){
-		firebase.auth().signOut()
+	if(user){
+		localStorage.set('refresh_token','')
 	} else{
 		auth.email.focus()
 	}
@@ -35,35 +36,44 @@ auth.modal
  .addEventListener('click', ()=>{
 	document.activeElement.blur()
 })
-
-
-firebase.auth().onAuthStateChanged(_user=>{
-	user = _user	
-
-	signedIn = Boolean(user)
-	document.body.classList.toggle('signed-in',signedIn)
-	auth.sign.value = `Sign ${signedIn ? 'out' : 'in'}`
+function update_auth(signed_in){
+	document.body.classList.toggle('signed-in',signed_in)
+	auth.sign.value = `Sign ${signed_in ? 'out' : 'in'}`
 	document.activeElement.blur()
 
 	document.querySelector('.editor .remove').disabled
 	= document.querySelector('.editor .publish').disabled
-	= !signedIn
+	= !signed_in
 
-	if(signedIn)
-		updateSecrets()
-})
-
-function signIn(email,password) {
-	firebase.auth().signInWithEmailAndPassword(email, password)
-		.then(() => {
-			auth.modal.classList.remove('loading')
-		})
-		.catch((error) => {
-			switch(error.code){
-				case 'auth/wrong-password':
-				case 'auth/invalid-email':
-					auth.modal.classList.add('invalid')
-					break
-			}
-		})
+	if(signed_in) updateSecrets()
+}
+async function sign_in_with_email(email,password) {
+	const res = await fetch(
+		'identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
+		{ email, password, returnSecureToken: true }
+	)
+	if(res.error) return auth.modal.classList.add('invalid')
+	setTokens(res.idToken,res.refreshToken)
+}
+async function sign_in_with_token(refresh_token) {
+	if(!refresh_token) return false
+	const res = await fetch_json(
+		'securetoken.googleapis.com/v1/token',
+		{ refresh_token, grant_type: 'refresh_token' }
+	)
+	if(res.error) return false
+	set_auth(res.id_token,res.refresh_token)
+}
+async function set_auth(idToken,refreshToken){
+	token = idToken
+	user = get_user(token)
+	localStorage.setItem('refresh_token',refreshToken)
+	update_auth(Boolean(user))
+}
+async function get_user(idToken){
+	const res = await fetch_json(
+		'identitytoolkit.googleapis.com/v1/accounts:lookup',
+		{ idToken }
+	)
+	return res.email
 }
