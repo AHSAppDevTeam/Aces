@@ -1,5 +1,6 @@
 let user = ''
 let token = ''
+let secrets
 
 sign_in_with_token(localStorage.getItem('refresh_token'))
 

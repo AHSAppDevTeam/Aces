@@ -21,12 +21,13 @@ async function sign_in_with_token(refresh_token) {
 }
 async function sign_out(){
     localStorage.setItem('refresh_token','')
-    token = ''
+    token = db = ''
     update_auth(false)
 }
 async function set_auth(idToken,refreshToken){
-	token = idToken
+	token = '?auth='+idToken
 	user = get_user(token)
+	secrets = db('secrets')
 	localStorage.setItem('refresh_token',refreshToken)
 	update_auth(Boolean(user))
 }
