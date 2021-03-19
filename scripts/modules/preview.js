@@ -11,6 +11,7 @@ function make_Preview(snippet){
 	// preview.addEventListener('click', _=> updateEditor(article))
 
 	// searchArticles() // terribly inefficient
+	return Preview
 }
 
 function update_Preview(Preview,snippet){
