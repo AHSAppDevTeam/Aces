@@ -603,27 +603,29 @@ header > [type=button] {
 #browser {
 	flex: 1;
 }
-#browser > details details{
+#browser > details section {
 	padding-left: 1rem;
 }
+#browser > details details section {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	grid-auto-rows: 50px;
+}
 #browser > header {
-	order: -10;
 	flex-wrap: wrap;
-	grid-column: 1 / -1;
 }
 #browser > header > .search {
 	width: 0;
 	flex-grow: 1;
 }
 .preview {
-	height: 10rem;
-	display: flex;
+	/* display: flex;
 	position: relative;
 	flex-direction: column;
 	background-size: cover;
 	cursor: pointer;
 	padding-bottom: 0;
-	text-align: left;
+	text-align: left; */
 }
 .preview[hidden] {
 	display: none;
@@ -652,6 +654,16 @@ header > [type=button] {
 	flex: 0 1 auto;
 	overflow: hidden;
 	opacity: 0;
+}
+.preview .featured {
+	display: none;
+}
+.preview .featured + svg {
+	width: 1em;
+	height: 1em;
+}
+.preview .featured:not(:checked) + svg{
+	fill: transparent;
 }
 .preview.not-published > .status {
 	flex-shrink: 0;

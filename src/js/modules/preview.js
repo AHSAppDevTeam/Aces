@@ -1,3 +1,4 @@
+const $templatePreview = $`#template-preview`
 
 function makePreview(){
 	const $preview = $templatePreview.content.cloneNode(true).querySelector('article')
