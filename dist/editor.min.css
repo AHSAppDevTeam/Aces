@@ -389,6 +389,46 @@ button,
 
 [hidden]{
 	display: none !important;
+}.sign-in {
+	position: fixed;
+	top: 8pt;
+	right: 8pt;
+
+	width: 24rem;
+	max-width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	
+	background:var(--background);
+	z-index: 10;
+
+	box-shadow: 0 0 0 100vmax #0004;
+}
+.sign-in:not(:focus):not(:focus-within){
+	pointer-events: none;
+	opacity: 0;
+}
+.sign-in .cancel {
+	position: absolute;
+	top: 8pt;
+	right: 8pt;
+	background: transparent;
+	border: 0;
+}
+
+.sign-in input {
+	color: black;
+}
+.sign-in.loading{
+	border-color: blue;
+}
+.sign-in.invalid{
+	border-color: red;
+}
+
+input[disabled] {
+	display: none;
 }#editor > header,
 #browser > header {
 	position: sticky;
@@ -427,6 +467,7 @@ body,
 #editor > *,
 header,
 header > *,
+.preview,
 .media > *,
 .media .delete,
 .sign-in {
@@ -436,6 +477,7 @@ header > *,
 }
 #editor > *,
 header,
+.preview,
 .media > *,
 .media .delete,
 #resize,
@@ -603,13 +645,16 @@ header > [type=button] {
 #browser {
 	flex: 1;
 }
-#browser > details > section {
+#browser details {
+    user-select: none;
+}
+#browser details > section {
 	padding-left: 1rem;
 }
 #browser > details > section > details > section {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-	grid-auto-rows: 6rem;
+	grid-auto-rows: minmax(6rem, auto);
 	grid-gap: 4pt;
 }
 #browser > header {
@@ -654,48 +699,4 @@ header > [type=button] {
 	flex-shrink: 0;
 	margin-bottom: 8pt;
 	opacity: 1;
-}
-address {
-	font-style: normal;
-}
-.sign-in {
-	position: fixed;
-	top: 8pt;
-	right: 8pt;
-
-	width: 24rem;
-	max-width: 100%;
-
-	display: flex;
-	flex-direction: column;
-	
-	background:var(--background);
-	z-index: 10;
-
-	box-shadow: 0 0 0 100vmax #0004;
-}
-.sign-in:not(:focus):not(:focus-within){
-	pointer-events: none;
-	opacity: 0;
-}
-.sign-in .cancel {
-	position: absolute;
-	top: 8pt;
-	right: 8pt;
-	background: transparent;
-	border: 0;
-}
-
-.sign-in input {
-	color: black;
-}
-.sign-in.loading{
-	border-color: blue;
-}
-.sign-in.invalid{
-	border-color: red;
-}
-
-input[disabled] {
-	display: none;
 }

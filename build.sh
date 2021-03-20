@@ -16,5 +16,7 @@ config.js auth.js init.js \
 # merge styles
 cd ..
 cd css
-cat modules/*.css main.css editor.css auth.css \
+cat modules/*.css \
+main.css auth.css \
+editor.css browser.css \
 > ../../dist/editor.min.css

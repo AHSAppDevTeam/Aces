@@ -1,0 +1,58 @@
+#browser {
+	flex: 1;
+}
+#browser details {
+    user-select: none;
+}
+#browser details > section {
+	padding-left: 1rem;
+}
+#browser > details > section > details > section {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	grid-auto-rows: minmax(6rem, auto);
+	grid-gap: 4pt;
+}
+#browser > header {
+	flex-wrap: wrap;
+}
+#browser > header > .search {
+	width: 0;
+	flex-grow: 1;
+}
+.preview {
+	padding: 4pt;
+	display: flex;
+	flex-direction: column;
+}
+.preview[hidden] {
+	display: none;
+}
+.preview > * {
+	width: 100%;
+	margin: 2pt 0;
+	opacity: 0.6;
+}
+.preview:hover > *,
+.preview.open > * {
+	opacity: 1;
+}
+.preview a.title {
+	font-size: 1rem;
+	text-decoration: none;
+}
+.actions .featured {
+	display: none;
+}
+.actions label svg {
+	width: 1em;
+	height: 1em;
+}
+.actions .featured:not(:checked) + svg{
+	fill: transparent;
+}
+.preview.not-published > .status {
+	flex-shrink: 0;
+	margin-bottom: 8pt;
+	opacity: 1;
+}
