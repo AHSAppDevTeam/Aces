@@ -134,6 +134,9 @@ header > [type=button] {
 	text-decoration: none;
 	color:var(--text);
 }
+#editor textarea{
+	resize: none;
+}
 
 #editor .id {
 	cursor: pointer;
