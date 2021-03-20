@@ -19,7 +19,7 @@ async function init(){
 		...layout.map(
 			location => makeGroup(location,location.categories.map(
 					category => makeGroup(category,category.articleIDs.map(
-							id => makePreview(snippets[id])
+							id => makePreview(id,snippets[id])
 	))))))
 	
 	for(const $textarea of $$('textarea')){

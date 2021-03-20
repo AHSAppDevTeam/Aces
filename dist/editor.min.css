@@ -631,7 +631,6 @@ header > [type=button] {
 .preview > * {
 	width: 100%;
 	margin: 2pt 0;
-	pointer-events: none;
 	opacity: 0.6;
 }
 .preview:hover > *,

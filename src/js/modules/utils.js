@@ -13,6 +13,5 @@ async function db(...path){
 	const response = await fetch(`https://ahs-app.firebaseio.com/${path.join('/')}.json${token}`)
 	return await response.json()
 }
-async function get_timestamp(){
-	return Math.floor(Date.now()/1000)
-}
+const get_timestamp = async () => Math.floor(Date.now()/1000)
+const rot13 = string => string.replace(/\w/g,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.indexOf(c)])
