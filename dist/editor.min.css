@@ -603,13 +603,14 @@ header > [type=button] {
 #browser {
 	flex: 1;
 }
-#browser > details section {
+#browser > details > section {
 	padding-left: 1rem;
 }
-#browser > details details section {
+#browser > details > section > details > section {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-	grid-auto-rows: 50px;
+	grid-auto-rows: 6rem;
+	grid-gap: 4pt;
 }
 #browser > header {
 	flex-wrap: wrap;
@@ -619,13 +620,9 @@ header > [type=button] {
 	flex-grow: 1;
 }
 .preview {
-	/* display: flex;
-	position: relative;
+	padding: 4pt;
+	display: flex;
 	flex-direction: column;
-	background-size: cover;
-	cursor: pointer;
-	padding-bottom: 0;
-	text-align: left; */
 }
 .preview[hidden] {
 	display: none;
@@ -639,30 +636,18 @@ header > [type=button] {
 .preview.open > * {
 	opacity: 1;
 }
-.preview > .title {
+.preview a.title {
 	font-size: 1rem;
+	text-decoration: none;
 }
-.preview > .author {
-	font-size: 0.8rem;
-}
-.preview > .status{
-	background: orange;
-	color: black;
-	border-radius: 2pt;
-	font-size: .9rem;
-	text-align: center;
-	flex: 0 1 auto;
-	overflow: hidden;
-	opacity: 0;
-}
-.preview .featured {
+.actions .featured {
 	display: none;
 }
-.preview .featured + svg {
+.actions label svg {
 	width: 1em;
 	height: 1em;
 }
-.preview .featured:not(:checked) + svg{
+.actions .featured:not(:checked) + svg{
 	fill: transparent;
 }
 .preview.not-published > .status {
@@ -672,18 +657,6 @@ header > [type=button] {
 }
 address {
 	font-style: normal;
-}
-.preview .author::before {
-	content: 'by ';
-}
-.preview > .body {
-	overflow: hidden;
-	flex-grow: 1;
-	mask-image: linear-gradient(black 50%, transparent);
-	-webkit-mask-image: linear-gradient(black 50%, transparent);
-}
-.preview > .body * {
-	display: contents;
 }
 .sign-in {
 	position: fixed;
