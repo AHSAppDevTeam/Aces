@@ -8,11 +8,11 @@
 		<meta name='author' content='Xing Liu'>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-		<link rel='icon' type='image/png' href='icon.png?v=1616185003'>
-		<link rel='stylesheet' href='dist/editor.min.css?v=1616185003'>
+		<link rel='icon' type='image/png' href='icon.png?v=1616198574'>
+		<link rel='stylesheet' href='dist/editor.min.css?v=1616198574'>
 	</head>
 	<body>
-		<main class='editor'>
+		<main id='editor'>
 			<header>
 				<input type='button'
 					class='remove'
@@ -32,34 +32,13 @@
 			</header>
 			<label>
 				<span>title</span>
-				<h3 class='title' contenteditable accesskey='t'></h3>
+				<textarea class='title' accesskey='t'></textarea>
 			</label>
 			<label>
 				<span>author</span>
-				<address class='author' contenteditable></address>
+				<textarea class='author' accesskey='a'></textarea>
 			</label>
-			<label class='half-width'>
-				<span>category</span>
-				<select class='category'>
-					<optgroup label='Homepage'>
-						<option default value='General_Info'>General Info</option>
-						<option>ASB</option>
-						<option>District</option>
-					</optgroup>
-					<optgroup label='Bulletin'>
-						<option>Academics</option>
-						<option>Athletics</option>
-						<option>Clubs</option>
-						<option>Colleges</option>
-						<option>Reference</option>
-					</optgroup>
-					<optgroup label='Other'>
-						<option>Archive</option>
-						<option>Debug</option>
-					</optgroup>
-				</select>
-			</label>
-			<label class='half-width'>
+			<label>
 				<span>date</span>
 				<input class='date' type='date'>
 			</label>
@@ -89,7 +68,7 @@
 			</label>
 			<label>
 				<span>article body</span>
-				<section class='md' contenteditable></section>
+				<textarea class='md' accesskey='b'></textarea>
 			</label>
 			<section class='body'></section>
 			<label>
@@ -97,12 +76,12 @@
 				<input class='id' readonly>
 			</label>
 		</main>
-		<div class='resize' tabindex='0'></div>
-		<aside class='browser'>
+		<div id='resize' tabindex='0'></div>
+		<aside id='browser'>
 			<header>
 				<input type='button'
 					class='new-article'
-					title='new article (alt+n)'
+					title='new article (alt+)'
 					value='＋'
 					accesskey='n'>
 				<input type='text'
@@ -149,20 +128,20 @@
 		</form>
 
 		<!-- TEMPLATES -->
-		<template class='template-preview'>
-			<a class='preview'>
+		<template id='template-preview'>
+			<a class='preview' class='not-published'>
 				<h3 class='title'></h3>
-				<address class='author'></address>
-				<p class='body'></p>
-				<p class='status'>unpublished changes</p>
+				<label><input class='featured' type='checkbox'>feature</label>
+				<label><input class='notified' type='checkbox'></label>
+				<input class='unpublish' type='checkbox'>
 			</a>
 		</template>
-		<template class='template-image'>
+		<template id='template-image'>
 			<section class='image' draggable='true'>
 				<img>
 				<input type='button' class='delete' value='×'>
 			</section>
 		</template>
-		<script src='dist/editor.min.js?v=1616185003'></script>
+		<script src='dist/editor.min.js?v=1616198574'></script>
   </body>
 </html>

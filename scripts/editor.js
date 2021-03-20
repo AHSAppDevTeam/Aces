@@ -13,7 +13,7 @@ editor.querySelector('.id').addEventListener('click', event=>{
 })
 
 function updatePageTitle(article){
-	document.title = 'AHS|ACES: '+article.public.title
+	document.title = 'AHS|ACES: '+article.title
 }
 function timestampToDate(timestamp){
 	return new Date(timestamp*1000).toISOString().slice(0,10)
@@ -27,17 +27,15 @@ function updateEditor(article) {
 	if(preview) preview.classList.remove('open')
 	preview = article.preview
 	preview.classList.add('open')
-
-	article.old = Object.assign({},article.public)
 	
 	{
-		const timestamp_seconds = article.public.timestamp
+		const timestamp_seconds = article.timestamp
 		const local_offset_minutes = new Date().getTimezoneOffset()
 		const local_timestamp_seconds = timestamp_seconds - local_offset_minutes*60
 		article.public.date = timestampToDate(local_timestamp_seconds)
 	}
 	
-	for (const property in article.public) {
+	for (const property in article) {
 		updateProperty(editor,article,property)
 	}
 

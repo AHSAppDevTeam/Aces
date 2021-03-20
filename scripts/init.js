@@ -6,29 +6,38 @@ const DEBUG = false
 /* INIT */
 //////////
 
-
-const TemplatePreview = document.querySelector('.template-preview')
-const Browser = document.querySelector('.browser')
+const $templatePreview = $('#template-preview')
+const $browser = $('#browser')
+const $editor = $('#editor')
 
 async function init(){
 	const layout = await db('layout')
 	const snippets = await db('snippets')
 	const notifications = await db('notifications')
 
-	Browser.append(
+	$browser.append(
 		...layout.map(
-			location => make_Group(location,location.categories.map(
-					category => make_Group(category,category.articleIDs.map(
-							id => make_Preview(snippets[id])
+			location => makeGroup(location,location.categories.map(
+					category => makeGroup(category,category.articleIDs.map(
+							id => makePreview(snippets[id])
 	))))))
+	
+	for(const $textarea of $$('textarea')){
+		$textarea.setAttribute('rows',1)
+		$textarea.addEventListener('input',()=>{
+			console.log('hi')
+			$textarea.style.height = 'auto'
+			$textarea.style.height = $textarea.scrollHeight+'px'
+		})
+	}
 }
-function make_Group({title,id},children){
-	const Group = document.createElement('details')
-	const heading = document.createElement('summary')
-	heading.innerHTML = `${title} (#${id})`
-	Group.append(heading,...children)
-	return Group
+function makeGroup({title},children){
+	const $group = document.createElement('details')
+	const $heading = document.createElement('summary')
+	$heading.innerHTML = title
+	$group.append($heading,...children)
+	$group.setAttribute('open','')
+	return $group
 }
 
 init()
-const editor = document.querySelector('.editor')

@@ -1,5 +1,5 @@
-.editor > header,
-.browser > header {
+#editor > header,
+#browser > header {
 	position: sticky;
 	display: flex;
 	top: 0;
@@ -12,29 +12,29 @@
 	z-index: 1;
 	background-color: var(--background);
 }
-.editor > header > *,
-.browser > header > * {
+#editor > header > *,
+#browser > header > * {
 	border-radius: var(--radius);
 	padding: 2pt 4pt;
 	z-index: -1;
 }
 html,
 body,
-.editor,
-.resize,
-.browser {
+#editor,
+#resize,
+#browser {
 	height: 100%;
 }
-.editor,
-.browser {
+#editor,
+#browser {
 	overflow: hidden scroll;
 	padding: 0 1rem 1rem 1rem;
 	display: grid;
 	grid-gap: 1rem;
 	grid-template-rows: repeat(99,auto) 1fr;
 }
-.editor > *,
-.browser > *,
+#editor > *,
+header,
 header > *,
 .media > *,
 .media .delete,
@@ -43,12 +43,11 @@ header > *,
 	border-radius: var(--radius);
 	background-color: var(--background);
 }
-.editor > *,
-.browser > *,
-header > *,
+#editor > *,
+header,
 .media > *,
 .media .delete,
-.resize,
+#resize,
 .sign-in {
 	transition-duration: 100ms;
 	border: var(--border);
@@ -59,10 +58,10 @@ header > :hover,
 .preview:hover,
 .media > :hover,
 .media .delete:hover,
-.resize:hover{
+#resize:hover{
 	border-color: #aaa;
 }
-.editor > label:hover > span{
+#editor > label:hover > span{
 	color: #aaa;
 }
 
@@ -71,26 +70,26 @@ header > :focus,
 .preview:focus,
 .media > :focus-within,
 .preview.open,
-.resize:focus {
+#resize:focus {
 	border-color: var(--text);
 }
-.editor > label:focus-within > span{
+#editor > label:focus-within > span{
 	color: var(--text);
 }
 
-.editor {
+#editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	width: 24rem;
 }
-.editor > * {
+#editor > * {
 	margin: 0;
 	position: relative;
 	grid-column-end: span 2;
 }
-.editor > label:not(.pad) {
+#editor > label:not(.pad) {
 	padding: 0;
 }
-.editor > label > span {
+#editor > label > span {
 	position: absolute;
 	top: -0.5rem;
 	left: 0.3rem;
@@ -101,30 +100,30 @@ header > :focus,
 	color: var(--border-color);
 	content: attr(name);
 }
-.editor > label:not(.pad) > :last-child {
+#editor > label:not(.pad) > :last-child {
 	border: 0;
 	width: 100%;
 	height: 100%;
 	padding: 8pt;
 }
-.editor > label > * {
+#editor > label > * {
 	margin: 0;
 	border-radius: var(--radius);
 	background: var(--background);
 }
-.editor > label.half-width {
+#editor > label.half-width {
 	grid-column-end: span 1;
 }
-.editor.render > :not(header) {
+#editor.render > :not(header) {
 	border-color: transparent;
 }
-.editor.render > label > span{
+#editor.render > label > span{
 	opacity: 0;
 }
-.editor ::placeholder {
+#editor ::placeholder {
 	color: #888;
 }
-.editor header > * {
+#editor header > * {
 	flex: 1 0 0;
 	width: 0;
 }
@@ -134,37 +133,37 @@ header > [type=button] {
 	color:var(--text);
 }
 
-.editor .id {
+#editor .id {
 	cursor: pointer;
 }
-.editor .title {
+#editor .title {
 	font-size: 1.6rem;
 }
-.editor .author {
+#editor .author {
 	font-size: 1rem;
 }
-.editor .media {
+#editor .media {
 	display: flex;
 	flex: 0 0 10rem;
 	height: 10rem;
 	overflow-x: scroll;
 }
-.editor .media > * {
+#editor .media > * {
 	margin-right: 8pt;
 	width: 8rem;
 	flex: 0 0 8rem;
 }
-.editor .media > img {
+#editor .media > img {
 	background: var(--border-color);
 }
-.editor .media .new {
+#editor .media .new {
 	display: flex;
 	flex-direction: column;
 }
-.editor.render .media .new {
+#editor.render .media .new {
 	display: none;
 }
-.editor .media .new .upload {
+#editor .media .new .upload {
 	flex-grow: 1;
 	cursor: pointer;
 	opacity: 0.2;
@@ -172,7 +171,7 @@ header > [type=button] {
 	background-repeat: no-repeat;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M4 1l-2 2zM4 1l2 2zM4 1v4zM2 7H6' fill='none' stroke='black' stroke-width='1' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
 }
-.editor .media .new .upload input {
+#editor .media .new .upload input {
 	display: none;
 }
 .media .image {
@@ -192,40 +191,36 @@ header > [type=button] {
 	padding: 4pt;
 	cursor: pointer;
 }
-.editor .body{
+#editor .body{
 	display: none;
 }
-.editor .md {
+#editor .md {
 	flex-grow: 1;
 }
-.editor.render .body{
+#editor.render .body{
 	display: block;
 }
-.editor.render .md{
+#editor.render .md{
 	display: none;
 }
 
-.resize{
+#resize{
 	border-block-width: 0;
 	flex: 0 0 8pt;
 	cursor: col-resize;
 }
-.browser {
+#browser {
 	flex: 1;
 }
-.browser > * {
-	padding: 8pt;
-	border-radius: var(--radius);
+#browser > details details{
+	padding-left: 1rem;
 }
-.browser details{
-	margin-left: 1rem;
-}
-.browser > header {
+#browser > header {
 	order: -10;
 	flex-wrap: wrap;
 	grid-column: 1 / -1;
 }
-.browser > header > .search {
+#browser > header > .search {
 	width: 0;
 	flex-grow: 1;
 }
@@ -268,7 +263,7 @@ header > [type=button] {
 	overflow: hidden;
 	opacity: 0;
 }
-.preview:not(.published) > .status {
+.preview.not-published > .status {
 	flex-shrink: 0;
 	margin-bottom: 8pt;
 	opacity: 1;
