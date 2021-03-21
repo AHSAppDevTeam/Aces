@@ -9,7 +9,7 @@ async function initEditor(){
             strike: /(~{2}).*?\1/,
             hr: /\s{0,3}([-+* ]{3,})$/,
             heading: /^#{1,6} *.+|(^|\n).+\n[-=]+$/,
-            list: /^\s*([0-9]+\.|[-+*])/,
+            list: /^\s*((\d+\.)|[-+*])/,
             link: /!?(\[.*?\]\(.*?\))/,
             whitespace: /\s+/,
             comment: /\/\/[^\r\n]*/,
@@ -24,7 +24,7 @@ async function editArticle(){
 async function updateEditor(id){
     const article = await db('articles',id)
     const markdown = await db('markdowns',id)
-    const notification = await db('notifications',id)
+    const notif = await db('notifications',id)
 
 	if (!article) return false
 
@@ -44,6 +44,10 @@ async function updateEditor(id){
         }
     }
     $('.markdown textarea',$editor).value = markdown
+    $('.id',$editor).value = id
+
+    if(article.notified) $('.notif',$editor).value = notif.notif
+
     for(const $textarea of $$('textarea',$editor))
         $textarea.dispatchEvent(new Event('input', {
             bubbles: true,

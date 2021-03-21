@@ -18,7 +18,7 @@
 /* settings you shouldn't play with unless you have a good reason */
 
 .markdown {
-	overflow: auto;
+	overflow: hidden;
 	position: relative;
 }
 
@@ -43,7 +43,7 @@
 	margin: 0;
 	padding: 8pt;
 	border: 0;
-	background: 0;
+	background: transparent;
 	outline: none;
 	resize: none;
 	min-width: 100%;

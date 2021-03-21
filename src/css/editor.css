@@ -55,7 +55,7 @@ header,
 	border: var(--border);
 	border-color: var(--border-color);
 }
-label:hover,
+#editar > label:hover,
 header > :hover,
 .preview:hover,
 .media > :hover,
@@ -67,7 +67,7 @@ header > :hover,
 	color: #aaa;
 }
 
-label:focus-within,
+#editor > label:focus-within,
 header > :focus,
 .preview:focus,
 .media > :focus-within,
