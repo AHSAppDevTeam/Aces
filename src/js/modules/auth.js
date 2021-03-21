@@ -27,7 +27,7 @@ async function sign_out(){
 async function set_auth(idToken,refreshToken){
 	token = '?auth='+idToken
 	user = get_user(token)
-	secrets = db('secrets')
+	secrets = db`secrets`
 	localStorage.setItem('refresh_token',refreshToken)
 	update_auth(Boolean(user))
 }
@@ -43,8 +43,8 @@ async function update_auth(signed_in){
 	auth.sign.value = `Sign ${signed_in ? 'out' : 'in'}`
 	document.activeElement.blur()
 
-	document.querySelector('.editor .remove').disabled
-	= document.querySelector('.editor .publish').disabled
+	$('.remove',$editor).disabled
+	= $('.publish',$editor).disabled
 	= !signed_in
 
 	if(signed_in) updateSecrets()

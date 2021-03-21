@@ -2,19 +2,25 @@ const $templatePreview = $`#template-preview`
 
 function makePreview(id,snippet){
 	const $preview = $templatePreview.content.cloneNode(true).querySelector('article')
-	$('.title',$preview).addEventListener('click',event=>{
-		document.title = 'Aces: '+snippet.title
-		history.pushState({}, '', id)
-		editArticle(id)
+
+	$preview.id = 'preview-'+id
+
+	const $title = $('.title',$preview)
+	$title.addEventListener('click',event=>{
+		document.title = snippet.title
+		history.pushState({}, '', rot13(id))
+		editArticle()
 		event.preventDefault()		
 	})
-	updatePreview($preview,id,snippet)
+	$title.href = rot13(id)
+
+	updatePreview($preview,snippet)
+
 	return $preview
 }
 
-function updatePreview($preview,id,snippet){
+function updatePreview($preview,snippet){
 	const $title = $('.title',$preview)
 	$title.innerHTML = snippet.title
-	$title.href = rot13(id)
 	$('.featured',$preview).checked = snippet.featured
 }

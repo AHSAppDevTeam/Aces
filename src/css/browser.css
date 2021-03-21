@@ -47,6 +47,8 @@
 .actions label svg {
 	width: 1em;
 	height: 1em;
+	fill: var(--text);
+	stroke: var(--text);
 }
 .actions .featured:not(:checked) + svg{
 	fill: transparent;

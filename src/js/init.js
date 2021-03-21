@@ -10,9 +10,10 @@ const $browser = $`#browser`
 const $editor = $`#editor`
 
 async function init(){
+	editArticle()
+
 	const layout = await db`layout`
 	const snippets = await db`snippets`
-	const notifications = await db`notifications`
 
 	$browser.append(
 		...layout.map(
@@ -24,7 +25,6 @@ async function init(){
 	for(const $textarea of $$`textarea`){
 		$textarea.setAttribute('rows',1)
 		$textarea.addEventListener('input',()=>{
-			console.log('hi')
 			$textarea.style.height = 'auto'
 			$textarea.style.height = $textarea.scrollHeight+'px'
 		})

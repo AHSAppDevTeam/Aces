@@ -630,13 +630,13 @@ header > [type=button] {
 #editor .body{
 	display: none;
 }
-#editor .md {
+#editor .markdown {
 	flex-grow: 1;
 }
 #editor.render .body{
 	display: block;
 }
-#editor.render .md{
+#editor.render .markdown {
 	display: none;
 }
 
@@ -694,6 +694,8 @@ header > [type=button] {
 .actions label svg {
 	width: 1em;
 	height: 1em;
+	fill: var(--text);
+	stroke: var(--text);
 }
 .actions .featured:not(:checked) + svg{
 	fill: transparent;
