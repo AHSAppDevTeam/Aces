@@ -4,3 +4,16 @@
 .markdown .italic {
     font-style: italic;
 }
+.markdown .strikethrough {
+    text-decoration: line-through;
+}
+.markdown .link {
+    color: blue;
+}
+.markdown .list {
+    color: green;
+}
+.markdown .heading {
+    font-weight: bold;
+    color: rgb(5, 80, 70)
+}

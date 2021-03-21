@@ -17,6 +17,7 @@ config.js auth.js init.js \
 cd ..
 cd css
 cat modules/*.css \
-main.css auth.css \
+font.css main.css \
+auth.css \
 editor.css browser.css \
 > ../../dist/editor.min.css

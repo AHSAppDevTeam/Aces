@@ -6,6 +6,11 @@ async function initEditor(){
         new Parser({
             bold: /([*_]{2}).*?\1/,
             italic: /([*_]).*?\1/,
+            strike: /(~{2}).*?\1/,
+            hr: /\s{0,3}([-+* ]{3,})$/,
+            heading: /^#{1,6} *.+|(^|\n).+\n[-=]+$/,
+            list: /^\s*([0-9]+\.|[-+*])/,
+            link: /!?(\[.*?\]\(.*?\))/,
             whitespace: /\s+/,
             comment: /\/\/[^\r\n]*/,
             other: /\S/

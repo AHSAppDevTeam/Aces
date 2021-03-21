@@ -3,6 +3,19 @@
 }
 .markdown .italic {
     font-style: italic;
+}
+.markdown .strikethrough {
+    text-decoration: line-through;
+}
+.markdown .link {
+    color: blue;
+}
+.markdown .list {
+    color: green;
+}
+.markdown .heading {
+    font-weight: bold;
+    color: rgb(5, 80, 70)
 }/* TextareaDecorator.css
  * written by Colin Kuebler 2012
  * Part of LDT, dual licensed under GPLv3 and MIT
@@ -402,7 +415,30 @@
   
   [hidden] {
     display: none;
-  }:root{
+  }@font-face {
+	font-family: 'pt-root';
+	src: url('pt-root/bold.woff') format('woff');
+	font-weight: 700;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'pt-root';
+	src: url('pt-root/medium.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'pt-root';
+	src: url('pt-root/regular.woff') format('woff');
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'pt-root';
+	src: url('pt-root/light.woff') format('woff');
+	font-weight: 300;
+	font-style: normal;
+}:root{
 	--radius: 4pt;
 	--border-color: #ddd;
 	--border: solid 2pt var(--border-color);
@@ -421,7 +457,8 @@
 }
 
 html {
-	font-family: Helvetica, Roboto, Sans-serif;
+	font-family: 'pt-root', Sans-serif;
+	font-weight: 400;
 	font-size: 14pt;
 }
 body {

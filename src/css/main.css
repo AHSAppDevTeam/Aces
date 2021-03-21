@@ -17,7 +17,8 @@
 }
 
 html {
-	font-family: Helvetica, Roboto, Sans-serif;
+	font-family: 'pt-root', Sans-serif;
+	font-weight: 400;
 	font-size: 14pt;
 }
 body {
