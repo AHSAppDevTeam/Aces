@@ -7,9 +7,9 @@ const DEBUG = false
 //////////
 
 const $browser = $`#browser`
-const $editor = $`#editor`
 
 async function init(){
+	initEditor()
 	editArticle()
 
 	const layout = await db`layout`
