@@ -26,17 +26,17 @@ async function sign_out(){
 }
 async function set_auth(idToken,refreshToken){
 	token = '?auth='+idToken
-	user = get_user(token)
-	secrets = db(secrets)
+	user = await get_user(idToken)
+	secrets = await db('secrets')
 	localStorage.setItem('refresh_token',refreshToken)
 	update_auth(Boolean(user))
 }
 async function get_user(idToken){
-	const res = await googleapis(
+	const { users: { 0: { email } } } = await googleapis(
 		'identitytoolkit.googleapis.com/v1/accounts:lookup',
 		{ idToken }
 	)
-	return res.email
+	return email
 }
 async function update_auth(signed_in){
 	document.body.classList.toggle('signed-in',signed_in)

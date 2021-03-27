@@ -1,4 +1,4 @@
-function initHighlighter($section){
+async function initHighlighter($section){
 	const input = $('.input',$section)
 	const output = $('.output',$section)
 	const syntax = {
@@ -10,14 +10,12 @@ function initHighlighter($section){
 		list: /^\s*((\d+\.)|[-+*])/g,
 		link: /(!?(\[.*?\]\((https?\:\/\/|mailto).*?\))|((https?\:\/\/|mailto)\S*))/g,
 	}
-	input.addEventListener('input',()=>{
+	input.addEventListener('input',async ()=>{
 		output.textContent = input.value
-
 		for(const key in syntax){
 			const regex = syntax[key]
-			output.innerHTML = output.innerHTML.replace(
-				regex, `<span class=${key}>$&</span>`
-			)
+			output.innerHTML = output.innerHTML
+				.replace(regex, `<span class=${key}>$&</span>`)
 		}
 	})
 }

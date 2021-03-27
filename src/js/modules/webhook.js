@@ -10,13 +10,13 @@ async function postWebhook(id,title,description){
 		embeds: [{
 			color: 0x995eff,
 			author: {
-				name: 'hello',
+				name: user,
 			},
 			url: 'https://editor.ahs.app/'+id,
 			title,
 			description,
 		}],
 	}
-	const response = await post(await db('secrets/webhook'),payload)
+	const response = await post(secrets.webhook,payload)
 	console.log(response)
 }

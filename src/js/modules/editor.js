@@ -57,8 +57,5 @@ async function updateEditor(id){
     if(article.notified) $('.notif',$editor).value = notif.notif
 
     for(const $textarea of $$('textarea',$editor))
-        $textarea.dispatchEvent(new Event('input', {
-            bubbles: true,
-            cancelable: true,
-        }))
+        $textarea.dispatchEvent(new Event('input'))
 }
