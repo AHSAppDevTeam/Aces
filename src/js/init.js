@@ -12,8 +12,8 @@ async function init(){
 	initEditor()
 	editArticle()
 
-	const layout = await db`layout`
-	const snippets = await db`snippets`
+	const layout = await db('layout')
+	const snippets = await db('snippets')
 
 	$browser.append(
 		...layout.map(

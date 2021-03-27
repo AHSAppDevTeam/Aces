@@ -14,13 +14,17 @@ function makePreview(id,snippet){
 	})
 	$title.href = rot13(id)
 
+	const $featured = $('.featured',$preview)
+	$featured.addEventListener('change',()=>{
+		id
+	})
+
 	updatePreview($preview,snippet)
 
 	return $preview
 }
 
 function updatePreview($preview,snippet){
-	const $title = $('.title',$preview)
-	$title.innerHTML = snippet.title
+	$('.title',$preview).innerHTML = snippet.title
 	$('.featured',$preview).checked = snippet.featured
 }
