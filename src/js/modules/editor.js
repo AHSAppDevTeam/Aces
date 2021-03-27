@@ -22,9 +22,9 @@ async function editArticle(){
 }
 
 async function updateEditor(id){
-    const article = await db('articles',id)
-    const markdown = await db('markdowns',id)
-    const notif = await db('notifications',id)
+    const article = await db('articles/'+id)
+    const markdown = await db('markdowns/'+id)
+    const notif = await db('notifications/'+id)
 
 	if (!article) return false
 

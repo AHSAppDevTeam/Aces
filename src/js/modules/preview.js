@@ -16,7 +16,9 @@ function makePreview(id,snippet){
 
 	const $featured = $('.featured',$preview)
 	$featured.addEventListener('change',()=>{
-		id
+		const featured = {featured:$featured.checked}
+		db('snippets/'+id,featured)
+		db('articles/'+id,featured)
 	})
 
 	updatePreview($preview,snippet)
