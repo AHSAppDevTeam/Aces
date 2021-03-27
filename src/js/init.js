@@ -21,14 +21,6 @@ async function init(){
 					category => makeGroup(category.title,category.articleIDs.map(
 							id => makePreview(id,snippets[id])
 	))))))
-	
-	for(const $textarea of $$`textarea`){
-		$textarea.setAttribute('rows',1)
-		$textarea.addEventListener('input',()=>{
-			$textarea.style.height = 'auto'
-			$textarea.style.height = $textarea.scrollHeight+'px'
-		})
-	}
 }
 function makeGroup(title,children){
 	const $group = document.createElement`details`

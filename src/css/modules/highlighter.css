@@ -3,7 +3,7 @@
  * Part of LDT, dual licensed under GPLv3 and MIT
  * Provides styles for rendering a textarea on top of a pre with scrollbars
  */
-.markdown pre, .markdown textarea {
+.markdown code, .markdown textarea {
 	font-size: 1rem;
     line-height: 1.4;
     font-family: inherit;
@@ -22,7 +22,7 @@
 	position: relative;
 }
 
-.markdown pre {
+.markdown code {
 	margin: 0;
     white-space: pre-wrap;
     overflow-wrap: break-word;

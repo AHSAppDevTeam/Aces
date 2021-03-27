@@ -1,22 +1,10 @@
 let $editor, decorator
 async function initEditor(){
     $editor = $('#editor')
-    decorator = new Decorator(
-        $('.markdown',$editor), 
-        new Parser({
-            bold: /([*_]{2}).*?\1/,
-            italic: /([*_]).*?\1/,
-            strike: /(~{2}).*?\1/,
-            hr: /\s{0,3}([-+* ]{3,})$/,
-            heading: /^#{1,6} *.+|(^|\n).+\n[-=]+$/,
-            list: /^\s*((\d+\.)|[-+*])/,
-            link: /(!?(\[.*?\]\((https?\:\/\/|mailto).*?\))|((https?\:\/\/|mailto)\S*))/,
-            whitespace: /\s+/,
-            other: /\S/,
-        })
-    ) 
+
+    initHighlighter($('.markdown',$editor))
     
-    $('.markdown textarea',$editor).addEventListener('input',({target})=>{
+    $('.markdown',$editor).addEventListener('input',({target})=>{
         $('.body',$editor).innerHTML = md(target.value)
     })
 
@@ -25,6 +13,15 @@ async function initEditor(){
 		target.value = previewing ? 'Edit' : 'Preview'
 		$editor.classList.toggle('render',previewing)
     })
+
+
+	for(const $textarea of $$('textarea',$editor)){
+		$textarea.setAttribute('rows',1)
+		$textarea.addEventListener('input',()=>{
+			$textarea.style.height = 'auto'
+			$textarea.style.height = $textarea.scrollHeight+'px'
+		})
+	}
 }
 async function editArticle(){
     const id = rot13(window.location.pathname.split('/').pop()) // Last portion of the path is the ciphered ID
@@ -53,8 +50,7 @@ async function updateEditor(id){
                 break
         }
     }
-    $('.markdown textarea',$editor).value = $('.markdown pre').textContent = markdown
-    decorator.update()
+    $('.markdown textarea',$editor).value = markdown
 
     $('.id',$editor).value = id
 
