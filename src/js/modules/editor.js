@@ -10,7 +10,7 @@ async function initEditor(){
             hr: /\s{0,3}([-+* ]{3,})$/,
             heading: /^#{1,6} *.+|(^|\n).+\n[-=]+$/,
             list: /^\s*((\d+\.)|[-+*])/,
-            link: /!?(\[.*?\]\(.*?\))/,
+            link: /(!?(\[.*?\]\((https?\:\/\/|mailto).*?\))|((https?\:\/\/|mailto)\S*))/,
             whitespace: /\s+/,
             comment: /\/\/[^\r\n]*/,
             other: /\S/
