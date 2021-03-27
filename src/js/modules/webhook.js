@@ -4,7 +4,7 @@
 
 async function postWebhook(id,title,description){
 	const payload = {
-		username: 'ACES edit log',
+		username: 'Aces',
 		avatar_url: 'https://internal.ahs.app/icon.png',
 		content: '',
 		embeds: [{

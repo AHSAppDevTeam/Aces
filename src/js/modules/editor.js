@@ -54,7 +54,7 @@ async function updateEditor(id){
 
     $('.id',$editor).value = id
 
-    if(article.notified) $('.notif',$editor).value = notif.notif
+    // if(article.notified) $('.notif',$editor).value = notif.notif
 
     for(const $textarea of $$('textarea',$editor))
         $textarea.dispatchEvent(new Event('input'))
