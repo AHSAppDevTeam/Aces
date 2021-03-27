@@ -1,5 +1,5 @@
 async function sign_in_with_email(email,password) {
-	const res = await post(
+	const res = await googleapis(
 		'identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
 		{ email, password, returnSecureToken: true }
 	)
@@ -12,7 +12,7 @@ async function sign_in_with_email(email,password) {
 }
 async function sign_in_with_token(refresh_token) {
 	if(!refresh_token) return false
-	const res = await post(
+	const res = await googleapis(
 		'securetoken.googleapis.com/v1/token',
 		{ refresh_token, grant_type: 'refresh_token' }
 	)
@@ -32,7 +32,7 @@ async function set_auth(idToken,refreshToken){
 	update_auth(Boolean(user))
 }
 async function get_user(idToken){
-	const res = await post(
+	const res = await googleapis(
 		'identitytoolkit.googleapis.com/v1/accounts:lookup',
 		{ idToken }
 	)
@@ -46,6 +46,4 @@ async function update_auth(signed_in){
 	$('.remove',$editor).disabled
 	= $('.publish',$editor).disabled
 	= !signed_in
-
-	if(signed_in) updateSecrets()
 }

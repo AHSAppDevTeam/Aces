@@ -19,6 +19,7 @@ function makePreview(id,snippet){
 		const featured = {featured:$featured.checked}
 		db('snippets/'+id,featured)
 		db('articles/'+id,featured)
+		postWebhook(id,($featured.checked ? '⭐ ' : '💔 ') + snippet.title,'')
 	})
 
 	updatePreview($preview,snippet)
