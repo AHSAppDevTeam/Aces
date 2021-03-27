@@ -198,6 +198,7 @@ header > [type=button] {
 }
 #editor .body{
 	display: none;
+	overflow-wrap: break-word;
 }
 #editor .markdown {
 	flex-grow: 1;

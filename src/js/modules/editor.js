@@ -14,7 +14,17 @@ async function initEditor(){
             whitespace: /\s+/,
             other: /\S/,
         })
-    )    
+    ) 
+    
+    $('.markdown textarea',$editor).addEventListener('input',({target})=>{
+        $('.body',$editor).innerHTML = md(target.value)
+    })
+
+    $('.render',$editor).addEventListener('click',({target})=>{
+		const previewing = target.value == 'Preview'
+		target.value = previewing ? 'Edit' : 'Preview'
+		$editor.classList.toggle('render',previewing)
+    })
 }
 async function editArticle(){
     const id = rot13(window.location.pathname.split('/').pop()) // Last portion of the path is the ciphered ID
