@@ -2,7 +2,7 @@ window.addEventListener('touchmove',(event)=>event.preventDefault())
 $('#resize').addEventListener('pointerdown',({target})=>{
 	target.focus()
 	window.addEventListener('mousemove',resizeListener)
-	window.addEventListener('touchmove',resizeListener)
+	window.addEventListener('touchmove',resizeListener,{passive:true})
 
 	window.addEventListener('mouseup',removeResizeListener,{once:true})
 	window.addEventListener('touchend',removeResizeListener,{once:true})
@@ -14,4 +14,5 @@ function resizeListener(event){
 function removeResizeListener(){
 	window.removeEventListener('mousemove',resizeListener)
 	window.removeEventListener('touchmove',resizeListener)
+	document.activeElement.blur()
 }
