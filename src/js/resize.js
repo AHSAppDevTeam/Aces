@@ -1,14 +1,17 @@
+window.addEventListener('touchmove',(event)=>event.preventDefault())
+$('#resize').addEventListener('pointerdown',({target})=>{
+	target.focus()
+	window.addEventListener('mousemove',resizeListener)
+	window.addEventListener('touchmove',resizeListener)
 
-////////////
-/* RESIZE */
-////////////
-
-const resize = document.querySelector('.resize')
-resize.addEventListener('pointerdown',_=>{
-	document.body.style.pointerEvents = document.body.style.userSelect = 'none'
-	resize.focus()
-	window.addEventListener('pointerup',event=>{
-		editor.style.width = event.x/window.innerWidth*100+'vw'
-		document.body.style.pointerEvents = document.body.style.userSelect = 'auto'
-	}, {once:true})
+	window.addEventListener('mouseup',removeResizeListener,{once:true})
+	window.addEventListener('touchend',removeResizeListener,{once:true})
 })
+function resizeListener(event){
+	$editor.style.width = (event.x||event.touches[0].pageX)/window.innerWidth*100+'vw'
+	event.preventDefault()
+}
+function removeResizeListener(){
+	window.removeEventListener('mousemove',resizeListener)
+	window.removeEventListener('touchmove',resizeListener)
+}

@@ -9,6 +9,7 @@ cd src
 cd js
 cat modules/*.js \
 config.js auth.js init.js \
+resize.js \
 > ../../dist/editor.min.js
 # search.js resize.js editor.js preview.js \
 # article.js remote.js webhook.js \

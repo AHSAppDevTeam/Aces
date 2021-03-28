@@ -20,11 +20,14 @@ html {
 	font-family: 'pt-root', Sans-serif;
 	font-weight: 400;
 	font-size: 14pt;
+	touch-action: pan-x;
+	overscroll-behavior-x: none; /* Prevent Chrome swipe navigation */
 }
 body {
 	display: flex;
 	background: var(--background);
 	line-height: 1.3;
+	overscroll-behavior-x: none; /* Prevent Chrome swipe navigation */
 }
 body * {
 	box-sizing: border-box;
