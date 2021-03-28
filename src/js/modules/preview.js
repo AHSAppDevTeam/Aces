@@ -1,25 +1,25 @@
 const $templatePreview = $('#template-preview')
 
-function makePreview(id,snippet){
+function makePreview(snippet){
 	const $preview = $templatePreview.content.cloneNode(true).querySelector('article')
 
-	$preview.id = 'preview-'+id
+	$preview.id = 'preview-'+snippet.id
 
 	const $title = $('.title',$preview)
 	$title.addEventListener('click',event=>{
 		document.title = snippet.title
-		history.pushState({}, '', rot13(id))
+		history.pushState({}, '', rot13(snippet.id))
 		editArticle()
 		event.preventDefault()		
 	})
-	$title.href = rot13(id)
+	$title.href = rot13(snippet.id)
 
 	const $featured = $('.featured',$preview)
 	$featured.addEventListener('change',()=>{
 		const featured = {featured:$featured.checked}
-		db('snippets/'+id,featured)
-		db('articles/'+id,featured)
-		postWebhook(id,($featured.checked ? '⭐ ' : '💔 ') + snippet.title,'')
+		db('snippets/'+snippet.id,featured)
+		db('articles/'+snippet.id,featured)
+		postWebhook(rot13(snippet.id),($featured.checked ? '⭐ ' : '💔 ') + snippet.title,'')
 	})
 
 	updatePreview($preview,snippet)

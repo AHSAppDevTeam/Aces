@@ -12,14 +12,14 @@ async function init(){
 	initEditor()
 	editArticle()
 
-	const layout = await db('layout')
-	const snippets = await db('snippets')
+	const [ locationIDs, locations, categories, snippets ] =
+	await Promise.all([ db('locationIDs'), db('locations'), db('categories'), db('snippets') ])
 
 	$browser.append(
-		...layout.map(
-			location => makeGroup(location.title,location.categories.map(
-					category => makeGroup(category.title,category.articleIDs.map(
-							id => makePreview(id,snippets[id])
+		...locationIDs.map(id=>locations[id]).filter(x=>x)
+			.map(location=>makeGroup( location.title, location.categoryIDs.map(id=>categories[id]).filter(x=>x)
+				.map(category=>makeGroup( category.title, category.articleIDs.map(id=>Object.assign(snippets[id],{id})).filter(x=>x)
+					.map(snippet=>makePreview(snippet)
 	))))))
 }
 function makeGroup(title,children){
