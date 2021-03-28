@@ -15,7 +15,7 @@ printf "
 		<style>%s</style>
 	</head>
 	<body>
-		<main id='editor'>
+		<main id='editor' class='panel'>
 			<header>
 				<input type='button'
 					class='remove'
@@ -85,7 +85,7 @@ printf "
 			</label>
 		</main>
 		<div id='resize' tabindex='0'></div>
-		<aside id='browser'>
+		<aside id='browser' class='panel'>
 			<header>
 				<input type='text'
 					class='search'
@@ -126,9 +126,23 @@ printf "
 		</form>
 
 		<!-- TEMPLATES -->
+		<template id='template-location'>
+			<section class='location'>
+				<header>
+					<h2><a class='title'></a></h2>
+				</header>
+			</section>
+		</template>
+		<template id='template-category'>
+			<section class='category'>
+				<header>
+					<h3><a class='title'></a></h3>
+				</header>
+			</section>
+		</template>
 		<template id='template-preview'>
-			<article class='preview' class='not-published'>
-				<a class='title'></a>
+			<article class='preview card not-published'>
+				<h4><a class='title'></a></h4>
 				<section class='actions'>
 					<label title='feature/unfeature (f)'>
 						<input class='featured' type='checkbox'>

@@ -52,18 +52,32 @@ input[disabled] {
 	display: none;
 }#browser {
 	flex: 1;
+	scroll-behavior: smooth;
 }
-#browser details {
-    user-select: none;
+#browser .title{
+	scroll-margin: 4rem;
+	font-size: 1rem;
+	text-decoration: none;
 }
-#browser details > section {
-	padding-left: 1rem;
+#browser .location > header .title {
+	font-size: 2rem;
+	text-align: center;
 }
-#browser > details > section > details > section {
+#browser .category {
+	margin-top: 1rem;
+}
+#browser .category > header {
+	grid-column: 1 / -1;
+}
+#browser .category > header .title{
+	font-size: 1.5rem;
+}
+#browser > section > section {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-	grid-auto-rows: minmax(6rem, auto);
-	grid-gap: 4pt;
+	grid-auto-rows: auto;
+	grid-gap: 8pt;
+	scroll-margin-top: 1rem;
 }
 #browser > header {
 	flex-wrap: wrap;
@@ -72,26 +86,17 @@ input[disabled] {
 	width: 0;
 	flex-grow: 1;
 }
-.preview {
-	padding: 4pt;
-	display: flex;
-	flex-direction: column;
-}
-.preview[hidden] {
+
+.card[hidden] {
 	display: none;
 }
-.preview > * {
-	width: 100%;
-	margin: 2pt 0;
+.card > * {
 	opacity: 0.6;
+	overflow-wrap: break-word;
 }
-.preview:hover > *,
-.preview.open > * {
+.card:hover > *,
+.card.open > * {
 	opacity: 1;
-}
-.preview a.title {
-	font-size: 1rem;
-	text-decoration: none;
 }
 .actions .featured {
 	display: none;
@@ -105,87 +110,10 @@ input[disabled] {
 .actions .featured:not(:checked) + svg{
 	fill: transparent;
 }
-.preview.not-published > .status {
-	flex-shrink: 0;
-	margin-bottom: 8pt;
-	opacity: 1;
-}#editor > header,
-#browser > header {
-	position: sticky;
-	display: flex;
-	top: 0;
-	margin-inline: -1rem;
-	border-inline: 0;
-	border-top: 0;
-	border-radius: 0;
-	height: 3rem;
-	gap: 0.5rem;
-	z-index: 1;
-	background-color: var(--background);
-}
-#editor > header > *,
-#browser > header > * {
-	border-radius: var(--radius);
-	padding: 2pt 4pt;
-	z-index: -1;
-}
-html,
-body,
-#editor,
-#resize,
-#browser {
-	height: 100%;
-}
-#editor,
-#browser {
-	overflow: hidden scroll;
-	padding: 0 1rem 1rem 1rem;
-	display: grid;
-	grid-gap: 1rem;
-	grid-template-rows: repeat(99,auto) 1fr;
-}
-#editor > *,
-header,
-header > *,
-.preview,
-.media > *,
-.media .delete,
-.sign-in {
-	padding: 8pt;
-	border-radius: var(--radius);
-	background-color: var(--background);
-}
-#editor > *,
-header,
-.preview,
-.media > *,
-.media .delete,
-#resize,
-.sign-in {
-	transition-duration: 100ms;
-	border: var(--border);
-	border-color: var(--border-color);
-}
-#editar > label:hover,
-header > :hover,
-.preview:hover,
-.media > :hover,
-.media .delete:hover,
-#resize:hover{
-	border-color: #aaa;
-}
 #editor > label:hover > span{
 	color: #aaa;
 }
 
-#editor > label:focus-within,
-header > :focus,
-.preview:focus,
-.media > :focus-within,
-.preview.open,
-#resize:focus {
-	border-color: var(--text);
-}
 #editor > label:focus-within > span{
 	color: var(--text);
 }
@@ -454,6 +382,11 @@ body * {
 }
 body :focus{
 	outline: 0;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
 }
 
 button,
@@ -812,10 +745,80 @@ button,
   
   [hidden] {
     display: none;
-  }</style>
+  }.panel {
+    padding-bottom: 1rem;
+}
+.panel > header {
+	position: sticky;
+	display: flex;
+	top: 0;
+	margin-inline: -1rem !important;
+	border-inline: 0;
+	border-top: 0;
+	border-radius: 0;
+	height: 3rem;
+	gap: 0.5rem;
+	z-index: 1;
+	background-color: var(--background);
+}
+.panel > header > * {
+	border-radius: var(--radius);
+	padding: 2pt 4pt;
+	z-index: -1;
+}
+html,
+body,
+#resize,
+.panel {
+	height: 100%;
+}
+.panel {
+	overflow: hidden scroll;
+	padding: 0 1rem 1rem 1rem;
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-rows: repeat(99,auto) 1fr;
+}
+#editor > *,
+.panel > header,
+.card,
+.media > *,
+.media .delete,
+.sign-in {
+	padding: 8pt;
+	border-radius: var(--radius);
+	background-color: var(--background);
+}
+#editor > *,
+.panel > header,
+.card,
+.media > *,
+.media .delete,
+#resize,
+.sign-in {
+	transition-duration: 100ms;
+	border: var(--border);
+	border-color: var(--border-color);
+}
+#editor > label:hover,
+.panel > :hover,
+.card:hover,
+.media > :hover,
+.media .delete:hover,
+#resize:hover{
+	border-color: #aaa;
+}
+#editor > label:focus-within,
+.panel > :focus,
+.card:focus,
+.media > :focus-within,
+.card.open,
+#resize:focus {
+	border-color: var(--text);
+}</style>
 	</head>
 	<body>
-		<main id='editor'>
+		<main id='editor' class='panel'>
 			<header>
 				<input type='button'
 					class='remove'
@@ -885,7 +888,7 @@ button,
 			</label>
 		</main>
 		<div id='resize' tabindex='0'></div>
-		<aside id='browser'>
+		<aside id='browser' class='panel'>
 			<header>
 				<input type='text'
 					class='search'
@@ -926,9 +929,23 @@ button,
 		</form>
 
 		<!-- TEMPLATES -->
+		<template id='template-location'>
+			<section class='location'>
+				<header>
+					<h2><a class='title'></a></h2>
+				</header>
+			</section>
+		</template>
+		<template id='template-category'>
+			<section class='category'>
+				<header>
+					<h3><a class='title'></a></h3>
+				</header>
+			</section>
+		</template>
 		<template id='template-preview'>
-			<article class='preview' class='not-published'>
-				<a class='title'></a>
+			<article class='preview card not-published'>
+				<h4><a class='title'></a></h4>
 				<section class='actions'>
 					<label title='feature/unfeature (f)'>
 						<input class='featured' type='checkbox'>
@@ -999,9 +1016,50 @@ async function update_auth(signed_in){
 	= $('.publish',$editor).disabled
 	= !signed_in
 }
+function makeGroup(type,id,title,children){
+	const $group = $template(type)
+	const $title = $('.title',$group)
+	$title.id = id
+	$title.href = '#'+id
+	$title.innerHTML = title
+	$group.append(...children)
+	return $group
+}
 
+function makePreview(id,snippet){
+	const $preview = $template('preview')
+
+	$preview.id = 'preview-'+id
+
+	const $title = $('.title',$preview)
+	$title.addEventListener('click',event=>{
+		document.title = snippet.title
+		history.pushState({}, '', rot13(id))
+		editArticle()
+		event.preventDefault()		
+	})
+	$title.href = rot13(id)
+
+	const $featured = $('.featured',$preview)
+	$featured.addEventListener('change',()=>{
+		const featured = {featured:$featured.checked}
+		db('snippets/'+id,featured)
+		db('articles/'+id,featured)
+		postWebhook(rot13(id),($featured.checked ? '⭐ ' : '💔 ') + snippet.title,'')
+	})
+
+	updatePreview($preview,snippet)
+
+	return $preview
+}
+
+function updatePreview($preview,snippet){
+	$('.title',$preview).innerHTML = snippet.title
+	$('.featured',$preview).checked = snippet.featured
+}
 const $ = (query,parent=document) => parent.querySelector(query)
 const $$ = (query,parent=document) => Array.from(parent.querySelectorAll(query))
+const $template = id => $('#template-'+id).content.cloneNode(true).querySelector('*')
 let $editor, decorator
 async function initEditor(){
     $editor = $('#editor')
@@ -1336,39 +1394,7 @@ async function updateEditor(id){
 	}
 
 	return md;
-}));const $templatePreview = $('#template-preview')
-
-function makePreview(snippet){
-	const $preview = $templatePreview.content.cloneNode(true).querySelector('article')
-
-	$preview.id = 'preview-'+snippet.id
-
-	const $title = $('.title',$preview)
-	$title.addEventListener('click',event=>{
-		document.title = snippet.title
-		history.pushState({}, '', rot13(snippet.id))
-		editArticle()
-		event.preventDefault()		
-	})
-	$title.href = rot13(snippet.id)
-
-	const $featured = $('.featured',$preview)
-	$featured.addEventListener('change',()=>{
-		const featured = {featured:$featured.checked}
-		db('snippets/'+snippet.id,featured)
-		db('articles/'+snippet.id,featured)
-		postWebhook(rot13(snippet.id),($featured.checked ? '⭐ ' : '💔 ') + snippet.title,'')
-	})
-
-	updatePreview($preview,snippet)
-
-	return $preview
-}
-
-function updatePreview($preview,snippet){
-	$('.title',$preview).innerHTML = snippet.title
-	$('.featured',$preview).checked = snippet.featured
-}const db_path = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
+}));const db_path = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
 async function post(path,request){
 	const response = await fetch('https://'+path,
 		{
@@ -1479,7 +1505,7 @@ const DEBUG = false
 /* INIT */
 //////////
 
-const $browser = $`#browser`
+const $browser = $('#browser')
 
 async function init(){
 	initEditor()
@@ -1487,25 +1513,13 @@ async function init(){
 
 	const [ locationIDs, locations, categories, snippets ] =
 	await Promise.all([ db('locationIDs'), db('locations'), db('categories'), db('snippets') ])
-
 	$browser.append(
-		...locationIDs.map(id=>locations[id]).filter(x=>x)
-			.map(location=>makeGroup( location.title, location.categoryIDs.map(id=>categories[id]).filter(x=>x)
-				.map(category=>makeGroup( category.title, category.articleIDs.map(id=>Object.assign(snippets[id],{id})).filter(x=>x)
-					.map(snippet=>makePreview(snippet)
+		...locationIDs
+			.map(id=>makeGroup('location', id, locations[id].title, locations[id].categoryIDs
+				.map(id=>makeGroup('category', id, categories[id].title, categories[id].articleIDs
+					.map(id=>makePreview(id, snippets[id])
 	))))))
 }
-function makeGroup(title,children){
-	const $group = document.createElement`details`
-	const $heading = document.createElement`summary`
-	const $rest = document.createElement`section`
-	$heading.innerHTML = title
-	$rest.append(...children)
-	$group.append($heading,$rest)
-	$group.setAttribute('open','')
-	return $group
-}
-
 init()
 window.addEventListener('touchmove',(event)=>event.preventDefault())
 $('#resize').addEventListener('pointerdown',({target})=>{
