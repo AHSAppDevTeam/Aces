@@ -15,8 +15,6 @@
 	caret-color: var(--text);
 }
 
-/* settings you shouldn't play with unless you have a good reason */
-
 .markdown {
 	overflow: hidden;
 	position: relative;

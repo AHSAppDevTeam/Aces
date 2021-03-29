@@ -120,7 +120,7 @@ input[disabled] {
 
 #editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	width: 24rem;
+	width: 36rem;
 }
 #editor > * {
 	margin: 0;
@@ -277,7 +277,10 @@ header > [type=button] {
 	src: url('pt-root/light.woff') format('woff');
 	font-weight: 300;
 	font-style: normal;
-}.markdown .bold {
+}.markdown {
+    position: relative;
+}
+.markdown .bold {
     font-weight: bold;
 }
 .markdown .italic {
@@ -294,6 +297,8 @@ header > [type=button] {
 }
 .markdown .heading {
     font-weight: bold;
+    display: inline-block;
+    width: 100%;
     background: #8882;
 }/* TextareaDecorator.css
  * written by Colin Kuebler 2012
@@ -311,8 +316,6 @@ header > [type=button] {
 	color: transparent !important;
 	caret-color: var(--text);
 }
-
-/* settings you shouldn't play with unless you have a good reason */
 
 .markdown {
 	overflow: hidden;
@@ -1091,9 +1094,10 @@ async function editArticle(){
 }
 
 async function updateEditor(id){
-    const article = await db('articles/'+id)
-    const markdown = await db('markdowns/'+id)
-    const notif = await db('notifications/'+id)
+    const [ article, markdown, notif ]
+    = await Promise.all([
+        db('articles/'+id), db('markdowns/'+id), db('notifications/'+id)
+    ])
 
 	if (!article) return false
 
@@ -1113,8 +1117,8 @@ async function updateEditor(id){
         }
     }
     $('.markdown textarea',$editor).value = markdown
-
     $('.id',$editor).value = id
+    $('.date',$editor).value = new Date(article.timestamp*1000).toISOString().slice(0,10)
 
     // if(article.notified) $('.notif',$editor).value = notif.notif
 
@@ -1124,12 +1128,12 @@ async function updateEditor(id){
 	const input = $('.input',$section)
 	const output = $('.output',$section)
 	const syntax = {
-		link: /(!?(\[.*?\]\((https?\:\/\/|mailto).*?\))|((https?\:\/\/|mailto)\S*))/gm,
 		bold: /([*_])\1.+?\1\1/gm,
 		italic: /([*_]).+?\1/gm,
 		strike: /(~~).+?\1/gm,
 		hr: /\s{0,3}([-+* ]{3,})$/gm,
-		heading: /^#{1,6}.+$/gm,
+		heading: /^#{1,6}\s.+$/gm,
+		link: /(!?(\[.*?\]\((https?\:\/\/|mailto).*?\))|(https?\:\/\/\S*)|(\S+@\S+\.\S+))/gm,
 		list: /^((\d+\.)|[-+*]).+$/gm,
 	}
 	input.addEventListener('input',async ()=>{
@@ -1137,12 +1141,10 @@ async function updateEditor(id){
 		for(const key in syntax){
 			const regex = syntax[key]
 			buffer = buffer.replace(regex,match=>
-				encodeURIComponent(`<span class=${key}>${match}</span>`) // encode reserved characters
-				.replace(/[-_.!~*'()]/g,char=>`&#${char.charCodeAt()};`) // encode unreserved characters
+				`<span class=${key}>${
+					match.replace(/[-_.!~*"'()]/g,char=>'&#'+char.charCodeAt()+';')
+				}</span>`
 			)
-		}
-		for(const key in syntax){
-			buffer = decodeURIComponent(buffer)
 		}
 		output.innerHTML = buffer
 	})
@@ -1518,7 +1520,10 @@ async function init(){
 	editArticle()
 
 	const [ locationIDs, locations, categories, snippets ] =
-	await Promise.all([ db('locationIDs'), db('locations'), db('categories'), db('snippets') ])
+	await Promise.all([ 
+		db('locationIDs'), db('locations'), db('categories'), db('snippets')
+	])
+	
 	$browser.append(
 		...locationIDs
 			.map(id=>makeGroup('location', id, locations[id].title, locations[id].categoryIDs

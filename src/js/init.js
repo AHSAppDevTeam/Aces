@@ -13,7 +13,10 @@ async function init(){
 	editArticle()
 
 	const [ locationIDs, locations, categories, snippets ] =
-	await Promise.all([ db('locationIDs'), db('locations'), db('categories'), db('snippets') ])
+	await Promise.all([ 
+		db('locationIDs'), db('locations'), db('categories'), db('snippets')
+	])
+	
 	$browser.append(
 		...locationIDs
 			.map(id=>makeGroup('location', id, locations[id].title, locations[id].categoryIDs
