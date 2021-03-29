@@ -2,20 +2,26 @@ async function initHighlighter($section){
 	const input = $('.input',$section)
 	const output = $('.output',$section)
 	const syntax = {
-		bold: /([*_]{2}).*?\1/g,
-		italic: /([*_]).?\1/g,
-		strike: /(~{2}).*?\1/g,
-		hr: /\s{0,3}([-+* ]{3,})$/g,
-		heading: /^#{1,6} *.+|(^|\n).+\n[-=]+$/g,
-		list: /^\s*((\d+\.)|[-+*])/g,
-		link: /(!?(\[.*?\]\((https?\:\/\/|mailto).*?\))|((https?\:\/\/|mailto)\S*))/g,
+		link: /(!?(\[.*?\]\((https?\:\/\/|mailto).*?\))|((https?\:\/\/|mailto)\S*))/gm,
+		bold: /([*_])\1.+?\1\1/gm,
+		italic: /([*_]).+?\1/gm,
+		strike: /(~~).+?\1/gm,
+		hr: /\s{0,3}([-+* ]{3,})$/gm,
+		heading: /^#{1,6}.+$/gm,
+		list: /^((\d+\.)|[-+*]).+$/gm,
 	}
 	input.addEventListener('input',async ()=>{
-		output.textContent = input.value
+		let buffer = output.textContent = input.value
 		for(const key in syntax){
 			const regex = syntax[key]
-			output.innerHTML = output.innerHTML
-				.replace(regex, `<span class=${key}>$&</span>`)
+			buffer = buffer.replace(regex,match=>
+				encodeURIComponent(`<span class=${key}>${match}</span>`) // encode reserved characters
+				.replace(/[-_.!~*'()]/g,char=>`&#${char.charCodeAt()};`) // encode unreserved characters
+			)
 		}
+		for(const key in syntax){
+			buffer = decodeURIComponent(buffer)
+		}
+		output.innerHTML = buffer
 	})
 }

@@ -11,9 +11,9 @@
     color: blue;
 }
 .markdown .list {
-    color: green;
+    background: linear-gradient(90deg, #ff08,transparent 2ch);
 }
 .markdown .heading {
     font-weight: bold;
-    color: rgb(5, 80, 70)
+    background: #8882;
 }
