@@ -17,7 +17,7 @@ function remoteArticle(article, action){
 		article.public.id
 	].join('/'))
 	
-	if(reference != old_reference) old_reference.remove()
+	// if(reference != old_reference) old_reference.remove()
 
 	switch(action){
 		case 'publish':
