@@ -13,7 +13,6 @@ import os
 os.chdir(os.path.join(os.path.dirname(__file__),'dist'))
 
 HOST = ('0.0.0.0', 8000)
-pattern = re.compile('.png|.jpg|.jpeg|.js|.css|.ico|.gif|.svg', re.IGNORECASE)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -21,8 +20,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         url_parts = urllib.parse.urlparse(self.path)
         request_file_path = Path(url_parts.path.strip("/"))
 
-        ext = request_file_path.suffix
-        if not request_file_path.is_file() and not pattern.match(ext):
+        if not request_file_path.is_file():
             self.path = 'index.html'
 
         return http.server.SimpleHTTPRequestHandler.do_GET(self)

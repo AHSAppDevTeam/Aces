@@ -1,17 +1,17 @@
 {
-    "hosting": {
-      "site": "edit-ahs-app",
-      "public": "dist",
-      "trailingSlash": false,
-      "ignore": [
-        "firebase.json",
-        "**/.*"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    }
-  }
+	"hosting": {
+		"site": "edit-ahs-app",
+		"public": "dist",
+		"trailingSlash": false,
+		"ignore": [
+			"firebase.json",
+			"**/.*"
+		],
+		"rewrites": [
+			{
+				"source": "**",
+				"destination": "/index.html"
+			}
+		]
+	}
+}
