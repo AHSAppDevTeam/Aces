@@ -29,4 +29,5 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 httpd = socketserver.TCPServer(HOST, Handler)
+print('Serving Aces at http://localhost:8000')
 httpd.serve_forever()
