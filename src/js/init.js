@@ -19,8 +19,8 @@ async function init(){
 	
 	$browser.append(
 		...locationIDs
-			.map(id=>makeGroup('location', id, locations[id].title, locations[id].categoryIDs
-				.map(id=>makeGroup('category', id, categories[id].title, categories[id].articleIDs
+			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
+				.map(id=>makeGroup('category', id, categories[id], categories[id].articleIDs
 					.map(id=>makePreview(id, snippets[id])
 	))))))
 }

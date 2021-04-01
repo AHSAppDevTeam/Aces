@@ -1,11 +1,18 @@
-function makeGroup(type,id,title,children){
+function makeGroup(type,id,{title,colorLight,colorDark},children){
 	const $group = $template(type)
+
 	const $id = $('.id',$group)
 	$id.id = id
 	$id.href = '#'+id
 	$id.innerHTML = '#'+id
+
 	$('.title',$group).value = title
+
+	$('.color-dark',$group)?.value = colorDark || '#000000'
+	$('.color-light',$group)?.value = colorLight || '#ffffff'
+
 	$group.append(...children)
+
 	return $group
 }
 

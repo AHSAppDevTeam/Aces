@@ -9,10 +9,11 @@ import socketserver
 import re
 from pathlib import Path
 import os
+import sys
 
 os.chdir(os.path.join(os.path.dirname(__file__),'dist'))
-
-HOST = ('0.0.0.0', 8000)
+port = int(sys.argv[1]) or 8000
+HOST = ('0.0.0.0', port)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -27,5 +28,5 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 httpd = socketserver.TCPServer(HOST, Handler)
-print('Serving Aces at http://localhost:8000')
+print('Serving Aces at http://localhost:'+str(port))
 httpd.serve_forever()

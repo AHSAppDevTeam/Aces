@@ -1035,14 +1035,21 @@ async function update_auth(signed_in){
 	= $('.publish',$editor).disabled
 	= !signed_in
 }
-function makeGroup(type,id,title,children){
+function makeGroup(type,id,{title,colorLight,colorDark},children){
 	const $group = $template(type)
+
 	const $id = $('.id',$group)
 	$id.id = id
 	$id.href = '#'+id
 	$id.innerHTML = '#'+id
+
 	$('.title',$group).value = title
+
+	$('.color-dark',$group)?.value = colorDark || '#000000'
+	$('.color-light',$group)?.value = colorLight || '#ffffff'
+
 	$group.append(...children)
+
 	return $group
 }
 
@@ -1533,8 +1540,8 @@ async function init(){
 	
 	$browser.append(
 		...locationIDs
-			.map(id=>makeGroup('location', id, locations[id].title, locations[id].categoryIDs
-				.map(id=>makeGroup('category', id, categories[id].title, categories[id].articleIDs
+			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
+				.map(id=>makeGroup('category', id, categories[id], categories[id].articleIDs
 					.map(id=>makePreview(id, snippets[id])
 	))))))
 }
