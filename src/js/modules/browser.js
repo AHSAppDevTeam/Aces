@@ -1,9 +1,10 @@
 function makeGroup(type,id,title,children){
 	const $group = $template(type)
-	const $title = $('.title',$group)
-	$title.id = id
-	$title.href = '#'+id
-	$title.innerHTML = title
+	const $id = $('.id',$group)
+	$id.id = id
+	$id.href = '#'+id
+	$id.innerHTML = '#'+id
+	$('.title',$group).value = title
 	$group.append(...children)
 	return $group
 }

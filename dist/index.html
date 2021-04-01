@@ -122,7 +122,7 @@ input[disabled] {
 
 #editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	width: 36rem;
+	width: 36vw;
 }
 #editor > * {
 	margin: 0;
@@ -938,14 +938,26 @@ body,
 		<template id='template-location'>
 			<section class='location'>
 				<header>
-					<h2><a class='title'></a></h2>
+					<h2>
+						<a class='id'></a>
+						<textarea class='title'></textarea>
+					</h2>
 				</header>
 			</section>
 		</template>
 		<template id='template-category'>
 			<section class='category'>
 				<header>
-					<h3><a class='title'></a></h3>
+					<h3>
+						<a class='id'></a>
+						<textarea class='title'></textarea>
+					</h3>
+					<label>
+						<input type='color' class='color-dark'>
+					</label>
+					<label>
+						<input type='color' class='color-light'>
+					</label>
 				</header>
 			</section>
 		</template>
@@ -1025,10 +1037,11 @@ async function update_auth(signed_in){
 }
 function makeGroup(type,id,title,children){
 	const $group = $template(type)
-	const $title = $('.title',$group)
-	$title.id = id
-	$title.href = '#'+id
-	$title.innerHTML = title
+	const $id = $('.id',$group)
+	$id.id = id
+	$id.href = '#'+id
+	$id.innerHTML = '#'+id
+	$('.title',$group).value = title
 	$group.append(...children)
 	return $group
 }
