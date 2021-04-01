@@ -953,10 +953,10 @@ body,
 						<textarea class='title'></textarea>
 					</h3>
 					<label>
-						<input type='color' class='color-dark'>
+						<input type='color' class='color-dark-mode'>
 					</label>
 					<label>
-						<input type='color' class='color-light'>
+						<input type='color' class='color-light-mode'>
 					</label>
 				</header>
 			</section>
@@ -1035,7 +1035,11 @@ async function update_auth(signed_in){
 	= $('.publish',$editor).disabled
 	= !signed_in
 }
-function makeGroup(type,id,{title,colorLight,colorDark},children){
+function makeGroup(
+	type, id,
+	{ title, colorLightMode, colorDarkMode },
+	children,
+){
 	const $group = $template(type)
 
 	const $id = $('.id',$group)
@@ -1045,8 +1049,10 @@ function makeGroup(type,id,{title,colorLight,colorDark},children){
 
 	$('.title',$group).value = title
 
-	$('.color-dark',$group)?.value = colorDark || '#000000'
-	$('.color-light',$group)?.value = colorLight || '#ffffff'
+	if(type=='category'){
+		$('.color-light-mode',$group).value = colorLightMode
+		$('.color-dark-mode',$group).value = colorDarkMode
+	}
 
 	$group.append(...children)
 

@@ -1,4 +1,8 @@
-function makeGroup(type,id,{title,colorLight,colorDark},children){
+function makeGroup(
+	type, id,
+	{ title, colorLightMode, colorDarkMode },
+	children,
+){
 	const $group = $template(type)
 
 	const $id = $('.id',$group)
@@ -8,8 +12,10 @@ function makeGroup(type,id,{title,colorLight,colorDark},children){
 
 	$('.title',$group).value = title
 
-	$('.color-dark',$group)?.value = colorDark || '#000000'
-	$('.color-light',$group)?.value = colorLight || '#ffffff'
+	if(type=='category'){
+		$('.color-light-mode',$group).value = colorLightMode
+		$('.color-dark-mode',$group).value = colorDarkMode
+	}
 
 	$group.append(...children)
 
