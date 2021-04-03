@@ -1,13 +1,7 @@
 "use strict"
 
 const DEBUG = true
-
-//////////
-/* INIT */
-//////////
-
 const $browser = $('#browser')
-
 async function init(){
 	initEditor()
 	editArticle()

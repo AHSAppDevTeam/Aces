@@ -1,18 +1,14 @@
-/////////////
-/* WEBHOOK */
-/////////////
-
 async function postWebhook(id,title,description){
 	const payload = {
 		username: 'Aces',
-		avatar_url: 'https://internal.ahs.app/icon.png',
+		avatar_url: 'https://edit.ahs.app/icon.png',
 		content: '',
 		embeds: [{
 			color: 0x995eff,
 			author: {
 				name: user,
 			},
-			url: 'https://editor.ahs.app/'+id,
+			url: 'https://editor.ahs.app/'+rot13(id),
 			title,
 			description,
 		}],

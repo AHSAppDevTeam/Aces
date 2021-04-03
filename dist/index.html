@@ -279,29 +279,6 @@ header > [type=button] {
 	src: url('pt-root/light.woff') format('woff');
 	font-weight: 300;
 	font-style: normal;
-}.markdown {
-    position: relative;
-}
-.markdown .bold {
-    font-weight: bold;
-}
-.markdown .italic {
-    font-style: italic;
-}
-.markdown .strikethrough {
-    text-decoration: line-through;
-}
-.markdown .link {
-    color: blue;
-}
-.markdown .list {
-    background: linear-gradient(90deg, #ff08,transparent 2ch);
-}
-.markdown .heading {
-    font-weight: bold;
-    display: inline-block;
-    width: 100%;
-    background: #8882;
 }/* TextareaDecorator.css
  * written by Colin Kuebler 2012
  * Part of LDT, dual licensed under GPLv3 and MIT
@@ -351,7 +328,30 @@ header > [type=button] {
 	min-width: 100%;
 	min-height: 100%;
 }
-:root{
+.markdown {
+    position: relative;
+}
+.markdown .bold {
+    font-weight: bold;
+}
+.markdown .italic {
+    font-style: italic;
+}
+.markdown .strikethrough {
+    text-decoration: line-through;
+}
+.markdown .link {
+    color: blue;
+}
+.markdown .list {
+    background: linear-gradient(90deg, #ff08,transparent 2ch);
+}
+.markdown .heading {
+    font-weight: bold;
+    display: inline-block;
+    width: 100%;
+    background: #8882;
+}:root{
 	--radius: 4pt;
 	--border-color: #ddd;
 	--border: solid 2pt var(--border-color);
@@ -1461,21 +1461,17 @@ async function googleapis(path,request){
 }
 const get_timestamp = async () => Math.floor(Date.now()/1000)
 const rot13 = string => string.replace(/[a-z]/gi,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.indexOf(c)])
-/////////////
-/* WEBHOOK */
-/////////////
-
 async function postWebhook(id,title,description){
 	const payload = {
 		username: 'Aces',
-		avatar_url: 'https://internal.ahs.app/icon.png',
+		avatar_url: 'https://edit.ahs.app/icon.png',
 		content: '',
 		embeds: [{
 			color: 0x995eff,
 			author: {
 				name: user,
 			},
-			url: 'https://editor.ahs.app/'+id,
+			url: 'https://editor.ahs.app/'+rot13(id),
 			title,
 			description,
 		}],
@@ -1528,13 +1524,7 @@ auth.modal
 "use strict"
 
 const DEBUG = true
-
-//////////
-/* INIT */
-//////////
-
 const $browser = $('#browser')
-
 async function init(){
 	initEditor()
 	editArticle()
