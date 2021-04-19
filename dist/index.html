@@ -1077,17 +1077,17 @@ function makePreview(id,snippet){
 	const $title = $('.title',$preview)
 	$title.addEventListener('click',event=>{
 		document.title = snippet.title
-		history.pushState({}, '', rot13(id))
+		history.pushState({}, '', id)
 		editArticle()
 		event.preventDefault()		
 	})
-	$title.href = rot13(id)
+	$title.href = id
 
 	const $featured = $('.featured',$preview)
 	$featured.addEventListener('change',({target:{checked:featured}})=>{
 		db('snippets/'+id,{featured})
 		db('articles/'+id,{featured})
-		postWebhook(rot13(id),(featured ? '⭐ ' : '💔 ') + snippet.title)
+		postWebhook(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
 	})
 
 	updatePreview($preview,snippet)
@@ -1103,56 +1103,57 @@ const $ = (query,parent=document) => parent.querySelector(query)
 const $$ = (query,parent=document) => Array.from(parent.querySelectorAll(query))
 const $template = id => $('#template-'+id).content.cloneNode(true).querySelector('*')
 let $editor, decorator
-async function initEditor(){
-    $editor = $('#editor')
+async function initEditor() {
+	$editor = $('#editor')
 
-    initHighlighter($('.markdown',$editor))
-    
-    $('.markdown',$editor).addEventListener('input',({target})=>{
-        $('.body',$editor).innerHTML = md(target.value)
-    })
+	initHighlighter($('.markdown', $editor))
 
-    $('.render',$editor).addEventListener('click',({target})=>{
+	$('.markdown', $editor).addEventListener('input', ({ target }) => {
+		$('.body', $editor).innerHTML = md(target.value)
+	})
+
+	$('.render', $editor).addEventListener('click', ({ target }) => {
 		const previewing = target.value == 'Preview'
 		target.value = previewing ? 'Edit' : 'Preview'
-		$editor.classList.toggle('render',previewing)
-    })
-
-
+		$editor.classList.toggle('render', previewing)
+	})
 }
-async function editArticle(){
-    const id = rot13(window.location.pathname.split('/').pop()) // Last portion of the path is the ciphered ID
-    if(id.includes('-')) updateEditor(id)
+async function editArticle() {
+	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
+	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
+	if (!id.includes('-')) return
+	updateEditor(id)
+	history.replaceState({}, '', id)
 }
 
-async function updateEditor(id){
-    const [ article, markdown, notif ]
-    = await Promise.all([
-        db('articles/'+id), db('markdowns/'+id), db('notifications/'+id)
-    ])
+async function updateEditor(id) {
+	const [article, markdown, notif]
+		= await Promise.all([
+			db('articles/' + id), db('markdowns/' + id), db('notifications/' + id)
+		])
 
 	if (!article) return false
 
-    document.title = article.title
-    for(const property in article){
-        const $element = $('.'+property,$editor)
-        if(!$element) continue
+	document.title = article.title
+	for (const property in article) {
+		const $element = $('.' + property, $editor)
+		if (!$element) continue
 
-        switch($element.type) {
-            case 'checkbox':
-            case 'radio':
-                $element.checked = article[property]
-                break
-            default:
-                $element.value = article[property]
-                break
-        }
-    }
-    $('.markdown textarea',$editor).value = markdown
-    $('.id',$editor).value = id
-    $('.date',$editor).value = new Date(article.timestamp*1000).toISOString().slice(0,10)
+		switch ($element.type) {
+			case 'checkbox':
+			case 'radio':
+				$element.checked = article[property]
+				break
+			default:
+				$element.value = article[property]
+				break
+		}
+	}
+	$('.markdown textarea', $editor).value = markdown
+	$('.id', $editor).value = id
+	$('.date', $editor).value = new Date(article.timestamp * 1000).toISOString().slice(0, 10)
 
-    // if(article.notified) $('.notif',$editor).value = notif.notif
+	// if(article.notified) $('.notif',$editor).value = notif.notif
 }
 async function initHighlighter($section){
 	const input = $('.input',$section)
@@ -1478,7 +1479,7 @@ async function initTextareas(){
 		$textarea.dispatchEvent(new Event('input'))	
 	}
 }const get_timestamp = async () => Math.floor(Date.now()/1000)
-const rot13 = string => string.replace(/[a-z]/gi,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.indexOf(c)])
+const rot13 = string => string.replace(/[a-z]/gi,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm.-'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-.'.indexOf(c)])
 async function postWebhook(id='',title='',description=''){
 	const payload = {
 		username: 'Aces',
@@ -1489,12 +1490,12 @@ async function postWebhook(id='',title='',description=''){
 			author: {
 				name: user,
 			},
-			url: 'https://editor.ahs.app/'+rot13(id),
+			url: 'https://edit.ahs.app/'+id,
 			title,
 			description,
 		}],
 	}
-	// const response = await post(secrets.webhook,payload)
+	const response = await post(secrets.webhook,payload)
 	console.log(response)
 }
 const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'

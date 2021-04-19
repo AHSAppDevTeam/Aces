@@ -40,17 +40,17 @@ function makePreview(id,snippet){
 	const $title = $('.title',$preview)
 	$title.addEventListener('click',event=>{
 		document.title = snippet.title
-		history.pushState({}, '', rot13(id))
+		history.pushState({}, '', id)
 		editArticle()
 		event.preventDefault()		
 	})
-	$title.href = rot13(id)
+	$title.href = id
 
 	const $featured = $('.featured',$preview)
 	$featured.addEventListener('change',({target:{checked:featured}})=>{
 		db('snippets/'+id,{featured})
 		db('articles/'+id,{featured})
-		postWebhook(rot13(id),(featured ? '⭐ ' : '💔 ') + snippet.title)
+		postWebhook(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
 	})
 
 	updatePreview($preview,snippet)

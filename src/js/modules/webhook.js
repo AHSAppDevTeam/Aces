@@ -8,7 +8,7 @@ async function postWebhook(id='',title='',description=''){
 			author: {
 				name: user,
 			},
-			url: 'https://editor.ahs.app/'+rot13(id),
+			url: 'https://edit.ahs.app/'+id,
 			title,
 			description,
 		}],
