@@ -15,13 +15,6 @@ async function initEditor(){
     })
 
 
-	for(const $textarea of $$('textarea',$editor)){
-		$textarea.setAttribute('rows',1)
-		$textarea.addEventListener('input',()=>{
-			$textarea.style.height = 'auto'
-			$textarea.style.height = $textarea.scrollHeight+'px'
-		})
-	}
 }
 async function editArticle(){
     const id = rot13(window.location.pathname.split('/').pop()) // Last portion of the path is the ciphered ID
@@ -56,7 +49,4 @@ async function updateEditor(id){
     $('.date',$editor).value = new Date(article.timestamp*1000).toISOString().slice(0,10)
 
     // if(article.notified) $('.notif',$editor).value = notif.notif
-
-    for(const $textarea of $$('textarea',$editor))
-        $textarea.dispatchEvent(new Event('input'))
 }

@@ -17,6 +17,8 @@ async function init(){
 				.map(id=>makeGroup('category', id, categories[id], categories[id].articleIDs
 					.map(id=>makePreview(id, snippets[id])
 	))))))
+
+	initTextareas()
 }
 init()
 

@@ -1,4 +1,4 @@
-async function postWebhook(id,title,description){
+async function postWebhook(id='',title='',description=''){
 	const payload = {
 		username: 'Aces',
 		avatar_url: 'https://edit.ahs.app/icon.png',

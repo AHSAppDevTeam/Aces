@@ -1,1 +1,1586 @@
-tml
+<!DOCTYPE html>
+<html lang='en-US' dir='ltr'>
+  	<head>
+		<meta charset='utf-8'>
+
+		<title>Aces</title>
+		<meta name='description' content='Arcadia High School App Content Editing System'>
+		<meta name='author' content='Xing Liu'>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+
+		<link rel='icon' type='image/png' href='/icon.png'>
+		<style>
+.sign-in {
+	position: fixed;
+	top: 8pt;
+	right: 8pt;
+
+	width: 24rem;
+	max-width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	
+	background:var(--background);
+	z-index: 10;
+
+	box-shadow: 0 0 0 100vmax #0004;
+}
+.sign-in:not(:focus):not(:focus-within){
+	pointer-events: none;
+	opacity: 0;
+}
+.sign-in .cancel {
+	position: absolute;
+	top: 8pt;
+	right: 8pt;
+	background: transparent;
+	border: 0;
+}
+
+.sign-in input {
+	color: black;
+}
+.sign-in.loading{
+	border-color: blue;
+}
+.sign-in.invalid{
+	border-color: red;
+}
+
+input[disabled] {
+	display: none;
+}
+
+#browser {
+	flex: 1;
+	scroll-behavior: smooth;
+}
+#browser .title{
+	scroll-margin: 4rem;
+	font-size: 1rem;
+	text-decoration: none;
+}
+#browser .location > header .title {
+	font-size: 2rem;
+	text-align: center;
+}
+#browser .category {
+	margin-top: 1rem;
+}
+#browser .category > header {
+	grid-column: 1 / -1;
+}
+#browser .category > header .title{
+	font-size: 1.5rem;
+}
+#browser > section > section {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	grid-auto-rows: auto;
+	grid-gap: 8pt;
+	scroll-margin-top: 1rem;
+}
+#browser > header {
+	flex-wrap: wrap;
+}
+#browser > header > .search {
+	width: 0;
+	flex-grow: 1;
+}
+
+.card[hidden] {
+	display: none;
+}
+.card > * {
+	opacity: 0.6;
+	overflow-wrap: break-word;
+}
+.card:hover > *,
+.card.open > * {
+	opacity: 1;
+}
+.actions .featured {
+	display: none;
+}
+.actions label svg {
+	width: 1em;
+	height: 1em;
+	fill: var(--text);
+	stroke: var(--text);
+}
+.actions .featured:not(:checked) + svg{
+	fill: transparent;
+}
+#editor > label:hover > span{
+	color: #aaa;
+}
+
+#editor > label:focus-within > span{
+	color: var(--text);
+}
+
+#editor {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	width: 36vw;
+}
+#editor > * {
+	margin: 0;
+	position: relative;
+	grid-column-end: span 2;
+}
+#editor > label:not(.pad) {
+	padding: 0;
+}
+#editor > label > span {
+	position: absolute;
+	top: -0.5rem;
+	left: 0.3rem;
+	text-transform: lowercase;
+	font-size: .8rem;
+	padding-inline: .2ch;
+	font-weight: 600;
+	color: var(--border-color);
+	content: attr(name);
+}
+#editor > label:not(.pad) > :last-child {
+	border: 0;
+	width: 100%;
+	height: 100%;
+	padding: 8pt;
+}
+#editor > label > * {
+	margin: 0;
+	border-radius: var(--radius);
+	background: var(--background);
+}
+#editor > label.half-width {
+	grid-column-end: span 1;
+}
+#editor.render > :not(header) {
+	border-color: transparent;
+}
+#editor.render > label > span{
+	opacity: 0;
+}
+#editor ::placeholder {
+	color: #888;
+}
+#editor header > * {
+	flex: 1 0 0;
+	width: 0;
+}
+header > [type=button] {
+	cursor: pointer;
+	text-decoration: none;
+	color:var(--text);
+}
+#editor textarea{
+	resize: none;
+}
+
+#editor .id {
+	cursor: pointer;
+}
+#editor .title {
+	font-size: 1.6rem;
+}
+#editor .author {
+	font-size: 1rem;
+}
+#editor .media {
+	display: flex;
+	flex: 0 0 10rem;
+	height: 10rem;
+	overflow-x: scroll;
+}
+#editor .media > * {
+	margin-right: 8pt;
+	width: 8rem;
+	flex: 0 0 8rem;
+}
+#editor .media > img {
+	background: var(--border-color);
+}
+#editor .media .new {
+	display: flex;
+	flex-direction: column;
+}
+#editor.render .media .new {
+	display: none;
+}
+#editor .media .new .upload {
+	flex-grow: 1;
+	cursor: pointer;
+	opacity: 0.2;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M4 1l-2 2zM4 1l2 2zM4 1v4zM2 7H6' fill='none' stroke='black' stroke-width='1' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+#editor .media .new .upload input {
+	display: none;
+}
+.media .image {
+	position: relative;
+	cursor: move;
+}
+.media .image img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	pointer-events: none;
+}
+.media .image .delete {
+	position: absolute;
+	top: 4pt;
+	right: 4pt;
+	padding: 4pt;
+	cursor: pointer;
+}
+#editor .body{
+	display: none;
+	overflow-wrap: break-word;
+}
+#editor .markdown {
+	flex-grow: 1;
+}
+#editor.render .body {
+	display: block;
+}
+#editor.render .markdown {
+	display: none;
+}
+
+#resize{
+	border-block-width: 0;
+	flex: 0 0 8pt;
+	cursor: col-resize;
+}
+@font-face {
+	font-family: 'pt-root';
+	src: url('pt-root/bold.woff') format('woff');
+	font-weight: 700;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'pt-root';
+	src: url('pt-root/medium.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'pt-root';
+	src: url('pt-root/regular.woff') format('woff');
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'pt-root';
+	src: url('pt-root/light.woff') format('woff');
+	font-weight: 300;
+	font-style: normal;
+}.markdown {
+    position: relative;
+}
+.markdown .bold {
+    font-weight: bold;
+}
+.markdown .italic {
+    font-style: italic;
+}
+.markdown .strikethrough {
+    text-decoration: line-through;
+}
+.markdown .link {
+    color: blue;
+}
+.markdown .list {
+    background: linear-gradient(90deg, #ff08,transparent 2ch);
+}
+.markdown .heading {
+    font-weight: bold;
+    display: inline-block;
+    width: 100%;
+    background: #8882;
+}/* TextareaDecorator.css
+ * written by Colin Kuebler 2012
+ * Part of LDT, dual licensed under GPLv3 and MIT
+ * Provides styles for rendering a textarea on top of a pre with scrollbars
+ */
+.markdown code, .markdown textarea {
+	font-size: 1rem;
+    line-height: 1.4;
+    font-family: inherit;
+}
+
+.markdown textarea {
+	/* hide the text but show the text caret */
+	color: transparent !important;
+	caret-color: var(--text);
+}
+
+.markdown {
+	overflow: hidden;
+	position: relative;
+}
+
+.markdown code {
+	margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+.markdown label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: inline;
+	box-sizing: border-box;
+	cursor: text;
+}
+
+.markdown textarea {
+	margin: 0;
+	padding: 8pt;
+	border: 0;
+	background: transparent;
+	outline: none;
+	resize: none;
+	min-width: 100%;
+	min-height: 100%;
+}
+:root{
+	--radius: 4pt;
+	--border-color: #ddd;
+	--border: solid 2pt var(--border-color);
+	--background: white;
+	--cover: #fffd;
+	--text: black;
+}
+
+@media (prefers-color-scheme: dark){
+	:root{
+		--border-color: #333;
+		--background: hsl(220deg,20%,8%);
+		--cover: #000d;
+		--text: #ddd;
+	}
+}
+
+html {
+	font-family: 'pt-root', Sans-serif;
+	font-weight: 400;
+	font-size: 14pt;
+	touch-action: pan-x;
+	overscroll-behavior-x: none; /* Prevent Chrome swipe navigation */
+}
+body {
+	display: flex;
+	background: var(--background);
+	line-height: 1.3;
+}
+body * {
+	box-sizing: border-box;
+	color: var(--text);
+}
+body :focus{
+	outline: 0;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+button,
+[type=button],
+[type=submit] {
+  cursor: pointer;
+}
+
+[hidden]{
+	display: none !important;
+}/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+
+/* Document
+   ========================================================================== */
+
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
+ html {
+    line-height: 1.15; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+  }
+  
+  /* Sections
+     ========================================================================== */
+  
+  /**
+   * Remove the margin in all browsers.
+   */
+  
+  body {
+    margin: 0;
+  }
+  
+  /**
+   * Render the `main` element consistently in IE.
+   */
+  
+  main {
+    display: block;
+  }
+  
+  /**
+   * Correct the font size and margin on `h1` elements within `section` and
+   * `article` contexts in Chrome, Firefox, and Safari.
+   */
+  
+  h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+  }
+  
+  /* Grouping content
+     ========================================================================== */
+  
+  /**
+   * 1. Add the correct box sizing in Firefox.
+   * 2. Show the overflow in Edge and IE.
+   */
+  
+  hr {
+    box-sizing: content-box; /* 1 */
+    height: 0; /* 1 */
+    overflow: visible; /* 2 */
+  }
+  
+  /**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+  
+  pre {
+    font-family: monospace, monospace; /* 1 */
+    font-size: 1em; /* 2 */
+  }
+  
+  /* Text-level semantics
+     ========================================================================== */
+  
+  /**
+   * Remove the gray background on active links in IE 10.
+   */
+  
+  a {
+    background-color: transparent;
+  }
+  
+  /**
+   * 1. Remove the bottom border in Chrome 57-
+   * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+   */
+  
+  abbr[title] {
+    border-bottom: none; /* 1 */
+    text-decoration: underline; /* 2 */
+    text-decoration: underline dotted; /* 2 */
+  }
+  
+  /**
+   * Add the correct font weight in Chrome, Edge, and Safari.
+   */
+  
+  b,
+  strong {
+    font-weight: bolder;
+  }
+  
+  /**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+  
+  code,
+  kbd,
+  samp {
+    font-family: monospace, monospace; /* 1 */
+    font-size: 1em; /* 2 */
+  }
+  
+  /**
+   * Add the correct font size in all browsers.
+   */
+  
+  small {
+    font-size: 80%;
+  }
+  
+  /**
+   * Prevent `sub` and `sup` elements from affecting the line height in
+   * all browsers.
+   */
+  
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  
+  sub {
+    bottom: -0.25em;
+  }
+  
+  sup {
+    top: -0.5em;
+  }
+  
+  /* Embedded content
+     ========================================================================== */
+  
+  /**
+   * Remove the border on images inside links in IE 10.
+   */
+  
+  img {
+    border-style: none;
+  }
+  
+  /* Forms
+     ========================================================================== */
+  
+  /**
+   * 1. Change the font styles in all browsers.
+   * 2. Remove the margin in Firefox and Safari.
+   */
+  
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-family: inherit; /* 1 */
+    font-size: 100%; /* 1 */
+    line-height: 1.15; /* 1 */
+    margin: 0; /* 2 */
+  }
+  
+  /**
+   * Show the overflow in IE.
+   * 1. Show the overflow in Edge.
+   */
+  
+  button,
+  input { /* 1 */
+    overflow: visible;
+  }
+  
+  /**
+   * Remove the inheritance of text transform in Edge, Firefox, and IE.
+   * 1. Remove the inheritance of text transform in Firefox.
+   */
+  
+  button,
+  select { /* 1 */
+    text-transform: none;
+  }
+  
+  /**
+   * Correct the inability to style clickable types in iOS and Safari.
+   */
+  
+  button,
+  [type="button"],
+  [type="reset"],
+  [type="submit"] {
+    -webkit-appearance: button;
+  }
+  
+  /**
+   * Remove the inner border and padding in Firefox.
+   */
+  
+  button::-moz-focus-inner,
+  [type="button"]::-moz-focus-inner,
+  [type="reset"]::-moz-focus-inner,
+  [type="submit"]::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+  }
+  
+  /**
+   * Restore the focus styles unset by the previous rule.
+   */
+  
+  button:-moz-focusring,
+  [type="button"]:-moz-focusring,
+  [type="reset"]:-moz-focusring,
+  [type="submit"]:-moz-focusring {
+    outline: 1px dotted ButtonText;
+  }
+  
+  /**
+   * Correct the padding in Firefox.
+   */
+  
+  fieldset {
+    padding: 0.35em 0.75em 0.625em;
+  }
+  
+  /**
+   * 1. Correct the text wrapping in Edge and IE.
+   * 2. Correct the color inheritance from `fieldset` elements in IE.
+   * 3. Remove the padding so developers are not caught out when they zero out
+   *    `fieldset` elements in all browsers.
+   */
+  
+  legend {
+    box-sizing: border-box; /* 1 */
+    color: inherit; /* 2 */
+    display: table; /* 1 */
+    max-width: 100%; /* 1 */
+    padding: 0; /* 3 */
+    white-space: normal; /* 1 */
+  }
+  
+  /**
+   * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+   */
+  
+  progress {
+    vertical-align: baseline;
+  }
+  
+  /**
+   * Remove the default vertical scrollbar in IE 10+.
+   */
+  
+  textarea {
+    overflow: auto;
+  }
+  
+  /**
+   * 1. Add the correct box sizing in IE 10.
+   * 2. Remove the padding in IE 10.
+   */
+  
+  [type="checkbox"],
+  [type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+  }
+  
+  /**
+   * Correct the cursor style of increment and decrement buttons in Chrome.
+   */
+  
+  [type="number"]::-webkit-inner-spin-button,
+  [type="number"]::-webkit-outer-spin-button {
+    height: auto;
+  }
+  
+  /**
+   * 1. Correct the odd appearance in Chrome and Safari.
+   * 2. Correct the outline style in Safari.
+   */
+  
+  [type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    outline-offset: -2px; /* 2 */
+  }
+  
+  /**
+   * Remove the inner padding in Chrome and Safari on macOS.
+   */
+  
+  [type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  
+  /**
+   * 1. Correct the inability to style clickable types in iOS and Safari.
+   * 2. Change font properties to `inherit` in Safari.
+   */
+  
+  ::-webkit-file-upload-button {
+    -webkit-appearance: button; /* 1 */
+    font: inherit; /* 2 */
+  }
+  
+  /* Interactive
+     ========================================================================== */
+  
+  /*
+   * Add the correct display in Edge, IE 10+, and Firefox.
+   */
+  
+  details {
+    display: block;
+  }
+  
+  /*
+   * Add the correct display in all browsers.
+   */
+  
+  summary {
+    display: list-item;
+  }
+  
+  /* Misc
+     ========================================================================== */
+  
+  /**
+   * Add the correct display in IE 10+.
+   */
+  
+  template {
+    display: none;
+  }
+  
+  /**
+   * Add the correct display in IE 10.
+   */
+  
+  [hidden] {
+    display: none;
+  }.panel {
+    padding-bottom: 1rem;
+}
+.panel > header {
+	position: sticky;
+	display: flex;
+	top: 0;
+	margin-inline: -1rem;
+	border-inline: 0;
+	border-top: 0;
+	border-radius: 0;
+	height: 3rem;
+	gap: 0.5rem;
+	z-index: 1;
+	background-color: var(--background);
+}
+.panel > header > * {
+	border-radius: var(--radius);
+	padding: 2pt 4pt;
+	z-index: -1;
+}
+html,
+body,
+#resize,
+.panel {
+	height: 100%;
+}
+.panel {
+	overflow: hidden scroll;
+	padding: 0 1rem 1rem 1rem;
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-rows: repeat(99,auto) 1fr;
+}
+#editor > *,
+.panel > header,
+.card,
+.media > *,
+.media .delete,
+.sign-in {
+	padding: 8pt;
+	border-radius: var(--radius);
+	background-color: var(--background);
+}
+#editor > *,
+.panel > header,
+.card,
+.media > *,
+.media .delete,
+#resize,
+.sign-in {
+	transition-duration: 100ms;
+	border: var(--border);
+	border-color: var(--border-color);
+}
+#editor > label:hover,
+.panel > :hover,
+.card:hover,
+.media > :hover,
+.media .delete:hover,
+#resize:hover{
+	border-color: #aaa;
+}
+#editor > label:focus-within,
+.panel > :focus,
+.card:focus,
+.media > :focus-within,
+.card.open,
+#resize:focus {
+	border-color: var(--text);
+}
+		</style>
+	</head>
+	<body>
+		<main id='editor' class='panel'>
+			<header>
+				<input type='button'
+					class='remove'
+					title='remove article (alt+r)'
+					value='Remove'
+					accesskey='r'>
+				<input type='button'
+					class='render'
+					title='toggle preview/edit mode (alt+v)'
+					value='Preview'
+					accesskey='v'>
+				<input type='button'
+					class='publish'
+					title='publish article (alt+p)'
+					value='Publish'
+					accesskey='p'>
+			</header>
+			<label>
+				<span>title</span>
+				<textarea class='title' accesskey='t'></textarea>
+			</label>
+			<label>
+				<span>author</span>
+				<textarea class='author' accesskey='a'></textarea>
+			</label>
+			<label>
+				<span>date</span>
+				<input class='date' type='date'>
+			</label>
+			<label class='half-width pad'>
+				<input class='featured' type='checkbox'>
+				feature
+			</label>
+			<label class='half-width pad'>
+				<input class='notified' type='checkbox'>
+				notify
+			</label>
+			<label>
+				<span>notification body</span>
+				<textarea class='notif'></textarea>
+			</label>
+			<label class='pad'>
+				<span>images and videos</span>
+				<section class='media'>
+					<section class='new'>
+						<label class='upload'>
+							<input type='file' multiple accept='image/*'>
+						</label>
+						<input class='url' type='url' placeholder='Image/YouTube URL'>
+						<!-- insert images -->
+					</section>
+				</section>
+			</label>
+			<label>
+				<span>article body</span>
+				<section class='markdown'>
+					<label>
+						<textarea class='input' accesskey='b' multi-line></textarea>
+					</label>
+					<code class='output'></code>
+				</section>
+			</label>
+			<section class='body'></section>
+			<label>
+				<span>ID (click to copy)</span>
+				<input class='id' readonly>
+			</label>
+		</main>
+		<div id='resize' tabindex='0'></div>
+		<aside id='browser' class='panel'>
+			<header>
+				<input type='text'
+					class='search'
+					title='search articles (alt+/)'
+					placeholder='Search titles'
+					accesskey='/'>
+				<input type='button'
+					class='refresh'
+					title='refresh articles (alt+u)'
+					value='↻'
+					accesskey='u'>
+				<a type='button'
+					class='sources'
+					title='view resources'
+					href='sources.html'
+					target='_blank'>🕮</a>
+				<input type='button'
+					class='sign'
+					title='sign in/out (alt+s)'
+					value='Sign in'
+					accesskey='s'>
+			</header>
+			<!-- insert previews -->
+		</aside>
+		<form class='sign-in' tabindex='0'>
+			<label>
+				email
+				<input class='email' type='email'
+				autocomplete='on' spellcheck='false' required>
+			</label>
+			<label>
+				password
+				<input class='password' type='password'
+				autocomplete='on' spellcheck='false' required>
+			</label>
+			<input type='button' class='cancel' value='✕'>
+			<input type='submit' value='sign in'>
+		</form>
+
+		<!-- TEMPLATES -->
+		<template id='template-location'>
+			<section class='location'>
+				<header>
+					<h2>
+						<a class='id'></a>
+						<textarea class='title'></textarea>
+					</h2>
+				</header>
+			</section>
+		</template>
+		<template id='template-category'>
+			<section class='category'>
+				<header>
+					<h3>
+						<a class='id'></a>
+						<textarea class='title'></textarea>
+					</h3>
+					<label>
+						<input type='color' class='color-dark-mode'>
+					</label>
+					<label>
+						<input type='color' class='color-light-mode'>
+					</label>
+				</header>
+			</section>
+		</template>
+		<template id='template-preview'>
+			<article class='preview card not-published'>
+				<h4><a class='title'></a></h4>
+				<section class='actions'>
+					<label title='feature/unfeature (f)'>
+						<input class='featured' type='checkbox'>
+						<svg viewBox='-1 -1 26 26' stroke-width='2.2' width='24' height='24'>
+							<path d='M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z'/>
+						</svg>
+					</label>
+					<!--<label title='move to archive (a)' class='archive'>
+						<svg viewBox='0 0 24 24' stroke-width='0' width='24' height='24'>
+							<path d='M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.81.97H5.44l.8-.97zM5 19V8h14v11H5zm8.45-9h-2.9v3H8l4 4 4-4h-2.55z'/>
+						</svg>
+					</label>-->
+				</section>
+			</article>
+		</template>
+		<template id='template-image'>
+			<section class='image' draggable='true'>
+				<img>
+				<input type='button' class='delete' value='×'>
+			</section>
+		</template>
+		<script>
+async function sign_in_with_email(email,password) {
+	const res = await googleapis(
+		'identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
+		{ email, password, returnSecureToken: true }
+	)
+	if(res.error) {
+        auth.modal.classList.remove('loading')
+        auth.modal.classList.add('invalid')
+        return false
+    }
+	set_auth(res.idToken,res.refreshToken)
+}
+async function sign_in_with_token(refresh_token) {
+	if(!refresh_token) return false
+	const res = await googleapis(
+		'securetoken.googleapis.com/v1/token',
+		{ refresh_token, grant_type: 'refresh_token' }
+	)
+	if(res.error) return false
+	set_auth(res.id_token,res.refresh_token)
+}
+async function sign_out(){
+    localStorage.setItem('refresh_token','')
+    token = db = ''
+    update_auth(false)
+}
+async function set_auth(idToken,refreshToken){
+	token = '?auth='+idToken
+	user = await get_user(idToken)
+	secrets = await db('secrets')
+	localStorage.setItem('refresh_token',refreshToken)
+	update_auth(Boolean(user))
+}
+async function get_user(idToken){
+	const { users: { 0: { email } } } = await googleapis(
+		'identitytoolkit.googleapis.com/v1/accounts:lookup',
+		{ idToken }
+	)
+	return email
+}
+async function update_auth(signed_in){
+	document.body.classList.toggle('signed-in',signed_in)
+	auth.sign.value = `Sign ${signed_in ? 'out' : 'in'}`
+	document.activeElement.blur()
+
+	$('.remove',$editor).disabled
+	= $('.publish',$editor).disabled
+	= !signed_in
+}
+function makeGroup(
+	type, id,
+	{ title, colorLightMode, colorDarkMode },
+	children,
+){
+	const parent = {
+		'category': 'categories',
+		'location': 'locations',
+	}[type]
+
+	const $group = $template(type)
+
+	const $id = $('.id',$group)
+	$id.id = id
+	$id.href = '#'+id
+	$id.innerHTML = '#'+id
+
+	$title = $('.title',$group)
+	$title.value = title
+	$title.addEventListener('change',({target:{value:title}})=>{
+		db(parent+'/'+id,{title})
+		postWebhook('#'+id,`➡️ renamed ${type} <${id}> to ${title}`)
+	})
+
+	if(type=='category'){
+		$('.color-light-mode',$group).value = colorLightMode
+		$('.color-dark-mode',$group).value = colorDarkMode
+	}
+
+	$group.append(...children)
+
+	return $group
+}
+
+function makePreview(id,snippet){
+	const $preview = $template('preview')
+
+	$preview.id = 'preview-'+id
+
+	const $title = $('.title',$preview)
+	$title.addEventListener('click',event=>{
+		document.title = snippet.title
+		history.pushState({}, '', rot13(id))
+		editArticle()
+		event.preventDefault()		
+	})
+	$title.href = rot13(id)
+
+	const $featured = $('.featured',$preview)
+	$featured.addEventListener('change',({target:{checked:featured}})=>{
+		db('snippets/'+id,{featured})
+		db('articles/'+id,{featured})
+		postWebhook(rot13(id),(featured ? '⭐ ' : '💔 ') + snippet.title)
+	})
+
+	updatePreview($preview,snippet)
+
+	return $preview
+}
+
+function updatePreview($preview,snippet){
+	$('.title',$preview).innerHTML = snippet.title
+	$('.featured',$preview).checked = snippet.featured
+}
+const $ = (query,parent=document) => parent.querySelector(query)
+const $$ = (query,parent=document) => Array.from(parent.querySelectorAll(query))
+const $template = id => $('#template-'+id).content.cloneNode(true).querySelector('*')
+let $editor, decorator
+async function initEditor(){
+    $editor = $('#editor')
+
+    initHighlighter($('.markdown',$editor))
+    
+    $('.markdown',$editor).addEventListener('input',({target})=>{
+        $('.body',$editor).innerHTML = md(target.value)
+    })
+
+    $('.render',$editor).addEventListener('click',({target})=>{
+		const previewing = target.value == 'Preview'
+		target.value = previewing ? 'Edit' : 'Preview'
+		$editor.classList.toggle('render',previewing)
+    })
+
+
+}
+async function editArticle(){
+    const id = rot13(window.location.pathname.split('/').pop()) // Last portion of the path is the ciphered ID
+    if(id.includes('-')) updateEditor(id)
+}
+
+async function updateEditor(id){
+    const [ article, markdown, notif ]
+    = await Promise.all([
+        db('articles/'+id), db('markdowns/'+id), db('notifications/'+id)
+    ])
+
+	if (!article) return false
+
+    document.title = article.title
+    for(const property in article){
+        const $element = $('.'+property,$editor)
+        if(!$element) continue
+
+        switch($element.type) {
+            case 'checkbox':
+            case 'radio':
+                $element.checked = article[property]
+                break
+            default:
+                $element.value = article[property]
+                break
+        }
+    }
+    $('.markdown textarea',$editor).value = markdown
+    $('.id',$editor).value = id
+    $('.date',$editor).value = new Date(article.timestamp*1000).toISOString().slice(0,10)
+
+    // if(article.notified) $('.notif',$editor).value = notif.notif
+}
+async function initHighlighter($section){
+	const input = $('.input',$section)
+	const output = $('.output',$section)
+	const syntax = {
+		bold: /([*_])\1.+?\1\1/gm,
+		italic: /([*_]).+?\1/gm,
+		strike: /(~~).+?\1/gm,
+		hr: /\s{0,3}([-+* ]{3,})$/gm,
+		heading: /^#{1,6}\s.+$/gm,
+		link: /(!?(\[.*?\]\((https?\:\/\/|mailto).*?\))|(https?\:\/\/\S*)|(\S+@\S+\.\S+))/gm,
+		list: /^((\d+\.)|[-+*]).+$/gm,
+	}
+	input.addEventListener('input',async ()=>{
+		let buffer = output.textContent = input.value
+		for(const key in syntax){
+			const regex = syntax[key]
+			buffer = buffer.replace(regex,match=>
+				`<span class=${key}>${
+					match.replace(/[-_.!~*"'()]/g,char=>'&#'+char.charCodeAt()+';')
+				}</span>`
+			)
+		}
+		output.innerHTML = buffer
+	})
+}
+// The MIT License (MIT)
+
+// Copyright (c) 2016 Sultan Tarimo
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+/*!
+ *             __
+ *   __ _  ___/ /
+ *  /  ' \/ _  / 
+ * /_/_/_/\_,_/ 
+ * 
+ * md.js is a lightweight markdown parser
+ * https://github.com/thysultan/md.js
+ * 
+ * @licence MIT
+ */
+(function (factory) {
+	if (typeof exports === 'object' && typeof module !== 'undefined') {
+		module.exports = factory();
+	} else if (typeof define === 'function' && define.amd) {
+		define(factory());
+	} else {
+		window.md = factory();
+	}
+}(function () {
+	var unicodes = {
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#39;',
+		'&': '&amp;',
+		'[': '&#91;',
+		']': '&#93;',
+		'(': '&#40;',
+		')': '&#41;',
+	};
+
+	var resc = /[<>&\(\)\[\]"']/g;
+
+	function unicode (char) { return unicodes[char] || char; }
+
+	var XSSFilterRegExp = /<(script)[^\0]*?>([^\0]+?)<\/(script)>/gmi;
+	var XSSFilterTemplate = '&lt;$1&gt;$2&lt;/$3&gt;';
+
+	var XSSFilterInlineJSRegExp = /(<.*? [^\0]*?=[^\0]*?)(javascript:.*?)(.*>)/gmi;
+	var XSSFilterInlineJSTemplate = '$1#$2&#58;$3';
+
+	var XSSFilterImageRegExp = /<img([^\0]*?onerror=)([^\0]*?)>/gmi;
+	var XSSFilterImageTemplate = function (match, group1, group2) {
+		return '<img' + group1 + group2.replace(resc, unicode) + '>';
+	};
+
+	var removeTabsRegExp = /^[\t ]+|[\t ]$/gm;
+
+	var htmlFilterRegExp = /(<.*>[\t ]*\n^.*)/gm;
+	var htmlFilterTemplate = function (match, group1) { 
+		return group1.replace(/^\n|$\n/gm, '');
+	};
+
+	var cssFilterRegExp = /(<style>[^]*<\/style>)/gm;
+	var cssFilterTemplate = htmlFilterTemplate;
+
+	var eventsFilterRegExp = /(<[^]+?)(on.*?=.*?)(.*>)/gm;
+	var eventsFilterTemplate = '$1$3';
+
+	var blockQuotesRegExp = /^[ \t]*> (.*)/gm;
+	var blockQuotesTemplate = '<blockquote>$1</blockquote>';
+
+	var inlineCodeRegExp = /`([^`]+?)`/g;
+	var inlineCodeTemplate = function (match, group1) {
+		return '<code>'+group1.replace(resc, unicode)+'</code>'
+	}
+
+	var blockCodeRegExp = /```(.*)\n([^\0]+?)```(?!```)/gm;
+
+	var imagesRegExp = /!\[(.*)\]\((.*)\)/g;
+	var imagesTemplate = function (match, group1, group2) {
+		var src = group2.replace(resc, unicode);
+		var alt = group1.replace(resc, unicode);
+
+		return '<img src="'+src+'" alt="'+alt+'">';
+	};
+
+	var headingsRegExp = /^(#+) +(.*)/gm;
+	var headingsTemplate = function (match, hash, content) {
+		var length = hash.length; return '<h'+length+'>'+content+'</h'+length+'>';
+	};
+
+	var headingsCommonh2RegExp = /^([^\n\t ])(.*)\n----+/gm;
+	var headingsCommonh1RegExp = /^([^\n\t ])(.*)\n====+/gm;
+	var headingsCommonh1Template = '<h1>$1$2</h1>';
+	var headingsCommonh2Template = '<h2>$1$2</h2>';
+
+	var paragraphsRegExp = /^([^-><#\d\+\_\*\t\n\[\! \{])([^]*?)(|  )(?:\n\n)/gm;
+	var paragraphsTemplate = function (match, group1, group2, group3) {
+		var leadingCharater = group1;
+		var body = group2;
+		
+		var trailingSpace = group3 ? '\n<br>\n' : '\n';
+		return '<p>'+leadingCharater+body+'</p>'+trailingSpace;
+	};
+
+	var horizontalRegExp = /^.*?(?:---|\*\*\*|- - -|\* \* \*)/gm;
+	var horizontalTemplate = '<hr>';
+
+	var strongRegExp = /(?:\*\*|\_\_)([^\*\n_]+?)(?:\*\*|\_\_)/g;
+	var strongTemplate = '<strong>$1</strong>';
+
+	var emphasisRegExp = /(?:\*|\_)([^\*\n_]+?)(?:\*|\_)/g;
+	var emphasisTemplate = '<em>$1</em>';
+
+	var strikeRegExp = /(?:~~)([^~]+?)(?:~~)/g;
+	var strikeTemplate = '<del>$1</del>';
+
+	var linksRegExp = /\[(.*?)\]\(([^\t\n ]*)(?:| "(.*)")\)+/gm;
+	var linksTemplate = function (match, group1, group2, group3) {
+		var link = group2.replace(resc, unicode);
+		var text = group1.replace(resc, unicode);
+		var title = group3 ? ' title="'+group3.replace(resc, unicode)+'"' : '';
+
+		return '<a href="'+link+'"'+title+'>'+text+'</a>';
+	};
+
+	var listUlRegExp1 = /^[\t ]*?(?:-|\+|\*) (.*)/gm;
+	var listUlRegExp2 = /(\<\/ul\>\n(.*)\<ul\>*)+/g;
+	var listUlTemplate = '<ul><li>$1</li></ul>';
+
+	var listOlRegExp1 = /^[\t ]*?(?:\d(?:\)|\.)) (.*)/gm;
+	var listOlRegExp2 = /(\<\/ol\>\n(.*)\<ol\>*)+/g;
+	var listOlTemplate = '<ol><li>$1</li></ol>';
+
+	var lineBreaksRegExp = /^\n\n+/gm;
+	var lineBreaksTemplate = '<br>';
+
+	var checkBoxesRegExp = /\[( |x)\]/g;
+	var checkBoxesTemplate = function (match, group1) {
+		return '<input type="checkbox" disabled' + (group1.toLowerCase() === 'x' ? ' checked' : '') + '>'
+	};
+
+
+	/**
+	 * markdown parser
+	 * 
+	 * @param  {string} markdown
+	 * @return {string}
+	 */
+	function md (markdown) {
+		if (!markdown) {
+			return '';
+		}
+
+		var code = [];
+		var index = 0;
+		var length = markdown.length;
+
+		// to allow matching trailing paragraphs
+		if (markdown[length-1] !== '\n' && markdown[length-2] !== '\n') {
+			markdown += '\n\n';
+		}
+
+		// format, removes tabs, leading and trailing spaces
+		markdown = (
+			markdown
+				// collect code blocks and replace with placeholder
+				// we do this to avoid code blocks matching the paragraph regexp
+				.replace(blockCodeRegExp, function (match, lang, block) {
+					var placeholder = '{code-block-'+index+'}';
+					var regex = new RegExp('{code-block-'+index+'}', 'g');
+
+					code[index++] = {lang: lang, block: block.replace(resc, unicode), regex: regex};
+
+					return placeholder;
+				})
+				// XSS script tags
+				.replace(XSSFilterRegExp, XSSFilterTemplate)
+				// XSS image onerror
+				.replace(XSSFilterImageRegExp, XSSFilterImageTemplate)
+				// filter events
+				.replace(eventsFilterRegExp, eventsFilterTemplate)
+				// tabs
+				.replace(removeTabsRegExp, '')
+				// blockquotes
+				.replace(blockQuotesRegExp, blockQuotesTemplate)
+				// images
+				.replace(imagesRegExp, imagesTemplate)
+				// headings
+				.replace(headingsRegExp, headingsTemplate)
+				// headings h1 (commonmark)
+				.replace(headingsCommonh1RegExp, headingsCommonh1Template)
+				// headings h2 (commonmark)
+				.replace(headingsCommonh2RegExp, headingsCommonh2Template)
+				// horizontal rule 
+				.replace(horizontalRegExp, horizontalTemplate)
+				// checkboxes
+				.replace(checkBoxesRegExp, checkBoxesTemplate)
+				// filter html
+				.replace(htmlFilterRegExp, htmlFilterTemplate)
+				// filter css
+				.replace(cssFilterRegExp, cssFilterTemplate)
+				// paragraphs
+				.replace(paragraphsRegExp, paragraphsTemplate)
+				// inline code
+				.replace(inlineCodeRegExp, inlineCodeTemplate)
+				// links
+				.replace(linksRegExp, linksTemplate)
+				// unorderd lists
+				.replace(listUlRegExp1, listUlTemplate).replace(listUlRegExp2, '')
+				// ordered lists
+				.replace(listOlRegExp1, listOlTemplate).replace(listOlRegExp2, '')
+				// strong
+				.replace(strongRegExp, strongTemplate)
+				// emphasis
+				.replace(emphasisRegExp, emphasisTemplate)
+				// strike through
+				.replace(strikeRegExp, strikeTemplate)
+				// line breaks
+				.replace(lineBreaksRegExp, lineBreaksTemplate)
+				// filter inline js
+				.replace(XSSFilterInlineJSRegExp, XSSFilterInlineJSTemplate)
+		);
+
+		// replace code block placeholders
+		for (var i = 0; i < index; i++) {
+			var item = code[i];
+			var lang = item.lang;
+			var block = item.block;
+
+			markdown = markdown.replace(item.regex, function (match) {
+				return '<pre><code class="language-'+lang+'">'+block+'</code></pre>';
+			});
+		}
+
+		return markdown.trim();
+	}
+
+	return md;
+}));
+const db_path = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
+async function post(path,request){
+	const response = await fetch('https://'+path,
+		{
+			body: JSON.stringify(request),
+			headers: { 'Content-Type': 'application/json' },
+			method: 'POST',
+		}	
+	) 
+	return await response.json()
+}
+async function db(path,request){
+	const response = await fetch(
+		db_path(path),
+		request ? {
+			body: JSON.stringify(request),
+			headers: { 'Content-Type': 'application/json' },
+			method: 'PATCH',
+		} : {}
+	)
+	return await response.json()
+}
+async function googleapis(path,request){
+	return await post(path+'?key='+KEY,request)
+}
+async function initTextareas(){
+	for(const $textarea of $$('textarea')){
+		
+		$textarea.setAttribute('rows',1)
+		$textarea.addEventListener('input',()=>{
+			$textarea.style.height = 'auto'
+			$textarea.style.height = $textarea.scrollHeight+'px'
+		})
+
+		if(!$textarea.hasAttribute('multi-line'))
+			$textarea.addEventListener('keydown',(event)=>{
+				if(event.key!='Enter') return
+				event.preventDefault()
+				$textarea.blur()
+				return false
+			})
+		
+		$textarea.dispatchEvent(new Event('input'))	
+	}
+}const get_timestamp = async () => Math.floor(Date.now()/1000)
+const rot13 = string => string.replace(/[a-z]/gi,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.indexOf(c)])
+async function postWebhook(id='',title='',description=''){
+	const payload = {
+		username: 'Aces',
+		avatar_url: 'https://edit.ahs.app/icon.png',
+		content: '',
+		embeds: [{
+			color: 0x995eff,
+			author: {
+				name: user,
+			},
+			url: 'https://editor.ahs.app/'+rot13(id),
+			title,
+			description,
+		}],
+	}
+	// const response = await post(secrets.webhook,payload)
+	console.log(response)
+}
+const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'
+let user = ''
+let token = ''
+let secrets
+
+sign_in_with_token(localStorage.getItem('refresh_token'))
+
+const auth = {
+	sign: $`.sign`,
+	modal: $`.sign-in`,
+
+	email: $`.email`,
+	password: $`.password`,
+}
+auth.modal
+ .addEventListener('submit',event=>{
+	event.preventDefault()
+	sign_in_with_email(
+		auth.email.value,
+		auth.password.value,
+	)
+	auth.modal.reset()
+	auth.modal.classList.add('loading')
+})
+auth.modal
+ .addEventListener('input',event=>{
+	 auth.modal.classList.remove('invalid')
+ })
+auth.sign
+ .addEventListener('click', event=>{
+	event.preventDefault()
+	if(user){
+		sign_out()
+	} else{
+		auth.email.focus()
+	}
+ })
+auth.modal
+ .querySelector('.cancel')
+ .addEventListener('click', ()=>{
+	document.activeElement.blur()
+})
+"use strict"
+
+const DEBUG = true
+const $browser = $('#browser')
+async function init(){
+	initEditor()
+	editArticle()
+
+	const [ locationIDs, locations, categories, snippets ] =
+	await Promise.all([ 
+		db('locationIDs'), db('locations'), db('categories'), db('snippets')
+	])
+	
+	$browser.append(
+		...locationIDs
+			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
+				.map(id=>makeGroup('category', id, categories[id], categories[id].articleIDs
+					.map(id=>makePreview(id, snippets[id])
+	))))))
+
+	initTextareas()
+}
+init()
+
+window.addEventListener('touchmove',(event)=>event.preventDefault())
+$('#resize').addEventListener('pointerdown',({target})=>{
+	target.focus()
+	window.addEventListener('mousemove',resizeListener)
+	window.addEventListener('touchmove',resizeListener,{passive:true})
+
+	window.addEventListener('mouseup',removeResizeListener,{once:true})
+	window.addEventListener('touchend',removeResizeListener,{once:true})
+})
+function resizeListener(event){
+	$editor.style.width = (event.x||event.touches[0].pageX)/window.innerWidth*100+'vw'
+	event.preventDefault()
+}
+function removeResizeListener(){
+	window.removeEventListener('mousemove',resizeListener)
+	window.removeEventListener('touchmove',resizeListener)
+	document.activeElement.blur()
+}
+		</script>
+  </body>
+</html>

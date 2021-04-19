@@ -3,6 +3,11 @@ function makeGroup(
 	{ title, colorLightMode, colorDarkMode },
 	children,
 ){
+	const parent = {
+		'category': 'categories',
+		'location': 'locations',
+	}[type]
+
 	const $group = $template(type)
 
 	const $id = $('.id',$group)
@@ -10,7 +15,12 @@ function makeGroup(
 	$id.href = '#'+id
 	$id.innerHTML = '#'+id
 
-	$('.title',$group).value = title
+	$title = $('.title',$group)
+	$title.value = title
+	$title.addEventListener('change',({target:{value:title}})=>{
+		db(parent+'/'+id,{title})
+		postWebhook('#'+id,`➡️ renamed ${type} <${id}> to ${title}`)
+	})
 
 	if(type=='category'){
 		$('.color-light-mode',$group).value = colorLightMode
@@ -37,11 +47,10 @@ function makePreview(id,snippet){
 	$title.href = rot13(id)
 
 	const $featured = $('.featured',$preview)
-	$featured.addEventListener('change',()=>{
-		const featured = {featured:$featured.checked}
-		db('snippets/'+id,featured)
-		db('articles/'+id,featured)
-		postWebhook(rot13(id),($featured.checked ? '⭐ ' : '💔 ') + snippet.title,'')
+	$featured.addEventListener('change',({target:{checked:featured}})=>{
+		db('snippets/'+id,{featured})
+		db('articles/'+id,{featured})
+		postWebhook(rot13(id),(featured ? '⭐ ' : '💔 ') + snippet.title)
 	})
 
 	updatePreview($preview,snippet)
