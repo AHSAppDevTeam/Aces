@@ -27,10 +27,11 @@ async function editArticle() {
 }
 
 async function updateEditor(id) {
-	const [article, markdown, notif]
-		= await Promise.all([
-			db('articles/' + id), db('markdowns/' + id), db('notifications/' + id)
-		])
+	const [
+		article, markdown, notif
+	] = await Promise.all([
+		db('articles/' + id), db('markdowns/' + id), db('notifs/' + id)
+	])
 
 	if (!article) return false
 
@@ -53,7 +54,7 @@ async function updateEditor(id) {
 	$('.id', $editor).value = id
 	$('.date', $editor).value = new Date(article.timestamp * 1000).toISOString().slice(0, 10)
 
-	// if(article.notified) $('.notif',$editor).value = notif.notif
+	$('.blurb',$editor).value = notif.blurb
 
 	$$('textarea',$editor).forEach(updateTextarea)
 }

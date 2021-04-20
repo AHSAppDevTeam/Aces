@@ -39,9 +39,23 @@ function makeGroup(
 		postWebhook('#'+id,`➡️ renamed ${type} <${id}> to ${title}`)
 	})
 
+
 	if(type=='category'){
-		$('.color-light-mode',$group).value = colorLightMode
-		$('.color-dark-mode',$group).value = colorDarkMode
+
+		$colorLightMode = $('.color-light-mode',$group) 
+		$colorDarkMode = $('.color-dark-mode',$group)
+
+		$colorLightMode.value = colorLightMode
+		$colorDarkMode.value = colorDarkMode
+
+		$colorLightMode.addEventListener('change',({target:{value:colorLightMode}})=>{
+			db(parent+'/'+id,{colorLightMode})
+			postWebhook('#'+id,`🎨 ${title} ☀️ ${colorLightMode}`)
+		})
+		$colorDarkMode.addEventListener('change',({target:{value:colorDarkMode}})=>{
+			db(parent+'/'+id,{colorDarkMode})
+			postWebhook('#'+id,`🎨 ${title} 🌙 ${colorDarkMode}`)
+		})
 	}
 
 	$group.append(...children)

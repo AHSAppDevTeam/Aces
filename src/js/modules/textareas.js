@@ -12,6 +12,7 @@ async function initTextarea($textarea){
 			$textarea.blur()
 			return false
 		})
+	
 	updateTextarea()
 }
 async function updateTextarea($textarea){
