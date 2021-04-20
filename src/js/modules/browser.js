@@ -36,7 +36,7 @@ function makeGroup(
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
 		db(parent+'/'+id,{title})
-		postWebhook('#'+id,`➡️ renamed ${type} <${id}> to ${title}`)
+		postWebhook('#'+id,`➡️ ${bracket(id,type)} ➡️ ${title}`)
 	})
 
 
@@ -50,11 +50,11 @@ function makeGroup(
 
 		$colorLightMode.addEventListener('change',({target:{value:colorLightMode}})=>{
 			db(parent+'/'+id,{colorLightMode})
-			postWebhook('#'+id,`🎨 ${title} ☀️ ${colorLightMode}`)
+			postWebhook('#'+id,`🎨 ${bracket(id,type)} 🎨 ${colorLightMode} 🏙`)
 		})
 		$colorDarkMode.addEventListener('change',({target:{value:colorDarkMode}})=>{
 			db(parent+'/'+id,{colorDarkMode})
-			postWebhook('#'+id,`🎨 ${title} 🌙 ${colorDarkMode}`)
+			postWebhook('#'+id,`🎨 ${bracket(id,type)} 🎨 ${colorDarkMode} 🌃`)
 		})
 	}
 

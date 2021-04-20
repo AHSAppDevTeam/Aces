@@ -953,10 +953,10 @@ body,
 						<textarea class='title'></textarea>
 					</h3>
 					<label>
-						<input type='color' class='color-dark-mode'>
+						<input type='color' class='color-light-mode'>
 					</label>
 					<label>
-						<input type='color' class='color-light-mode'>
+						<input type='color' class='color-dark-mode'>
 					</label>
 				</header>
 			</section>
@@ -1073,7 +1073,7 @@ function makeGroup(
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
 		db(parent+'/'+id,{title})
-		postWebhook('#'+id,`➡️ renamed ${type} <${id}> to ${title}`)
+		postWebhook('#'+id,`➡️ renamed ${bracket(id,type)} to ${title}`)
 	})
 
 
@@ -1087,11 +1087,11 @@ function makeGroup(
 
 		$colorLightMode.addEventListener('change',({target:{value:colorLightMode}})=>{
 			db(parent+'/'+id,{colorLightMode})
-			postWebhook('#'+id,`🎨☀️ ${colorLightMode} ${title}`)
+			postWebhook('#'+id,`🎨 ${colorLightMode} 🏙 ${bracket(id,type)}`)
 		})
 		$colorDarkMode.addEventListener('change',({target:{value:colorDarkMode}})=>{
 			db(parent+'/'+id,{colorDarkMode})
-			postWebhook('#'+id,`🎨🌙 ${colorDarkMode} ${title}`)
+			postWebhook('#'+id,`🎨 ${colorDarkMode} 🌃 ${bracket(id,type)}`)
 		})
 	}
 
@@ -1519,6 +1519,13 @@ async function updateTextarea($textarea){
 }
 const get_timestamp = async () => Math.floor(Date.now()/1000)
 const rot13 = string => string.replace(/[a-z]/gi,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm.-'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-.'.indexOf(c)])
+const bracket = (id,type) => {
+	let brackets = type == 'location' ? '{}'
+	: type == 'category' ? '[]'
+	: type == 'article' ? '<>'
+	: '""'
+	return brackets[0] + id + brackets[1]	
+}
 async function postWebhook(id='',title='',description=''){
 	const payload = {
 		username: 'Aces',
