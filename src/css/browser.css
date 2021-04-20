@@ -2,23 +2,31 @@
 	flex: 1;
 	scroll-behavior: smooth;
 }
+#browser header {
+	display: flex;
+}
 #browser .title{
 	scroll-margin: 4rem;
 	font-size: 1rem;
 	text-decoration: none;
+	flex-grow: 1;
 }
 #browser .location > header .title {
 	font-size: 2rem;
-	text-align: center;
 }
 #browser .category {
 	margin-top: 1rem;
 }
 #browser .category > header {
 	grid-column: 1 / -1;
+	background: red;
 }
 #browser .category > header .title{
 	font-size: 1.5rem;
+	flex: 1 1 0;
+}
+#browser .category > header [type=color]{
+	flex: 0 1 0;
 }
 #browser > section > section {
 	display: grid;
@@ -35,23 +43,23 @@
 	flex-grow: 1;
 }
 
-.card[hidden] {
-	display: none;
-}
-.card > * {
+.preview > * {
 	opacity: 0.6;
 	overflow-wrap: break-word;
 }
-.card:hover > *,
-.card.open > * {
+.preview:hover > *,
+.preview.open > * {
 	opacity: 1;
 }
+
 .actions .featured {
 	display: none;
 }
-.actions label svg {
+.actions > .toggle {
 	width: 1em;
-	height: 1em;
+	height: 1em;	
+}
+.actions > .toggle > svg:last-child {
 	fill: var(--text);
 	stroke: var(--text);
 }

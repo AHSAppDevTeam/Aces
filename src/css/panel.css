@@ -1,5 +1,5 @@
 .panel {
-    padding-bottom: 1rem;
+	padding-bottom: 1rem;
 }
 .panel > header {
 	position: sticky;
@@ -32,17 +32,14 @@ body,
 	grid-gap: 1rem;
 	grid-template-rows: repeat(99,auto) 1fr;
 }
-#editor > *,
 .panel > header,
 .card,
 .media > *,
 .media .delete,
 .sign-in {
-	padding: 8pt;
 	border-radius: var(--radius);
-	background-color: var(--background);
+	padding: 8pt;
 }
-#editor > *,
 .panel > header,
 .card,
 .media > *,
@@ -53,18 +50,12 @@ body,
 	border: var(--border);
 	border-color: var(--border-color);
 }
-#editor > label:hover,
-.panel > :hover,
 .card:hover,
-.media > :hover,
-.media .delete:hover,
 #resize:hover{
 	border-color: #aaa;
 }
-#editor > label:focus-within,
-.panel > :focus,
 .card:focus,
-.media > :focus-within,
+.card:focus-within,
 .card.open,
 #resize:focus {
 	border-color: var(--text);

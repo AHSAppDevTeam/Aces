@@ -1,11 +1,3 @@
-#editor > label:hover > span{
-	color: #aaa;
-}
-
-#editor > label:focus-within > span{
-	color: var(--text);
-}
-
 #editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	width: 36vw;
@@ -14,31 +6,6 @@
 	margin: 0;
 	position: relative;
 	grid-column-end: span 2;
-}
-#editor > label:not(.pad) {
-	padding: 0;
-}
-#editor > label > span {
-	position: absolute;
-	top: -0.5rem;
-	left: 0.3rem;
-	text-transform: lowercase;
-	font-size: .8rem;
-	padding-inline: .2ch;
-	font-weight: 600;
-	color: var(--border-color);
-	content: attr(name);
-}
-#editor > label:not(.pad) > :last-child {
-	border: 0;
-	width: 100%;
-	height: 100%;
-	padding: 8pt;
-}
-#editor > label > * {
-	margin: 0;
-	border-radius: var(--radius);
-	background: var(--background);
 }
 #editor > label.half-width {
 	grid-column-end: span 1;
@@ -49,9 +16,6 @@
 #editor.render > label > span{
 	opacity: 0;
 }
-#editor ::placeholder {
-	color: #888;
-}
 #editor header > * {
 	flex: 1 0 0;
 	width: 0;
@@ -60,9 +24,6 @@ header > [type=button] {
 	cursor: pointer;
 	text-decoration: none;
 	color:var(--text);
-}
-#editor textarea{
-	resize: none;
 }
 
 #editor .id {

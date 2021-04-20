@@ -56,23 +56,31 @@ input[disabled] {
 	flex: 1;
 	scroll-behavior: smooth;
 }
+#browser header {
+	display: flex;
+}
 #browser .title{
 	scroll-margin: 4rem;
 	font-size: 1rem;
 	text-decoration: none;
+	flex-grow: 1;
 }
 #browser .location > header .title {
 	font-size: 2rem;
-	text-align: center;
 }
 #browser .category {
 	margin-top: 1rem;
 }
 #browser .category > header {
 	grid-column: 1 / -1;
+	background: red;
 }
 #browser .category > header .title{
 	font-size: 1.5rem;
+	flex: 1 1 0;
+}
+#broweser .category > header [type=color]{
+	flex: 0 1 0;
 }
 #browser > section > section {
 	display: grid;
@@ -89,37 +97,29 @@ input[disabled] {
 	flex-grow: 1;
 }
 
-.card[hidden] {
-	display: none;
-}
-.card > * {
+.preview > * {
 	opacity: 0.6;
 	overflow-wrap: break-word;
 }
-.card:hover > *,
-.card.open > * {
+.preview:hover > *,
+.preview.open > * {
 	opacity: 1;
 }
+
 .actions .featured {
 	display: none;
 }
-.actions label svg {
+.actions > .toggle {
 	width: 1em;
-	height: 1em;
+	height: 1em;	
+}
+.actions > .toggle > svg:last-child {
 	fill: var(--text);
 	stroke: var(--text);
 }
 .actions .featured:not(:checked) + svg{
 	fill: transparent;
 }
-#editor > label:hover > span{
-	color: #aaa;
-}
-
-#editor > label:focus-within > span{
-	color: var(--text);
-}
-
 #editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	width: 36vw;
@@ -128,31 +128,6 @@ input[disabled] {
 	margin: 0;
 	position: relative;
 	grid-column-end: span 2;
-}
-#editor > label:not(.pad) {
-	padding: 0;
-}
-#editor > label > span {
-	position: absolute;
-	top: -0.5rem;
-	left: 0.3rem;
-	text-transform: lowercase;
-	font-size: .8rem;
-	padding-inline: .2ch;
-	font-weight: 600;
-	color: var(--border-color);
-	content: attr(name);
-}
-#editor > label:not(.pad) > :last-child {
-	border: 0;
-	width: 100%;
-	height: 100%;
-	padding: 8pt;
-}
-#editor > label > * {
-	margin: 0;
-	border-radius: var(--radius);
-	background: var(--background);
 }
 #editor > label.half-width {
 	grid-column-end: span 1;
@@ -163,9 +138,6 @@ input[disabled] {
 #editor.render > label > span{
 	opacity: 0;
 }
-#editor ::placeholder {
-	color: #888;
-}
 #editor header > * {
 	flex: 1 0 0;
 	width: 0;
@@ -174,9 +146,6 @@ header > [type=button] {
 	cursor: pointer;
 	text-decoration: none;
 	color:var(--text);
-}
-#editor textarea{
-	resize: none;
 }
 
 #editor .id {
@@ -351,6 +320,48 @@ header > [type=button] {
 	min-width: 100%;
 	min-height: 100%;
 }
+label.card{
+	position: relative;
+	padding: 0;
+	background: transparent;
+}
+label.card:hover > span{
+	color: #aaa;
+}
+label.card:focus-within > span{
+	color: var(--text);
+}
+label.card > span {
+	position: absolute;
+	top: -0.5rem;
+	left: 0.3rem;
+	text-transform: lowercase;
+	font-size: .8rem;
+	padding-inline: .2ch;
+	font-weight: 600;
+	color: var(--border-color);
+	content: attr(name);
+}
+label.card.toggle{
+	padding: 8pt;
+}
+label.card:not(.toggle) > :last-child {
+	border: 0;
+	padding: 8pt;
+	width: 100%;
+	height: 100%;
+}
+label.card > * {
+	margin: 0;
+	border-radius: var(--radius);
+	background: var(--background);
+}
+label.card ::placeholder {
+	color: #888;
+}
+label.card textarea{
+	resize: none;
+}
 :root{
 	--radius: 4pt;
 	--border-color: #ddd;
@@ -443,7 +454,6 @@ button,
   
   h1 {
     font-size: 2em;
-    margin: 0.67em 0;
   }
   
   /* Grouping content
@@ -751,7 +761,7 @@ button,
   [hidden] {
     display: none;
   }.panel {
-    padding-bottom: 1rem;
+	padding-bottom: 1rem;
 }
 .panel > header {
 	position: sticky;
@@ -784,17 +794,14 @@ body,
 	grid-gap: 1rem;
 	grid-template-rows: repeat(99,auto) 1fr;
 }
-#editor > *,
 .panel > header,
 .card,
 .media > *,
 .media .delete,
 .sign-in {
-	padding: 8pt;
 	border-radius: var(--radius);
-	background-color: var(--background);
+	padding: 8pt;
 }
-#editor > *,
 .panel > header,
 .card,
 .media > *,
@@ -805,18 +812,12 @@ body,
 	border: var(--border);
 	border-color: var(--border-color);
 }
-#editor > label:hover,
-.panel > :hover,
 .card:hover,
-.media > :hover,
-.media .delete:hover,
 #resize:hover{
 	border-color: #aaa;
 }
-#editor > label:focus-within,
-.panel > :focus,
 .card:focus,
-.media > :focus-within,
+.card:focus-within,
 .card.open,
 #resize:focus {
 	border-color: var(--text);
@@ -842,31 +843,35 @@ body,
 					value='Publish'
 					accesskey='p'>
 			</header>
-			<label>
+			<label class='card'>
 				<span>title</span>
 				<textarea class='title' accesskey='t'></textarea>
 			</label>
-			<label>
+			<label class='card'>
 				<span>author</span>
 				<textarea class='author' accesskey='a'></textarea>
 			</label>
-			<label>
-				<span>date</span>
-				<input class='date' type='date'>
-			</label>
-			<label class='half-width pad'>
+			<label class='card half-width toggle'>
 				<input class='featured' type='checkbox'>
 				feature
 			</label>
-			<label class='half-width pad'>
+			<label class='card half-width'>
+				<span>publication date</span>
+				<input class='date' type='datetime-local'>
+			</label>
+			<label class='card half-width toggle'>
 				<input class='notified' type='checkbox'>
 				notify
 			</label>
-			<label>
-				<span>blurb</span>
+			<label class='card half-width'>
+				<span>notification date</span>
+				<input class='date' type='datetime-local'>
+			</label>
+			<label class='card'>
+				<span>blurb (notification body)</span>
 				<textarea class='blurb'></textarea>
 			</label>
-			<label class='pad'>
+			<label class='card'>
 				<span>images and videos</span>
 				<section class='media'>
 					<section class='new'>
@@ -878,8 +883,8 @@ body,
 					</section>
 				</section>
 			</label>
-			<label>
-				<span>article body</span>
+			<label class='card'>
+				<span>body (article text)</span>
 				<section class='markdown'>
 					<label>
 						<textarea class='input' accesskey='b' multi-line></textarea>
@@ -888,10 +893,6 @@ body,
 				</section>
 			</label>
 			<section class='body'></section>
-			<label>
-				<span>ID (click to copy)</span>
-				<input class='id' readonly>
-			</label>
 		</main>
 		<div id='resize' tabindex='0'></div>
 		<aside id='browser' class='panel'>
@@ -938,24 +939,28 @@ body,
 		<template id='template-location'>
 			<section class='location'>
 				<header>
-					<h2>
-						<a class='id'></a>
-						<textarea class='title'></textarea>
-					</h2>
+					<a class='id' hidden></a>
+					<label class='card'>
+						<span>title</span>
+						<textarea class='title input'></textarea>
+					</label>
 				</header>
 			</section>
 		</template>
 		<template id='template-category'>
 			<section class='category'>
 				<header>
-					<h3>
-						<a class='id'></a>
-						<textarea class='title'></textarea>
-					</h3>
-					<label>
+					<a class='id' hidden></a>
+					<label class='card'>
+						<span>title</span>
+						<textarea class='title input'></textarea>
+					</label>
+					<label class='card'>
+						<span>light theme</span>
 						<input type='color' class='color-light-mode'>
 					</label>
-					<label>
+					<label class='card'>
+						<span>dark theme</span>
 						<input type='color' class='color-dark-mode'>
 					</label>
 				</header>
@@ -965,7 +970,7 @@ body,
 			<article class='preview card not-published'>
 				<h4><a class='title'></a></h4>
 				<section class='actions'>
-					<label title='feature/unfeature (f)'>
+					<label title='feature/unfeature (f)' class='card toggle'>
 						<input class='featured' type='checkbox'>
 						<svg viewBox='-1 -1 26 26' stroke-width='2.2' width='24' height='24'>
 							<path d='M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z'/>
@@ -1073,7 +1078,7 @@ function makeGroup(
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
 		db(parent+'/'+id,{title})
-		postWebhook('#'+id,`➡️ renamed ${bracket(id,type)} to ${title}`)
+		postWebhook('#'+id,`➡️ ${bracket(id,type)} ➡️ ${title}`)
 	})
 
 
@@ -1087,11 +1092,11 @@ function makeGroup(
 
 		$colorLightMode.addEventListener('change',({target:{value:colorLightMode}})=>{
 			db(parent+'/'+id,{colorLightMode})
-			postWebhook('#'+id,`🎨 ${colorLightMode} 🏙 ${bracket(id,type)}`)
+			postWebhook('#'+id,`🎨 ${bracket(id,type)} 🎨 ${colorLightMode} 🏙`)
 		})
 		$colorDarkMode.addEventListener('change',({target:{value:colorDarkMode}})=>{
 			db(parent+'/'+id,{colorDarkMode})
-			postWebhook('#'+id,`🎨 ${colorDarkMode} 🌃 ${bracket(id,type)}`)
+			postWebhook('#'+id,`🎨 ${bracket(id,type)} 🎨 ${colorDarkMode} 🌃`)
 		})
 	}
 
@@ -1186,7 +1191,6 @@ async function updateEditor(id) {
 		}
 	}
 	$('.markdown textarea', $editor).value = markdown
-	$('.id', $editor).value = id
 	$('.date', $editor).value = new Date(article.timestamp * 1000).toISOString().slice(0, 10)
 
 	$('.blurb',$editor).value = notif.blurb
@@ -1497,7 +1501,27 @@ async function db(path,request){
 async function googleapis(path,request){
 	return await post(path+'?key='+KEY,request)
 }
-async function initTextarea($textarea){
+async function initResize(){
+	window.addEventListener('touchmove',(event)=>event.preventDefault())
+	$('#resize').addEventListener('pointerdown',({target})=>{
+		target.focus()
+		window.addEventListener('mousemove',resizeListener)
+		window.addEventListener('touchmove',resizeListener,{passive:true})
+
+		window.addEventListener('mouseup',removeResizeListener,{once:true})
+		window.addEventListener('touchend',removeResizeListener,{once:true})
+	})
+}
+async function resizeListener(event){
+	$editor.style.width = (event.x||event.touches[0].pageX)/window.innerWidth*100+'vw'
+	event.preventDefault()
+}
+async function removeResizeListener(){
+	window.removeEventListener('mousemove',resizeListener)
+	window.removeEventListener('touchmove',resizeListener)
+	$$('textarea').forEach(updateTextarea)
+	document.activeElement.blur()
+}async function initTextarea($textarea){
 	$textarea.setAttribute('rows',1)
 	$textarea.addEventListener('input',()=>{
 		$textarea.style.height = 'auto'
@@ -1592,24 +1616,7 @@ const DEBUG = true
 
 initEditor()
 initBrowser()
-window.addEventListener('touchmove',(event)=>event.preventDefault())
-$('#resize').addEventListener('pointerdown',({target})=>{
-	target.focus()
-	window.addEventListener('mousemove',resizeListener)
-	window.addEventListener('touchmove',resizeListener,{passive:true})
-
-	window.addEventListener('mouseup',removeResizeListener,{once:true})
-	window.addEventListener('touchend',removeResizeListener,{once:true})
-})
-function resizeListener(event){
-	$editor.style.width = (event.x||event.touches[0].pageX)/window.innerWidth*100+'vw'
-	event.preventDefault()
-}
-function removeResizeListener(){
-	window.removeEventListener('mousemove',resizeListener)
-	window.removeEventListener('touchmove',resizeListener)
-	document.activeElement.blur()
-}
+initResize()
 		</script>
   </body>
 </html>

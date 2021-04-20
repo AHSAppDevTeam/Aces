@@ -51,7 +51,6 @@ async function updateEditor(id) {
 		}
 	}
 	$('.markdown textarea', $editor).value = markdown
-	$('.id', $editor).value = id
 	$('.date', $editor).value = new Date(article.timestamp * 1000).toISOString().slice(0, 10)
 
 	$('.blurb',$editor).value = notif.blurb

@@ -1,0 +1,42 @@
+label.card{
+	position: relative;
+	padding: 0;
+	background: transparent;
+}
+label.card:hover > span{
+	color: #aaa;
+}
+label.card:focus-within > span{
+	color: var(--text);
+}
+label.card > span {
+	position: absolute;
+	top: -0.5rem;
+	left: 0.3rem;
+	text-transform: lowercase;
+	font-size: .8rem;
+	padding-inline: .2ch;
+	font-weight: 600;
+	color: var(--border-color);
+	content: attr(name);
+}
+label.card.toggle{
+	padding: 8pt;
+}
+label.card:not(.toggle) > :last-child {
+	border: 0;
+	padding: 8pt;
+	width: 100%;
+	height: 100%;
+}
+label.card > * {
+	margin: 0;
+	border-radius: var(--radius);
+	background: var(--background);
+}
+label.card ::placeholder {
+	color: #888;
+}
+label.card textarea{
+	resize: none;
+}

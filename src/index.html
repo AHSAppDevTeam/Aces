@@ -32,31 +32,35 @@
 					value='Publish'
 					accesskey='p'>
 			</header>
-			<label>
+			<label class='card'>
 				<span>title</span>
 				<textarea class='title' accesskey='t'></textarea>
 			</label>
-			<label>
+			<label class='card'>
 				<span>author</span>
 				<textarea class='author' accesskey='a'></textarea>
 			</label>
-			<label>
-				<span>date</span>
-				<input class='date' type='date'>
-			</label>
-			<label class='half-width pad'>
+			<label class='card half-width toggle'>
 				<input class='featured' type='checkbox'>
 				feature
 			</label>
-			<label class='half-width pad'>
+			<label class='card half-width'>
+				<span>publication date</span>
+				<input class='date' type='datetime-local'>
+			</label>
+			<label class='card half-width toggle'>
 				<input class='notified' type='checkbox'>
 				notify
 			</label>
-			<label>
-				<span>blurb</span>
+			<label class='card half-width'>
+				<span>notification date</span>
+				<input class='date' type='datetime-local'>
+			</label>
+			<label class='card'>
+				<span>blurb (notification body)</span>
 				<textarea class='blurb'></textarea>
 			</label>
-			<label class='pad'>
+			<label class='card'>
 				<span>images and videos</span>
 				<section class='media'>
 					<section class='new'>
@@ -68,8 +72,8 @@
 					</section>
 				</section>
 			</label>
-			<label>
-				<span>article body</span>
+			<label class='card'>
+				<span>body (article text)</span>
 				<section class='markdown'>
 					<label>
 						<textarea class='input' accesskey='b' multi-line></textarea>
@@ -78,10 +82,6 @@
 				</section>
 			</label>
 			<section class='body'></section>
-			<label>
-				<span>ID (click to copy)</span>
-				<input class='id' readonly>
-			</label>
 		</main>
 		<div id='resize' tabindex='0'></div>
 		<aside id='browser' class='panel'>
@@ -128,24 +128,28 @@
 		<template id='template-location'>
 			<section class='location'>
 				<header>
-					<h2>
-						<a class='id'></a>
-						<textarea class='title'></textarea>
-					</h2>
+					<a class='id' hidden></a>
+					<label class='card'>
+						<span>title</span>
+						<textarea class='title input'></textarea>
+					</label>
 				</header>
 			</section>
 		</template>
 		<template id='template-category'>
 			<section class='category'>
 				<header>
-					<h3>
-						<a class='id'></a>
-						<textarea class='title'></textarea>
-					</h3>
-					<label>
+					<a class='id' hidden></a>
+					<label class='card'>
+						<span>title</span>
+						<textarea class='title input'></textarea>
+					</label>
+					<label class='card'>
+						<span>light theme</span>
 						<input type='color' class='color-light-mode'>
 					</label>
-					<label>
+					<label class='card'>
+						<span>dark theme</span>
 						<input type='color' class='color-dark-mode'>
 					</label>
 				</header>
@@ -155,7 +159,7 @@
 			<article class='preview card not-published'>
 				<h4><a class='title'></a></h4>
 				<section class='actions'>
-					<label title='feature/unfeature (f)'>
+					<label title='feature/unfeature (f)' class='card toggle'>
 						<input class='featured' type='checkbox'>
 						<svg viewBox='-1 -1 26 26' stroke-width='2.2' width='24' height='24'>
 							<path d='M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z'/>
