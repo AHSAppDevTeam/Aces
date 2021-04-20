@@ -4,6 +4,8 @@ async function initEditor() {
 
 	initHighlighter($('.markdown', $editor))
 
+	$$('textarea',editor).forEach(initTextarea)
+
 	$('.markdown', $editor).addEventListener('input', ({ target }) => {
 		$('.body', $editor).innerHTML = md(target.value)
 	})
@@ -13,6 +15,8 @@ async function initEditor() {
 		target.value = previewing ? 'Edit' : 'Preview'
 		$editor.classList.toggle('render', previewing)
 	})
+
+	editArticle()
 }
 async function editArticle() {
 	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
@@ -50,4 +54,6 @@ async function updateEditor(id) {
 	$('.date', $editor).value = new Date(article.timestamp * 1000).toISOString().slice(0, 10)
 
 	// if(article.notified) $('.notif',$editor).value = notif.notif
+
+	$$('textarea',$editor).forEach(updateTextarea)
 }

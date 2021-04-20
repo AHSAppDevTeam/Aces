@@ -1035,6 +1035,23 @@ async function update_auth(signed_in){
 	= $('.publish',$editor).disabled
 	= !signed_in
 }
+async function initBrowser(){
+	const $browser = $('#browser')
+
+	const [ locationIDs, locations, categories, snippets ] =
+	await Promise.all([ 
+		db('locationIDs'), db('locations'), db('categories'), db('snippets')
+	])
+	
+	$browser.append(
+		...locationIDs
+			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
+				.map(id=>makeGroup('category', id, categories[id], categories[id].articleIDs
+					.map(id=>makePreview(id, snippets[id])
+	))))))
+
+	$$('textarea',$browser).forEach(initTextarea)
+}
 function makeGroup(
 	type, id,
 	{ title, colorLightMode, colorDarkMode },
@@ -1108,6 +1125,8 @@ async function initEditor() {
 
 	initHighlighter($('.markdown', $editor))
 
+	$$('textarea',editor).forEach(initTextarea)
+
 	$('.markdown', $editor).addEventListener('input', ({ target }) => {
 		$('.body', $editor).innerHTML = md(target.value)
 	})
@@ -1117,6 +1136,8 @@ async function initEditor() {
 		target.value = previewing ? 'Edit' : 'Preview'
 		$editor.classList.toggle('render', previewing)
 	})
+
+	editArticle()
 }
 async function editArticle() {
 	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
@@ -1154,6 +1175,8 @@ async function updateEditor(id) {
 	$('.date', $editor).value = new Date(article.timestamp * 1000).toISOString().slice(0, 10)
 
 	// if(article.notified) $('.notif',$editor).value = notif.notif
+
+	$$('textarea',$editor).forEach(updateTextarea)
 }
 async function initHighlighter($section){
 	const input = $('.input',$section)
@@ -1459,26 +1482,26 @@ async function db(path,request){
 async function googleapis(path,request){
 	return await post(path+'?key='+KEY,request)
 }
-async function initTextareas(){
-	for(const $textarea of $$('textarea')){
-		
-		$textarea.setAttribute('rows',1)
-		$textarea.addEventListener('input',()=>{
-			$textarea.style.height = 'auto'
-			$textarea.style.height = $textarea.scrollHeight+'px'
-		})
+async function initTextarea($textarea){
+	$textarea.setAttribute('rows',1)
+	$textarea.addEventListener('input',()=>{
+		$textarea.style.height = 'auto'
+		$textarea.style.height = $textarea.scrollHeight+'px'
+	})
 
-		if(!$textarea.hasAttribute('multi-line'))
-			$textarea.addEventListener('keydown',(event)=>{
-				if(event.key!='Enter') return
-				event.preventDefault()
-				$textarea.blur()
-				return false
-			})
-		
-		$textarea.dispatchEvent(new Event('input'))	
-	}
-}const get_timestamp = async () => Math.floor(Date.now()/1000)
+	if(!$textarea.hasAttribute('multi-line'))
+		$textarea.addEventListener('keydown',(event)=>{
+			if(event.key!='Enter') return
+			event.preventDefault()
+			$textarea.blur()
+			return false
+		})
+	updateTextarea()
+}
+async function updateTextarea($textarea){
+	$textarea.dispatchEvent(new Event('input'))
+}
+const get_timestamp = async () => Math.floor(Date.now()/1000)
 const rot13 = string => string.replace(/[a-z]/gi,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm.-'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-.'.indexOf(c)])
 async function postWebhook(id='',title='',description=''){
 	const payload = {
@@ -1543,27 +1566,9 @@ auth.modal
 "use strict"
 
 const DEBUG = true
-const $browser = $('#browser')
-async function init(){
-	initEditor()
-	editArticle()
 
-	const [ locationIDs, locations, categories, snippets ] =
-	await Promise.all([ 
-		db('locationIDs'), db('locations'), db('categories'), db('snippets')
-	])
-	
-	$browser.append(
-		...locationIDs
-			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
-				.map(id=>makeGroup('category', id, categories[id], categories[id].articleIDs
-					.map(id=>makePreview(id, snippets[id])
-	))))))
-
-	initTextareas()
-}
-init()
-
+initEditor()
+initBrowser()
 window.addEventListener('touchmove',(event)=>event.preventDefault())
 $('#resize').addEventListener('pointerdown',({target})=>{
 	target.focus()
