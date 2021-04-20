@@ -18,7 +18,10 @@ label.card > span {
 	padding-inline: .2ch;
 	font-weight: 600;
 	color: var(--border-color);
-	content: attr(name);
+	max-width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 label.card.toggle{
 	padding: 8pt;

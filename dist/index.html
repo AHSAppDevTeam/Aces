@@ -56,31 +56,32 @@ input[disabled] {
 	flex: 1;
 	scroll-behavior: smooth;
 }
-#browser header {
-	display: flex;
-}
 #browser .title{
 	scroll-margin: 4rem;
-	font-size: 1rem;
 	text-decoration: none;
 	flex-grow: 1;
 }
-#browser .location > header .title {
+.group header {
+	display: flex;
+	gap: 8pt;
+}
+.group header > label:first-child{
+	flex-grow: 1;
+}
+.group.location > header .title {
 	font-size: 2rem;
 }
-#browser .category {
+.group.category {
 	margin-top: 1rem;
 }
-#browser .category > header {
+.group.category > header {
 	grid-column: 1 / -1;
-	background: red;
 }
-#browser .category > header .title{
+.group.category > header .title{
 	font-size: 1.5rem;
-	flex: 1 1 0;
 }
-#broweser .category > header [type=color]{
-	flex: 0 1 0;
+.group.category > header .color{
+	flex-basis: 6rem;
 }
 #browser > section > section {
 	display: grid;
@@ -340,7 +341,10 @@ label.card > span {
 	padding-inline: .2ch;
 	font-weight: 600;
 	color: var(--border-color);
-	content: attr(name);
+	max-width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 label.card.toggle{
 	padding: 8pt;
@@ -937,29 +941,29 @@ body,
 
 		<!-- TEMPLATES -->
 		<template id='template-location'>
-			<section class='location'>
+			<section class='group location'>
 				<header>
-					<a class='id' hidden></a>
 					<label class='card'>
-						<span>title</span>
+						<span>location title</span>
 						<textarea class='title input'></textarea>
 					</label>
+					<a class='id' hidden></a>
 				</header>
 			</section>
 		</template>
 		<template id='template-category'>
-			<section class='category'>
+			<section class='group category'>
 				<header>
-					<a class='id' hidden></a>
 					<label class='card'>
-						<span>title</span>
+						<span>category title</span>
 						<textarea class='title input'></textarea>
 					</label>
-					<label class='card'>
+					<a class='id' hidden></a>
+					<label class='card color'>
 						<span>light theme</span>
 						<input type='color' class='color-light-mode'>
 					</label>
-					<label class='card'>
+					<label class='card color'>
 						<span>dark theme</span>
 						<input type='color' class='color-dark-mode'>
 					</label>
@@ -1078,7 +1082,7 @@ function makeGroup(
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
 		db(parent+'/'+id,{title})
-		postWebhook('#'+id,`➡️ ${bracket(id,type)} ➡️ ${title}`)
+		postWebhook('#'+id,`➡️ \`${bracket(id,type)}\` ${title}`)
 	})
 
 
@@ -1092,11 +1096,11 @@ function makeGroup(
 
 		$colorLightMode.addEventListener('change',({target:{value:colorLightMode}})=>{
 			db(parent+'/'+id,{colorLightMode})
-			postWebhook('#'+id,`🎨 ${bracket(id,type)} 🎨 ${colorLightMode} 🏙`)
+			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${colorLightMode} 🏙`)
 		})
 		$colorDarkMode.addEventListener('change',({target:{value:colorDarkMode}})=>{
 			db(parent+'/'+id,{colorDarkMode})
-			postWebhook('#'+id,`🎨 ${bracket(id,type)} 🎨 ${colorDarkMode} 🌃`)
+			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${colorDarkMode} 🌃`)
 		})
 	}
 

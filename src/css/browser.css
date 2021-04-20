@@ -2,31 +2,32 @@
 	flex: 1;
 	scroll-behavior: smooth;
 }
-#browser header {
-	display: flex;
-}
 #browser .title{
 	scroll-margin: 4rem;
-	font-size: 1rem;
 	text-decoration: none;
 	flex-grow: 1;
 }
-#browser .location > header .title {
+.group header {
+	display: flex;
+	gap: 8pt;
+}
+.group header > label:first-child{
+	flex-grow: 1;
+}
+.group.location > header .title {
 	font-size: 2rem;
 }
-#browser .category {
+.group.category {
 	margin-top: 1rem;
 }
-#browser .category > header {
+.group.category > header {
 	grid-column: 1 / -1;
-	background: red;
 }
-#browser .category > header .title{
+.group.category > header .title{
 	font-size: 1.5rem;
-	flex: 1 1 0;
 }
-#browser .category > header [type=color]{
-	flex: 0 1 0;
+.group.category > header .color{
+	flex-basis: 6rem;
 }
 #browser > section > section {
 	display: grid;
