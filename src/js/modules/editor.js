@@ -51,9 +51,11 @@ async function updateEditor(id) {
 		}
 	}
 	$('.markdown textarea', $editor).value = markdown
-	$('.date', $editor).value = new Date(article.timestamp * 1000).toISOString().slice(0, 10)
-
-	$('.blurb',$editor).value = notif.blurb
+	$('.date', $editor).value = timestamp_to_datetime(article.timestamp)
+	if(notif){
+		$('.notif-date',$editor).value = timestamp_to_datetime(notif.notifTimestamp)
+		$('.blurb',$editor).value = notif.blurb
+	}
 
 	$$('textarea',$editor).forEach(updateTextarea)
 }

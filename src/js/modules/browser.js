@@ -17,7 +17,7 @@ async function initBrowser(){
 }
 function makeGroup(
 	type, id,
-	{ title, colorLightMode, colorDarkMode },
+	{ title, color },
 	children,
 ){
 	const parent = {
@@ -41,20 +41,11 @@ function makeGroup(
 
 
 	if(type=='category'){
-
-		$colorLightMode = $('.color-light-mode',$group) 
-		$colorDarkMode = $('.color-dark-mode',$group)
-
-		$colorLightMode.value = colorLightMode
-		$colorDarkMode.value = colorDarkMode
-
-		$colorLightMode.addEventListener('change',({target:{value:colorLightMode}})=>{
-			db(parent+'/'+id,{colorLightMode})
-			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${colorLightMode} 🏙`)
-		})
-		$colorDarkMode.addEventListener('change',({target:{value:colorDarkMode}})=>{
-			db(parent+'/'+id,{colorDarkMode})
-			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${colorDarkMode} 🌃`)
+		$color = $('.color',$group) 
+		$color.value = color
+		$color.addEventListener('change',({target:{value:color}})=>{
+			db(parent+'/'+id,{color})
+			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${color}`)
 		})
 	}
 

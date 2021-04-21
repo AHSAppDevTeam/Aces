@@ -40,21 +40,21 @@
 				<span>author</span>
 				<textarea class='author' accesskey='a'></textarea>
 			</label>
-			<label class='card half-width toggle'>
+			<label class='card half-width'><div>
 				<input class='featured' type='checkbox'>
 				feature
-			</label>
+			</div></label>
 			<label class='card half-width'>
 				<span>publication date</span>
 				<input class='date' type='datetime-local'>
 			</label>
-			<label class='card half-width toggle'>
+			<label class='card half-width'><div>
 				<input class='notified' type='checkbox'>
 				notify
-			</label>
+			</div></label>
 			<label class='card half-width'>
 				<span>notification date</span>
-				<input class='date' type='datetime-local'>
+				<input class='notif-date' type='datetime-local'>
 			</label>
 			<label class='card'>
 				<span>blurb (notification body)</span>
@@ -144,13 +144,9 @@
 						<textarea class='title input'></textarea>
 					</label>
 					<a class='id' hidden></a>
-					<label class='card color'>
-						<span>light theme</span>
-						<input type='color' class='color-light-mode'>
-					</label>
-					<label class='card color'>
-						<span>dark theme</span>
-						<input type='color' class='color-dark-mode'>
+					<label class='card'>
+						<span>color</span>
+						<input type='color' class='color'>
 					</label>
 				</header>
 			</section>

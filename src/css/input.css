@@ -1,7 +1,6 @@
 label.card{
 	position: relative;
 	padding: 0;
-	background: transparent;
 }
 label.card:hover > span{
 	color: #aaa;
@@ -17,25 +16,23 @@ label.card > span {
 	font-size: .8rem;
 	padding-inline: .2ch;
 	font-weight: 600;
+	background: var(--background);
 	color: var(--border-color);
 	max-width: 100%;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
-label.card.toggle{
-	padding: 8pt;
-}
-label.card:not(.toggle) > :last-child {
+label.card > :last-child {
 	border: 0;
 	padding: 8pt;
 	width: 100%;
 	height: 100%;
+	background: transparent;
 }
 label.card > * {
 	margin: 0;
 	border-radius: var(--radius);
-	background: var(--background);
 }
 label.card ::placeholder {
 	color: #888;

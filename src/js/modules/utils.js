@@ -7,3 +7,4 @@ const bracket = (id,type) => {
 	: '""'
 	return brackets[0] + id + brackets[1]	
 }
+const timestamp_to_datetime = timestamp => new Date(timestamp*1000).toISOString().slice(0,16)

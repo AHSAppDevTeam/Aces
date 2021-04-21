@@ -65,8 +65,11 @@ input[disabled] {
 	display: flex;
 	gap: 8pt;
 }
-.group header > label:first-child{
+.group header > label:first-child {
 	flex-grow: 1;
+}
+.group > header > label:last-child {
+	flex-basis: 4rem;
 }
 .group.location > header .title {
 	font-size: 2rem;
@@ -79,9 +82,6 @@ input[disabled] {
 }
 .group.category > header .title{
 	font-size: 1.5rem;
-}
-.group.category > header .color{
-	flex-basis: 6rem;
 }
 #browser > section > section {
 	display: grid;
@@ -99,12 +99,7 @@ input[disabled] {
 }
 
 .preview > * {
-	opacity: 0.6;
 	overflow-wrap: break-word;
-}
-.preview:hover > *,
-.preview.open > * {
-	opacity: 1;
 }
 
 .actions .featured {
@@ -324,7 +319,6 @@ header > [type=button] {
 label.card{
 	position: relative;
 	padding: 0;
-	background: transparent;
 }
 label.card:hover > span{
 	color: #aaa;
@@ -340,25 +334,23 @@ label.card > span {
 	font-size: .8rem;
 	padding-inline: .2ch;
 	font-weight: 600;
+	background: var(--background);
 	color: var(--border-color);
 	max-width: 100%;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
-label.card.toggle{
-	padding: 8pt;
-}
-label.card:not(.toggle) > :last-child {
+label.card > :last-child {
 	border: 0;
 	padding: 8pt;
 	width: 100%;
 	height: 100%;
+	background: transparent;
 }
 label.card > * {
 	margin: 0;
 	border-radius: var(--radius);
-	background: var(--background);
 }
 label.card ::placeholder {
 	color: #888;
@@ -855,21 +847,21 @@ body,
 				<span>author</span>
 				<textarea class='author' accesskey='a'></textarea>
 			</label>
-			<label class='card half-width toggle'>
+			<label class='card half-width'><div>
 				<input class='featured' type='checkbox'>
 				feature
-			</label>
+			</div></label>
 			<label class='card half-width'>
 				<span>publication date</span>
 				<input class='date' type='datetime-local'>
 			</label>
-			<label class='card half-width toggle'>
+			<label class='card half-width'><div>
 				<input class='notified' type='checkbox'>
 				notify
-			</label>
+			</div></label>
 			<label class='card half-width'>
 				<span>notification date</span>
-				<input class='date' type='datetime-local'>
+				<input class='notif-date' type='datetime-local'>
 			</label>
 			<label class='card'>
 				<span>blurb (notification body)</span>
@@ -959,13 +951,9 @@ body,
 						<textarea class='title input'></textarea>
 					</label>
 					<a class='id' hidden></a>
-					<label class='card color'>
-						<span>light theme</span>
-						<input type='color' class='color-light-mode'>
-					</label>
-					<label class='card color'>
-						<span>dark theme</span>
-						<input type='color' class='color-dark-mode'>
+					<label class='card'>
+						<span>color</span>
+						<input type='color' class='color'>
 					</label>
 				</header>
 			</section>
@@ -1063,7 +1051,7 @@ async function initBrowser(){
 }
 function makeGroup(
 	type, id,
-	{ title, colorLightMode, colorDarkMode },
+	{ title, color },
 	children,
 ){
 	const parent = {
@@ -1087,20 +1075,11 @@ function makeGroup(
 
 
 	if(type=='category'){
-
-		$colorLightMode = $('.color-light-mode',$group) 
-		$colorDarkMode = $('.color-dark-mode',$group)
-
-		$colorLightMode.value = colorLightMode
-		$colorDarkMode.value = colorDarkMode
-
-		$colorLightMode.addEventListener('change',({target:{value:colorLightMode}})=>{
-			db(parent+'/'+id,{colorLightMode})
-			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${colorLightMode} 🏙`)
-		})
-		$colorDarkMode.addEventListener('change',({target:{value:colorDarkMode}})=>{
-			db(parent+'/'+id,{colorDarkMode})
-			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${colorDarkMode} 🌃`)
+		$color = $('.color',$group) 
+		$color.value = color
+		$color.addEventListener('change',({target:{value:color}})=>{
+			db(parent+'/'+id,{color})
+			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${color}`)
 		})
 	}
 
@@ -1195,9 +1174,11 @@ async function updateEditor(id) {
 		}
 	}
 	$('.markdown textarea', $editor).value = markdown
-	$('.date', $editor).value = new Date(article.timestamp * 1000).toISOString().slice(0, 10)
-
-	$('.blurb',$editor).value = notif.blurb
+	$('.date', $editor).value = timestamp_to_datetime(article.timestamp)
+	if(notif){
+		$('.notif-date',$editor).value = timestamp_to_datetime(notif.notif)
+		$('.blurb',$editor).value = notif.blurb
+	}
 
 	$$('textarea',$editor).forEach(updateTextarea)
 }
@@ -1554,6 +1535,7 @@ const bracket = (id,type) => {
 	: '""'
 	return brackets[0] + id + brackets[1]	
 }
+const timestamp_to_datetime = timestamp => new Date(timestamp*1000).toISOString().slice(0,16)
 async function postWebhook(id='',title='',description=''){
 	const payload = {
 		username: 'Aces',
