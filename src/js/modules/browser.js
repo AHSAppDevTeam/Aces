@@ -14,6 +14,7 @@ async function initBrowser(){
 	))))))
 
 	$$('textarea',$browser).forEach(initTextarea)
+	
 	$('.search',$browser).addEventListener('input',({target:{value:query}})=>{
 		$$('.preview>h4>.title',$browser).forEach($title=>{
 			const $preview = $title.parentElement.parentElement

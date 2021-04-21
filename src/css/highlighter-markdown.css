@@ -1,24 +1,24 @@
 .markdown {
-    position: relative;
+	position: relative;
 }
 .markdown .bold {
-    font-weight: bold;
+	font-weight: bold;
 }
 .markdown .italic {
-    font-style: italic;
+	font-style: italic;
 }
 .markdown .strikethrough {
-    text-decoration: line-through;
+	text-decoration: line-through;
 }
 .markdown .link {
-    color: blue;
+	color: blue;
 }
 .markdown .list {
-    background: linear-gradient(90deg, #ff08,transparent 2ch);
+	background: linear-gradient(90deg, #ff08,transparent 2ch);
 }
 .markdown .heading {
-    font-weight: bold;
-    display: inline-block;
-    width: 100%;
-    background: #8882;
+	font-weight: bold;
+	display: inline-block;
+	width: 100%;
+	background: #8882;
 }
