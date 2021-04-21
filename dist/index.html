@@ -274,7 +274,6 @@ header > [type=button] {
  */
 .markdown code, .markdown textarea {
 	font-size: 1rem;
-	line-height: 1.35;
 	font-family: inherit;
 }
 
@@ -897,11 +896,6 @@ body,
 					title='search articles (alt+/)'
 					placeholder='Search titles'
 					accesskey='/'>
-				<input type='button'
-					class='refresh'
-					title='refresh articles (alt+u)'
-					value='↻'
-					accesskey='u'>
 				<a type='button'
 					class='sources'
 					title='view resources'
@@ -1047,6 +1041,12 @@ async function initBrowser(){
 	))))))
 
 	$$('textarea',$browser).forEach(initTextarea)
+	$('.search',$browser).addEventListener('input',({target:{value:query}})=>{
+		$$('.preview>h4>.title',$browser).forEach($title=>{
+			const $preview = $title.parentElement.parentElement
+			$preview.hidden = $title.textContent.includes(query)
+		})
+	})
 }
 function makeGroup(
 	type, id,

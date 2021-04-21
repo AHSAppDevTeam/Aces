@@ -14,6 +14,12 @@ async function initBrowser(){
 	))))))
 
 	$$('textarea',$browser).forEach(initTextarea)
+	$('.search',$browser).addEventListener('input',({target:{value:query}})=>{
+		$$('.preview>h4>.title',$browser).forEach($title=>{
+			const $preview = $title.parentElement.parentElement
+			$preview.hidden = $title.textContent.includes(query)
+		})
+	})
 }
 function makeGroup(
 	type, id,
