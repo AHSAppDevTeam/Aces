@@ -853,7 +853,7 @@ body,
 			</div></label>
 			<label class='card half-width'>
 				<span>publication date</span>
-				<input class='date' type='datetime-local'>
+				<input class='timestamp' type='datetime-local'>
 			</label>
 			<label class='card half-width'><div>
 				<input class='notified' type='checkbox'>
@@ -861,7 +861,7 @@ body,
 			</div></label>
 			<label class='card half-width'>
 				<span>notification date</span>
-				<input class='notif-date' type='datetime-local'>
+				<input class='notifTimestamp' type='datetime-local'>
 			</label>
 			<label class='card'>
 				<span>blurb (notification body)</span>
@@ -1158,28 +1158,27 @@ async function updateEditor(id) {
 
 	if (!article) return false
 
-	document.title = article.title
-	for (const property in article) {
+	const story = Object.assign(article,notif,{markdown})
+	document.title = story.title
+	for (const property in story) {
 		const $element = $('.' + property, $editor)
 		if (!$element) continue
-
+		const value = story[property]
 		switch ($element.type) {
 			case 'checkbox':
 			case 'radio':
-				$element.checked = article[property]
+				$element.checked = value
+				break
+			case 'datetime-local':
+				$element.value = timestamp_to_date(value)
 				break
 			default:
-				$element.value = article[property]
+				$element.value = value
 				break
 		}
 	}
-	$('.markdown textarea', $editor).value = markdown
-	$('.date', $editor).value = timestamp_to_datetime(article.timestamp)
-	if(notif){
-		$('.notif-date',$editor).value = timestamp_to_datetime(notif.notif)
-		$('.blurb',$editor).value = notif.blurb
-	}
 
+	$('.markdown textarea', $editor).value = markdown
 	$$('textarea',$editor).forEach(updateTextarea)
 }
 async function initHighlighter($section){
@@ -1535,7 +1534,9 @@ const bracket = (id,type) => {
 	: '""'
 	return brackets[0] + id + brackets[1]	
 }
-const timestamp_to_datetime = timestamp => new Date(timestamp*1000).toISOString().slice(0,16)
+const offset = () => new Date().getTimezoneOffset()*60
+const timestamp_to_date = timestamp => new Date((timestamp + offset())*1000).toISOString().slice(0,16)
+const date_to_timestamp = date => Math.trunc(new Date(date).getTime()/1000) - offset()
 async function postWebhook(id='',title='',description=''){
 	const payload = {
 		username: 'Aces',

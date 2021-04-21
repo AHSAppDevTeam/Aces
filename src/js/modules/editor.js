@@ -35,27 +35,26 @@ async function updateEditor(id) {
 
 	if (!article) return false
 
-	document.title = article.title
-	for (const property in article) {
+	const story = Object.assign(article,notif,{markdown})
+	document.title = story.title
+	for (const property in story) {
 		const $element = $('.' + property, $editor)
 		if (!$element) continue
-
+		const value = story[property]
 		switch ($element.type) {
 			case 'checkbox':
 			case 'radio':
-				$element.checked = article[property]
+				$element.checked = value
+				break
+			case 'datetime-local':
+				$element.value = timestamp_to_date(value)
 				break
 			default:
-				$element.value = article[property]
+				$element.value = value
 				break
 		}
 	}
-	$('.markdown textarea', $editor).value = markdown
-	$('.date', $editor).value = timestamp_to_datetime(article.timestamp)
-	if(notif){
-		$('.notif-date',$editor).value = timestamp_to_datetime(notif.notifTimestamp)
-		$('.blurb',$editor).value = notif.blurb
-	}
 
+	$('.markdown textarea', $editor).value = markdown
 	$$('textarea',$editor).forEach(updateTextarea)
 }
