@@ -38,7 +38,7 @@ async function updateEditor(id) {
 	const story = Object.assign(article,notif,{markdown})
 	document.title = story.title
 	for (const property in story) {
-		const $element = $('.' + property, $editor)
+		const $element = $('#' + property, $editor)
 		if (!$element) continue
 		const value = story[property]
 		switch ($element.type) {
@@ -54,7 +54,5 @@ async function updateEditor(id) {
 				break
 		}
 	}
-
-	$('.markdown textarea', $editor).value = markdown
 	$$('textarea',$editor).forEach(updateTextarea)
 }

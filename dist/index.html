@@ -821,55 +821,55 @@ body,
 		</style>
 	</head>
 	<body>
-		<main id='editor' class='panel'>
+		<main id=editor class=panel>
 			<header>
-				<input type='button'
-					class='remove'
+				<input type=button
+					class=remove
 					title='remove article (alt+r)'
-					value='Remove'
-					accesskey='r'>
-				<input type='button'
-					class='render'
+					value=Remove
+					accesskey=r>
+				<input type=button
+					class=render
 					title='toggle preview/edit mode (alt+v)'
-					value='Preview'
-					accesskey='v'>
-				<input type='button'
-					class='publish'
+					value=Preview
+					accesskey=v>
+				<input type=button
+					class=publish
 					title='publish article (alt+p)'
-					value='Publish'
-					accesskey='p'>
+					value=Publish
+					accesskey=p>
 			</header>
-			<label class='card'>
+			<label class=card>
 				<span>title</span>
-				<textarea class='title' accesskey='t'></textarea>
+				<textarea id=title class=title accesskey=t></textarea>
 			</label>
-			<label class='card'>
+			<label class=card>
 				<span>author</span>
-				<textarea class='author' accesskey='a'></textarea>
+				<textarea id=author accesskey=a></textarea>
 			</label>
 			<label class='card half-width'><div>
-				<input class='featured' type='checkbox'>
+				<input id=featured type=checkbox>
 				feature
 			</div></label>
-			<label class='card half-width'>
-				<span>publication date</span>
-				<input class='timestamp' type='datetime-local'>
-			</label>
 			<label class='card half-width'><div>
-				<input class='notified' type='checkbox'>
+				<input id=notified type=checkbox>
 				notify
 			</div></label>
-			<label class='card half-width'>
+			<label class=card>
+				<span>publication date</span>
+				<input id=timestamp type=datetime-local>
+			</label>
+			<label class=card>
 				<span>notification date</span>
-				<input class='notifTimestamp' type='datetime-local'>
+				<input id=notifTimestamp type=datetime-local>
 			</label>
-			<label class='card'>
+			<label class=card>
 				<span>blurb (notification body)</span>
-				<textarea class='blurb'></textarea>
+				<textarea id=blurb></textarea>
 			</label>
-			<label class='card'>
+			<label class=card>
 				<span>images and videos</span>
-				<section class='media'>
+				<section class=media>
 					<section class='new'>
 						<label class='upload'>
 							<input type='file' multiple accept='image/*'>
@@ -883,15 +883,15 @@ body,
 				<span>body (article text)</span>
 				<section class='markdown'>
 					<label>
-						<textarea class='input' accesskey='b' multi-line></textarea>
+						<textarea class='input' id='markdown' accesskey='b' multi-line></textarea>
 					</label>
 					<code class='output'></code>
 				</section>
 			</label>
 			<section class='body'></section>
 		</main>
-		<div id='resize' tabindex='0'></div>
-		<aside id='browser' class='panel'>
+		<div id=resize tabindex=0></div>
+		<aside id=browser class=panel>
 			<header>
 				<input type='text'
 					class='search'
@@ -1161,7 +1161,7 @@ async function updateEditor(id) {
 	const story = Object.assign(article,notif,{markdown})
 	document.title = story.title
 	for (const property in story) {
-		const $element = $('.' + property, $editor)
+		const $element = $('#' + property, $editor)
 		if (!$element) continue
 		const value = story[property]
 		switch ($element.type) {
@@ -1177,8 +1177,6 @@ async function updateEditor(id) {
 				break
 		}
 	}
-
-	$('.markdown textarea', $editor).value = markdown
 	$$('textarea',$editor).forEach(updateTextarea)
 }
 async function initHighlighter($section){
