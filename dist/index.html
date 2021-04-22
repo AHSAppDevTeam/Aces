@@ -1000,7 +1000,7 @@ async function sign_in_with_token(refresh_token) {
 }
 async function sign_out(){
 	localStorage.setItem('refresh_token','')
-	token = db = ''
+	token = user = ''
 	update_auth(false)
 }
 async function set_auth(idToken,refreshToken){
@@ -1143,7 +1143,6 @@ async function initEditor() {
 		const url_sets = await Promise.all(Array.from(files).map(imgbb))
 		$('#media',$editor).prepend(...url_sets.map($thumb))
 	})
-
 
 	editArticle()
 }
@@ -1626,13 +1625,14 @@ auth.sign
 	event.preventDefault()
 	if(user){
 		sign_out()
-	} else{
+	} else {
 		auth.email.focus()
 	}
  })
 auth.modal
  .querySelector('.cancel')
  .addEventListener('click', ()=>{
+	auth.modal.reset()
 	document.activeElement.blur()
 })
 initEditor()

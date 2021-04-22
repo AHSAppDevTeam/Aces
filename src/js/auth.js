@@ -30,12 +30,13 @@ auth.sign
 	event.preventDefault()
 	if(user){
 		sign_out()
-	} else{
+	} else {
 		auth.email.focus()
 	}
  })
 auth.modal
  .querySelector('.cancel')
  .addEventListener('click', ()=>{
+	auth.modal.reset()
 	document.activeElement.blur()
 })

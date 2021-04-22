@@ -21,7 +21,7 @@ async function sign_in_with_token(refresh_token) {
 }
 async function sign_out(){
 	localStorage.setItem('refresh_token','')
-	token = db = ''
+	token = user = ''
 	update_auth(false)
 }
 async function set_auth(idToken,refreshToken){
