@@ -8,7 +8,7 @@
 	--text: black;
 }
 
-@media (prefers-color-scheme: light){
+@media (prefers-color-scheme: dark){
 	:root{
 		--border-color: hsl(220deg,20%,20%);
 		--hover-color: hsl(220deg,20%,40%);

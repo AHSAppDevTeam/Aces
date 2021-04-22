@@ -346,7 +346,7 @@ input::placeholder {
 	--text: black;
 }
 
-@media (prefers-color-scheme: light){
+@media (prefers-color-scheme: dark){
 	:root{
 		--border-color: hsl(220deg,20%,20%);
 		--hover-color: hsl(220deg,20%,40%);
@@ -865,20 +865,17 @@ body,
 				<span>blurb (notification body)</span>
 				<textarea id=blurb></textarea>
 			</label>
+			<label class='card half-width'>
+				<span>upload images</span>
+				<input type=file multiple accept='image/*'>
+			</label>
+			<label class='card half-width'>
+				<span>image/YouTube URL</span>
+				<input id=url type=url>
+			</label>
 			<label class=card>
 				<span>images and videos</span>
-				<section class=media>
-					<section class='new'>
-						<label class='card upload'>
-							<span>upload image</span>
-							<input type='file' multiple accept='image/*'>
-						</label>
-						<label class=card>
-							<span>image/YouTube URL</span>
-							<input class='url' type='url'>
-						</label>
-						<!-- insert images -->
-					</section>
+				<section id=media>
 				</section>
 			</label>
 			<label class=card>
@@ -986,8 +983,8 @@ body,
 				</section>
 			</article>
 		</template>
-		<template id='template-image'>
-			<section class='image' draggable='true'>
+		<template id='template-thumb'>
+			<section class='card image' draggable='true'>
 				<img>
 				<input type='button' class='delete' value='×'>
 			</section>
@@ -1197,6 +1194,11 @@ async function updateEditor(id) {
 				break
 		}
 	}
+	$('#media',$editor).append(...(story.thumbURLs||[]).map(url=>{
+		const $thumb = $template('thumb')
+		$('img',$thumb).src = url
+		return $thumb
+	}))
 	$$('textarea',$editor).forEach(updateTextarea)
 }
 async function initHighlighter($section){
