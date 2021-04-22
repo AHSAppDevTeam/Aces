@@ -37,11 +37,11 @@ body,
 	border: var(--border);
 	border-color: var(--border-color);
 }
-.card:hover {
+.card:hover:not(header) {
 	border-color: #aaa;
 }
 .card:focus,
-.card:focus-within,
+.card:focus-within:not(header),
 .card.open {
 	border-color: var(--text);
 }

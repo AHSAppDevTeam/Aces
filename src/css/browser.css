@@ -39,7 +39,7 @@
 #browser > header {
 	flex-wrap: wrap;
 }
-#browser > header > .search {
+#browser > header > #search {
 	width: 0;
 	flex-grow: 1;
 }
