@@ -31,15 +31,11 @@
 	opacity: 0;
 }
 #sign-in .cancel {
-	position: absolute;
-	top: 8pt;
-	right: 8pt;
 	background: transparent;
 	border: 0;
 }
-
-#sign-in input {
-	color: black;
+#sign-in > * + * {
+	margin-top: 8pt;
 }
 #sign-in.loading{
 	border-color: blue;
@@ -891,18 +887,18 @@ body,
 			<!-- insert previews -->
 		</aside>
 		<form id=sign-in class=card tabindex='0'>
-			<label>
-				email
+			<label class=card>
+				<span>email</span>
 				<input id='email' type='email'
 				autocomplete='on' spellcheck='false' required>
 			</label>
-			<label>
-				password
+			<label class=card>
+				<span>password</span>
 				<input id='password' type='password'
 				autocomplete='on' spellcheck='false' required>
 			</label>
-			<input type='button' class='cancel' value='✕'>
-			<input type='submit' value='sign in'>
+			<input type=submit class=card value='sign in'>
+			<input type=button class=cancel value='✕'>
 		</form>
 
 		<!-- TEMPLATES -->
