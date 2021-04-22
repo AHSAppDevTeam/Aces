@@ -21,10 +21,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 		url_parts = urllib.parse.urlparse(self.path)
 		request_file_path = Path(url_parts.path.strip("/"))
 
-	if not request_file_path.is_file():
-		self.path = 'index.html'
-
-	return http.server.SimpleHTTPRequestHandler.do_GET(self)
+		if not request_file_path.is_file():
+			self.path = 'index.html'
+		
+		return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 
 httpd = socketserver.TCPServer(HOST, Handler)

@@ -92,9 +92,3 @@ header > [type=button] {
 #editor.render .markdown {
 	display: none;
 }
-
-#resize{
-	border-block-width: 0;
-	flex: 0 0 8pt;
-	cursor: col-resize;
-}

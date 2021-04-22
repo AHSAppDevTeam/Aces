@@ -206,12 +206,6 @@ header > [type=button] {
 #editor.render .markdown {
 	display: none;
 }
-
-#resize{
-	border-block-width: 0;
-	flex: 0 0 8pt;
-	cursor: col-resize;
-}
 @font-face {
 	font-family: 'pt-root';
 	src: url('pt-root/bold.woff') format('woff');
@@ -788,7 +782,31 @@ body,
 }
 #resize {
 	border-radius: 0;
-	padding: 0 0 0 8pt;
+	padding-block: 0;
+	padding-inline: 4pt;
+	font-size: .6rem;
+	font-weight: 400;
+	border-inline-width: 0;
+	cursor: col-resize;
+	writing-mode: vertical-rl;
+	display: flex;
+	align-items: center;
+	color: var(--border-color)
+}
+#resize:hover {
+	color: #aaa;
+}
+#resize > :not(.dots) {
+	color: inherit;
+}
+#resize > .dots {
+	letter-spacing: 1ch;
+	flex-grow: 1;
+	text-align: center;
+	font-size: 700;
+}
+#resize > .author {
+	transform: rotate(180deg);
 }
 		</style>
 	</head>
@@ -862,7 +880,17 @@ body,
 			</label>
 			<section class='body'></section>
 		</main>
-		<div id=resize class=card tabindex=0></div>
+		<div id=resize class=card tabindex=0>
+			<span class=name>
+				AHS App Content Editing System
+			</span>
+			<span class=dots>
+				&bull;&bull;&bull;
+			</span>
+			<span class=author>
+				Designed and programmed by Xing Liu
+			</span>
+		</div>
 		<aside id=browser class=panel>
 			<header class=card>
 				<input type=text

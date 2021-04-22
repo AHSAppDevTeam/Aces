@@ -1,4 +1,28 @@
 #resize {
 	border-radius: 0;
-	padding: 0 0 0 8pt;
+	padding-block: 0;
+	padding-inline: 4pt;
+	font-size: .6rem;
+	font-weight: 400;
+	border-inline-width: 0;
+	cursor: col-resize;
+	writing-mode: vertical-rl;
+	display: flex;
+	align-items: center;
+	color: var(--border-color)
+}
+#resize:hover {
+	color: #aaa;
+}
+#resize > :not(.dots) {
+	color: inherit;
+}
+#resize > .dots {
+	letter-spacing: 1ch;
+	flex-grow: 1;
+	text-align: center;
+	font-size: 700;
+}
+#resize > .author {
+	transform: rotate(180deg);
 }
