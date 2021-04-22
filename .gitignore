@@ -1,5 +1,5 @@
 .firebase/
-dist/
+dist/index.html
 *.swp
 *.swo
 *~
