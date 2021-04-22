@@ -1,4 +1,4 @@
-const db_path = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
+const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
 async function post(path,request){
 	const response = await fetch('https://'+path,
 		{
@@ -24,7 +24,7 @@ async function imgbb(data){
 }
 async function db(path,request){
 	const response = await fetch(
-		db_path(path),
+		dbPath(path),
 		request ? {
 			body: JSON.stringify(request),
 			headers: { 'Content-Type': 'application/json' },

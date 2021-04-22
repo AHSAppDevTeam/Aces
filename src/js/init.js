@@ -1,3 +1,4 @@
 initEditor()
 initBrowser()
 initResize()
+initAuth()

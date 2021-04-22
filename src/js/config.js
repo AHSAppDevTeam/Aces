@@ -1,7 +1,7 @@
 'use strict'
 const DEBUG = true
 const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'
-const default_story = {
+const defaultStory = {
 	author: 'Content Editors',
 	blurb: '',
 	body: '',
@@ -18,3 +18,6 @@ const default_story = {
 	videoIDs: [],
 	views: 0
 }
+let user = ''
+let token = ''
+let secrets = {}

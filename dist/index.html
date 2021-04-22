@@ -960,7 +960,7 @@ body,
 'use strict'
 const DEBUG = true
 const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'
-const default_story = {
+const defaultStory = {
 	author: 'Content Editors',
 	blurb: '',
 	body: '',
@@ -977,54 +977,84 @@ const default_story = {
 	videoIDs: [],
 	views: 0
 }
-async function sign_in_with_email(email,password) {
+let user = ''
+let token = ''
+let secrets = {}
+async function initAuth(){
+	const $sign = $('#sign')
+	const $signIn = $('#sign-in')
+	const $email = $('#email')
+	const $password = $('#password')
+
+	signInWithToken(localStorage.getItem('refresh_token'))
+
+	$signIn.addEventListener('submit', event=>{
+		event.preventDefault()
+		signInWithEmail( $email.value, $password.value )
+		$signIn.reset()
+		$signIn.classList.add('loading')
+	})
+	$signIn.addEventListener('input', ()=>{
+		$signIn.classList.remove('invalid')
+	})
+	$sign.addEventListener('click', event=>{
+		event.preventDefault()
+		user ? signOut() : $email.focus()
+	})
+	$('.cancel',$signIn).addEventListener('click', ()=>{
+		$signIn.reset()
+		document.activeElement.blur()
+	})
+}
+async function signInWithEmail( email, password ) {
 	const res = await googleapis(
 		'identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
 		{ email, password, returnSecureToken: true }
 	)
 	if(res.error) {
-		auth.modal.classList.remove('loading')
-		auth.modal.classList.add('invalid')
+		const classes = $('signIn').classList
+		classes.remove('loading')
+		classes.add('invalid')
 		return false
 	}
-	set_auth(res.idToken,res.refreshToken)
+	setAuth(res.idToken,res.refreshToken)
 }
-async function sign_in_with_token(refresh_token) {
-	if(!refresh_token) return false
+async function signInWithToken(refreshToken) {
+	if(!refreshToken) return false
 	const res = await googleapis(
 		'securetoken.googleapis.com/v1/token',
-		{ refresh_token, grant_type: 'refresh_token' }
+		{ refresh_token: refreshToken, grant_type: 'refresh_token' }
 	)
 	if(res.error) return false
-	set_auth(res.id_token,res.refresh_token)
+	setAuth(res.id_token,res.refresh_token)
 }
-async function sign_out(){
+async function signOut(){
 	localStorage.setItem('refresh_token','')
 	token = user = ''
-	update_auth(false)
+	updateAuth(false)
 }
-async function set_auth(idToken,refreshToken){
-	token = '?auth='+idToken
-	user = await get_user(idToken)
+async function setAuth(idToken,refreshToken) {
+	token = '?auth=' + idToken
+	user = await getUser(idToken)
 	secrets = await db('secrets')
 	localStorage.setItem('refresh_token',refreshToken)
-	update_auth(Boolean(user))
+	updateAuth(Boolean(user))
 }
-async function get_user(idToken){
+async function getUser(idToken) {
 	const { users: { 0: { email } } } = await googleapis(
 		'identitytoolkit.googleapis.com/v1/accounts:lookup',
 		{ idToken }
 	)
 	return email
 }
-async function update_auth(signed_in){
-	document.body.classList.toggle('signed-in',signed_in)
-	auth.sign.value = `Sign ${signed_in ? 'out' : 'in'}`
+async function updateAuth(signedIn){
+	document.body.classList.toggle('signed-in',signedIn)
+	$('#sign').value = `Sign ${signedIn ? 'out' : 'in'}`
 	document.activeElement.blur()
 
 	$('#remove',$editor).disabled
 	= $('#publish',$editor).disabled
-	= !signed_in
+	= !signedIn
 }
 async function initBrowser(){
 	const $browser = $('#browser')
@@ -1140,8 +1170,8 @@ async function initEditor() {
 		$editor.classList.toggle('render', previewing)
 	})
 	$('#upload', $editor).addEventListener('change', async ({ target: { files } }) => {
-		const url_sets = await Promise.all(Array.from(files).map(imgbb))
-		$('#media',$editor).prepend(...url_sets.map($thumb))
+		const urlSets = await Promise.all(Array.from(files).map(imgbb))
+		$('#media',$editor).prepend(...urlSets.map($thumb))
 	})
 
 	editArticle()
@@ -1163,7 +1193,7 @@ async function updateEditor(id) {
 
 	if (!article) return false
 
-	const story = Object.assign(default_story,article,notif,{markdown})
+	const story = Object.assign(defaultStory,article,notif,{markdown})
 	document.title = story.title
 	for (const property in story) {
 		const $element = $('#' + property, $editor)
@@ -1182,21 +1212,21 @@ async function updateEditor(id) {
 				break
 		}
 	}
-	const url_sets = story.thumbURLs.map(
+	const urlSets = story.thumbURLs.map(
 		(thumbURL,index) =>
 		({
 			thumb: thumbURL,
 			image: story.videoIDs[index] || story.imageURLs[index-story.videoIDs.length]
 		})
 	)
-	$('#media',$editor).replaceChildren(...url_sets.map($thumb))
+	$('#media',$editor).replaceChildren(...urlSets.map($thumb))
 	$$('textarea',$editor).forEach(updateTextarea)
 }
-function $thumb(url_set){
+function $thumb(urlSet){
 	const $thumb = $template('thumb')
-	$thumb.dataset.thumb = url_set.thumb
-	$thumb.dataset.image = url_set.image
-	$('img',$thumb).src = url_set.thumb
+	$thumb.dataset.thumb = urlSet.thumb
+	$thumb.dataset.image = urlSet.image
+	$('img',$thumb).src = urlSet.thumb
 	return $thumb
 }
 async function initHighlighter($section){
@@ -1487,7 +1517,7 @@ function makeID(){
 
 	return md;
 }));
-const db_path = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
+const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
 async function post(path,request){
 	const response = await fetch('https://'+path,
 		{
@@ -1513,7 +1543,7 @@ async function imgbb(data){
 }
 async function db(path,request){
 	const response = await fetch(
-		db_path(path),
+		dbPath(path),
 		request ? {
 			body: JSON.stringify(request),
 			headers: { 'Content-Type': 'application/json' },
@@ -1563,7 +1593,7 @@ async function removeResizeListener(){
 async function updateTextarea($textarea){
 	$textarea.dispatchEvent(new Event('input'))
 }
-const get_timestamp = async () => Math.floor(Date.now()/1000)
+const getTimestamp = async () => Math.floor(Date.now()/1000)
 const rot13 = string => string.replace(/[a-z]/gi,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm.-'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-.'.indexOf(c)])
 const bracket = (id,type) => {
 	let brackets = type == 'location' ? '{}'
@@ -1573,8 +1603,8 @@ const bracket = (id,type) => {
 	return brackets[0] + id + brackets[1]	
 }
 const offset = () => new Date().getTimezoneOffset()*60
-const timestamp_to_date = timestamp => new Date((timestamp + offset())*1000).toISOString().slice(0,16)
-const date_to_timestamp = date => Math.trunc(new Date(date).getTime()/1000) - offset()
+const timestampToDate = timestamp => new Date((timestamp + offset())*1000).toISOString().slice(0,16)
+const dateToTimestamp = date => Math.trunc(new Date(date).getTime()/1000) - offset()
 async function postWebhook(id='',title='',description=''){
 	const payload = {
 		username: 'Aces',
@@ -1593,51 +1623,10 @@ async function postWebhook(id='',title='',description=''){
 	const response = await post(secrets.webhook,payload)
 	console.log(response)
 }
-let user = ''
-let token = ''
-let secrets
-
-sign_in_with_token(localStorage.getItem('refresh_token'))
-
-const auth = {
-	sign: $`#sign`,
-	modal: $`#sign-in`,
-
-	email: $`#email`,
-	password: $`#password`,
-}
-auth.modal
- .addEventListener('submit',event=>{
-	event.preventDefault()
-	sign_in_with_email(
-		auth.email.value,
-		auth.password.value,
-	)
-	auth.modal.reset()
-	auth.modal.classList.add('loading')
-})
-auth.modal
- .addEventListener('input',event=>{
-	 auth.modal.classList.remove('invalid')
- })
-auth.sign
- .addEventListener('click', event=>{
-	event.preventDefault()
-	if(user){
-		sign_out()
-	} else {
-		auth.email.focus()
-	}
- })
-auth.modal
- .querySelector('.cancel')
- .addEventListener('click', ()=>{
-	auth.modal.reset()
-	document.activeElement.blur()
-})
 initEditor()
 initBrowser()
 initResize()
+initAuth()
 		</script>
   </body>
 </html>
