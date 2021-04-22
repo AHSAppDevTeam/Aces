@@ -54,7 +54,6 @@ header > [type=button] {
 #editor .media .new .upload {
 	flex-grow: 1;
 	cursor: pointer;
-	opacity: 0.2;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M4 1l-2 2zM4 1l2 2zM4 1v4zM2 7H6' fill='none' stroke='black' stroke-width='1' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");

@@ -168,7 +168,6 @@ header > [type=button] {
 #editor .media .new .upload {
 	flex-grow: 1;
 	cursor: pointer;
-	opacity: 0.2;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M4 1l-2 2zM4 1l2 2zM4 1v4zM2 7H6' fill='none' stroke='black' stroke-width='1' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -339,18 +338,18 @@ input::placeholder {
 }
 :root{
 	--radius: 4pt;
-	--border-color: #ddd;
-	--hover-color: #aaa;
+	--border-color: #ccc;
+	--hover-color: #888;
 	--border: solid 2pt var(--border-color);
 	--background: white;
 	--cover: #fffd;
 	--text: black;
 }
 
-@media (prefers-color-scheme: dark){
+@media (prefers-color-scheme: light){
 	:root{
-		--border-color: hsl(220deg,20%,16%);
-		--hover-color: hsl(220deg,20%,32%);
+		--border-color: hsl(220deg,20%,20%);
+		--hover-color: hsl(220deg,20%,40%);
 		--background: hsl(220deg,20%,8%);
 		--cover: #000d;
 		--text: #ddd;
@@ -740,10 +739,10 @@ template {
 }
 .panel {
 	overflow: hidden scroll;
-	padding: 0 1rem 1rem 1rem;
+	padding: 0 1rem;
 	display: grid;
 	grid-gap: 1rem;
-	grid-template-rows: repeat(99,auto) 1fr;
+	grid-auto-rows: 1fr;
 }
 .panel > header {
 	position: sticky;
@@ -855,11 +854,11 @@ body,
 				notify
 			</div></label>
 			<label class=card>
-				<span>publication date</span>
+				<span>publication time</span>
 				<input id=timestamp type=datetime-local>
 			</label>
 			<label class=card>
-				<span>notification date</span>
+				<span>notification time</span>
 				<input id=notifTimestamp type=datetime-local>
 			</label>
 			<label class=card>
@@ -870,10 +869,14 @@ body,
 				<span>images and videos</span>
 				<section class=media>
 					<section class='new'>
-						<label class='upload'>
+						<label class='card upload'>
+							<span>upload image</span>
 							<input type='file' multiple accept='image/*'>
 						</label>
-						<input class='url' type='url' placeholder='Image/YouTube URL'>
+						<label class=card>
+							<span>image/YouTube URL</span>
+							<input class='url' type='url'>
+						</label>
 						<!-- insert images -->
 					</section>
 				</section>
@@ -971,7 +974,7 @@ body,
 				<section class='actions'>
 					<label title='feature/unfeature (f)' class='toggle'>
 						<input class='featured' type='checkbox'>
-						<svg viewBox='-1 -1 26 26' stroke-width='2.2' width='24' height='24'>
+						<svg viewBox='-1 -1 26 26' stroke-width='1.8' width='24' height='24'>
 							<path d='M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z'/>
 						</svg>
 					</label>

@@ -1,9 +1,9 @@
 .panel {
 	overflow: hidden scroll;
-	padding: 0 1rem 1rem 1rem;
+	padding: 0 1rem;
 	display: grid;
 	grid-gap: 1rem;
-	grid-template-rows: repeat(99,auto) 1fr;
+	grid-auto-rows: 1fr;
 }
 .panel > header {
 	position: sticky;
