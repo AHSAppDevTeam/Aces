@@ -1,6 +1,7 @@
 :root{
 	--radius: 4pt;
 	--border-color: #ddd;
+	--hover-color: #aaa;
 	--border: solid 2pt var(--border-color);
 	--background: white;
 	--cover: #fffd;
@@ -9,7 +10,8 @@
 
 @media (prefers-color-scheme: dark){
 	:root{
-		--border-color: #333;
+		--border-color: hsl(220deg,20%,16%);
+		--hover-color: hsl(220deg,20%,32%);
 		--background: hsl(220deg,20%,8%);
 		--cover: #000d;
 		--text: #ddd;

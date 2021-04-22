@@ -3,7 +3,7 @@ label.card{
 	padding: 0;
 }
 label.card:hover > span{
-	color: #aaa;
+	color: var(--hover-color);
 }
 label.card:focus-within > span{
 	color: var(--text);
@@ -39,4 +39,7 @@ label.card ::placeholder {
 }
 label.card textarea{
 	resize: none;
+}
+input::placeholder {
+	color: var(--hover-color)
 }

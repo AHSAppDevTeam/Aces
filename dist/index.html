@@ -297,7 +297,7 @@ label.card{
 	padding: 0;
 }
 label.card:hover > span{
-	color: #aaa;
+	color: var(--hover-color);
 }
 label.card:focus-within > span{
 	color: var(--text);
@@ -334,9 +334,13 @@ label.card ::placeholder {
 label.card textarea{
 	resize: none;
 }
+input::placeholder {
+	color: var(--hover-color)
+}
 :root{
 	--radius: 4pt;
 	--border-color: #ddd;
+	--hover-color: #aaa;
 	--border: solid 2pt var(--border-color);
 	--background: white;
 	--cover: #fffd;
@@ -345,7 +349,8 @@ label.card textarea{
 
 @media (prefers-color-scheme: dark){
 	:root{
-		--border-color: #333;
+		--border-color: hsl(220deg,20%,16%);
+		--hover-color: hsl(220deg,20%,32%);
 		--background: hsl(220deg,20%,8%);
 		--cover: #000d;
 		--text: #ddd;
@@ -773,7 +778,7 @@ body,
 	border-color: var(--border-color);
 }
 .card:hover:not(header) {
-	border-color: #aaa;
+	border-color: var(--hover-color);
 }
 .card:focus,
 .card:focus-within:not(header),
@@ -785,7 +790,7 @@ body,
 	padding-block: 0;
 	padding-inline: 4pt;
 	font-size: .6rem;
-	font-weight: 400;
+	font-weight: 700;
 	border-inline-width: 0;
 	cursor: col-resize;
 	writing-mode: vertical-rl;
@@ -794,16 +799,20 @@ body,
 	color: var(--border-color)
 }
 #resize:hover {
-	color: #aaa;
+	color: var(--hover-color);
+}
+#resize:focus {
+	color: var(--text);
 }
 #resize > :not(.dots) {
 	color: inherit;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 #resize > .dots {
 	letter-spacing: 1ch;
 	flex-grow: 1;
 	text-align: center;
-	font-size: 700;
 }
 #resize > .author {
 	transform: rotate(180deg);

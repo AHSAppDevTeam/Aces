@@ -38,7 +38,7 @@ body,
 	border-color: var(--border-color);
 }
 .card:hover:not(header) {
-	border-color: #aaa;
+	border-color: var(--hover-color);
 }
 .card:focus,
 .card:focus-within:not(header),
