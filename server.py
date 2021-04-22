@@ -17,14 +17,14 @@ HOST = ('0.0.0.0', port)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
-    def do_GET(self):
-        url_parts = urllib.parse.urlparse(self.path)
-        request_file_path = Path(url_parts.path.strip("/"))
+	def do_GET(self):
+		url_parts = urllib.parse.urlparse(self.path)
+		request_file_path = Path(url_parts.path.strip("/"))
 
-        if not request_file_path.is_file():
-            self.path = 'index.html'
+	if not request_file_path.is_file():
+		self.path = 'index.html'
 
-        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+	return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 
 httpd = socketserver.TCPServer(HOST, Handler)

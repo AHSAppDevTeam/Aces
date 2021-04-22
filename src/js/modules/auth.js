@@ -4,10 +4,10 @@ async function sign_in_with_email(email,password) {
 		{ email, password, returnSecureToken: true }
 	)
 	if(res.error) {
-        auth.modal.classList.remove('loading')
-        auth.modal.classList.add('invalid')
-        return false
-    }
+		auth.modal.classList.remove('loading')
+		auth.modal.classList.add('invalid')
+		return false
+	}
 	set_auth(res.idToken,res.refreshToken)
 }
 async function sign_in_with_token(refresh_token) {
@@ -20,9 +20,9 @@ async function sign_in_with_token(refresh_token) {
 	set_auth(res.id_token,res.refresh_token)
 }
 async function sign_out(){
-    localStorage.setItem('refresh_token','')
-    token = db = ''
-    update_auth(false)
+	localStorage.setItem('refresh_token','')
+	token = db = ''
+	update_auth(false)
 }
 async function set_auth(idToken,refreshToken){
 	token = '?auth='+idToken

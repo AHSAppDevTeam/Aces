@@ -21,8 +21,8 @@
 
 .markdown code {
 	margin: 0;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
 }
 
 .markdown label {
