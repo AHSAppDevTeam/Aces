@@ -15,7 +15,7 @@ label.card > span {
 	text-transform: lowercase;
 	font-size: .8rem;
 	padding-inline: .2ch;
-	font-weight: 600;
+	font-weight: 700;
 	background: var(--background);
 	color: var(--border-color);
 	max-width: 100%;

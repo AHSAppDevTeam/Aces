@@ -221,29 +221,20 @@ header > [type=button] {
 	src: url('pt-root/bold.woff') format('woff');
 	font-weight: 700;
 	font-style: normal;
-}
-@font-face {
-	font-family: 'pt-root';
-	src: url('pt-root/medium.woff') format('woff');
-	font-weight: 500;
-	font-style: normal;
+	font-display: swap;
 }
 @font-face {
 	font-family: 'pt-root';
 	src: url('pt-root/regular.woff') format('woff');
 	font-weight: 400;
 	font-style: normal;
+	font-display: swap;
 }
-@font-face {
-	font-family: 'pt-root';
-	src: url('pt-root/light.woff') format('woff');
-	font-weight: 300;
-	font-style: normal;
-}.markdown {
+.markdown {
 	position: relative;
 }
 .markdown .bold {
-	font-weight: bold;
+	font-weight: 700;
 }
 .markdown .italic {
 	font-style: italic;
@@ -258,11 +249,12 @@ header > [type=button] {
 	background: linear-gradient(90deg, #ff08,transparent 2ch);
 }
 .markdown .heading {
-	font-weight: bold;
+	font-weight: 700;
 	display: inline-block;
 	width: 100%;
 	background: #8882;
-}/* TextareaDecorator.css
+}
+/* TextareaDecorator.css
  * written by Colin Kuebler 2012
  * Part of LDT, dual licensed under GPLv3 and MIT
  * Provides styles for rendering a textarea on top of a pre with scrollbars
@@ -327,7 +319,7 @@ label.card > span {
 	text-transform: lowercase;
 	font-size: .8rem;
 	padding-inline: .2ch;
-	font-weight: 600;
+	font-weight: 700;
 	background: var(--background);
 	color: var(--border-color);
 	max-width: 100%;
@@ -389,7 +381,7 @@ body :focus{
 	outline: 0;
 }
 h1,h2,h3,h4,h5,h6 {
-	font-weight: normal;
+	font-weight: 400;
 	margin: 0;
 	padding: 0;
 }
@@ -402,7 +394,8 @@ button,
 
 [hidden]{
 	display: none !important;
-}/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+}
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
 /* Document
 ========================================================================== */
@@ -497,7 +490,7 @@ abbr[title] {
 
 b,
 strong {
-	font-weight: bolder;
+	font-weight: 700;
 }
 
 /**
@@ -749,7 +742,8 @@ template {
 
 [hidden] {
 	display: none;
-}.panel {
+}
+.panel {
 	overflow: hidden scroll;
 	padding: 0 1rem 1rem 1rem;
 	display: grid;
