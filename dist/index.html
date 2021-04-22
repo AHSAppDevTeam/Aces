@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang='en-US' dir='ltr'>
+<html lang=en-US dir=ltr>
   	<head>
-		<meta charset='utf-8'>
+		<meta charset=utf-8>
 
 		<title>Aces</title>
-		<meta name='description' content='Arcadia High School App Content Editing System'>
-		<meta name='author' content='Xing Liu'>
-		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<meta name=description content='Arcadia High School App Content Editing System'>
+		<meta name=author content='Xing Liu'>
+		<meta name=viewport content='width=device-width, initial-scale=1.0'>
 
-		<link rel='icon' type='image/png' href='/icon.png'>
+		<link rel=icon type=image/png href=/icon.png>
 		<style>
 #sign-in {
 	position: fixed;
@@ -835,7 +835,7 @@ body,
 			</label>
 			<label class='card half-width'>
 				<span>upload images</span>
-				<input type=file multiple accept='image/*'>
+				<input id=upload type=file multiple accept=image/*>
 			</label>
 			<label class='card half-width'>
 				<span>image/YouTube URL</span>
@@ -960,6 +960,23 @@ body,
 'use strict'
 const DEBUG = true
 const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'
+const default_story = {
+	author: 'Content Editors',
+	blurb: '',
+	body: '',
+	categoryID: '',
+	date: '',
+	featured: false,
+	imageURLs: [],
+	markdown: '',
+	notifTimestamp: 0,
+	notified: false,
+	thumbURLs: [],
+	timestamp: 0,
+	title: '',
+	videoIDs: [],
+	views: 0
+}
 async function sign_in_with_email(email,password) {
 	const res = await googleapis(
 		'identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
@@ -1122,19 +1139,10 @@ async function initEditor() {
 		target.value = previewing ? 'Edit' : 'Preview'
 		$editor.classList.toggle('render', previewing)
 	})
-	$('#upload', $editor).addEventListener('change'), ({ target: { files } }) => {
-		for(const file of files){
-			const id = makeID()
-			const ref = storage.child('images/'+id)
-			const task = ref.put(file)
-			$('#media').prepend($thumb(
-				'https://firebasestorage.googleapis.com/v0/b/arcadia-high-mobile.appspot.com/o/images/'
-				+ id
-				+ '?alt=media'
-			))
-		}
-		files = []
-	}
+	$('#upload', $editor).addEventListener('change', async ({ target: { files } }) => {
+		const url_sets = await Promise.all(Array.from(files).map(imgbb))
+		$('#media',$editor).prepend(...url_sets.map($thumb))
+	})
 
 
 	editArticle()
@@ -1156,7 +1164,7 @@ async function updateEditor(id) {
 
 	if (!article) return false
 
-	const story = Object.assign(article,notif,{markdown})
+	const story = Object.assign(default_story,article,notif,{markdown})
 	document.title = story.title
 	for (const property in story) {
 		const $element = $('#' + property, $editor)
@@ -1175,12 +1183,21 @@ async function updateEditor(id) {
 				break
 		}
 	}
-	$('#media',$editor).replaceChildren(...(story.thumbURLs||[]).map($thumb))
+	const url_sets = story.thumbURLs.map(
+		(thumbURL,index) =>
+		({
+			thumb: thumbURL,
+			image: story.videoIDs[index] || story.imageURLs[index-story.videoIDs.length]
+		})
+	)
+	$('#media',$editor).replaceChildren(...url_sets.map($thumb))
 	$$('textarea',$editor).forEach(updateTextarea)
 }
-function $thumb(url){
+function $thumb(url_set){
 	const $thumb = $template('thumb')
-	$('img',$thumb).src = url
+	$thumb.dataset.thumb = url_set.thumb
+	$thumb.dataset.image = url_set.image
+	$('img',$thumb).src = url_set.thumb
 	return $thumb
 }
 async function initHighlighter($section){
@@ -1481,6 +1498,19 @@ async function post(path,request){
 		}	
 	) 
 	return await response.json()
+}
+async function imgbb(data){
+	const body = new FormData()
+	body.append('image',data)
+	const response = await fetch(
+		'https://'+secrets.imgbb,
+		{ method: 'POST', body }
+	)
+	const result = await response.json()
+	return {
+		image: result.data.image.url,
+		thumb: result.data.thumb.url,
+	}
 }
 async function db(path,request){
 	const response = await fetch(

@@ -11,7 +11,7 @@ async function post(path,request){
 }
 async function imgbb(data){
 	const body = new FormData()
-	body.append('image',file)
+	body.append('image',data)
 	const response = await fetch(
 		'https://'+secrets.imgbb,
 		{ method: 'POST', body }
