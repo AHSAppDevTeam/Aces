@@ -15,19 +15,19 @@
 	</head>
 	<body>
 		<main id=editor class=panel>
-			<header>
-				<input type=button
-					class=remove
+			<header class=card>
+				<input type=button class=card
+					id=remove
 					title='remove article (alt+r)'
 					value=Remove
 					accesskey=r>
-				<input type=button
-					class=render
+				<input type=button class=card
+					id=render
 					title='toggle preview/edit mode (alt+v)'
 					value=Preview
 					accesskey=v>
-				<input type=button
-					class=publish
+				<input type=button class=card
+					id=publish
 					title='publish article (alt+p)'
 					value=Publish
 					accesskey=p>
@@ -72,7 +72,7 @@
 					</section>
 				</section>
 			</label>
-			<label class='card'>
+			<label class=card>
 				<span>body (article text)</span>
 				<section class='markdown'>
 					<label>
@@ -83,36 +83,39 @@
 			</label>
 			<section class='body'></section>
 		</main>
-		<div id=resize tabindex=0></div>
+		<div id=resize class=card tabindex=0></div>
 		<aside id=browser class=panel>
-			<header>
-				<input type='text'
-					class='search'
+			<header class=card>
+				<input type=text
+					class=card
+					id=search
 					title='search articles (alt+/)'
 					placeholder='Search titles'
 					accesskey='/'>
-				<a type='button'
-					class='sources'
+				<a type=button
+					class=card
+					id=sources
 					title='view resources'
 					href='sources.html'
 					target='_blank'>🕮</a>
-				<input type='button'
-					class='sign'
+				<input type=button
+					class=card
+					id=sign
 					title='sign in/out (alt+s)'
 					value='Sign in'
 					accesskey='s'>
 			</header>
 			<!-- insert previews -->
 		</aside>
-		<form class='sign-in' tabindex='0'>
+		<form id=sign-in class=card tabindex='0'>
 			<label>
 				email
-				<input class='email' type='email'
+				<input id='email' type='email'
 				autocomplete='on' spellcheck='false' required>
 			</label>
 			<label>
 				password
-				<input class='password' type='password'
+				<input id='password' type='password'
 				autocomplete='on' spellcheck='false' required>
 			</label>
 			<input type='button' class='cancel' value='✕'>

@@ -1,4 +1,4 @@
-.sign-in {
+#sign-in {
 	position: fixed;
 	top: 8pt;
 	right: 8pt;
@@ -14,11 +14,11 @@
 
 	box-shadow: 0 0 0 100vmax #0004;
 }
-.sign-in:not(:focus):not(:focus-within){
+#sign-in:not(:focus):not(:focus-within){
 	pointer-events: none;
 	opacity: 0;
 }
-.sign-in .cancel {
+#sign-in .cancel {
 	position: absolute;
 	top: 8pt;
 	right: 8pt;
@@ -26,13 +26,13 @@
 	border: 0;
 }
 
-.sign-in input {
+#sign-in input {
 	color: black;
 }
-.sign-in.loading{
+#sign-in.loading{
 	border-color: blue;
 }
-.sign-in.invalid{
+#sign-in.invalid{
 	border-color: red;
 }
 

@@ -1,5 +1,9 @@
 .panel {
-	padding-bottom: 1rem;
+	overflow: hidden scroll;
+	padding: 0 1rem 1rem 1rem;
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-rows: repeat(99,auto) 1fr;
 }
 .panel > header {
 	position: sticky;
@@ -25,38 +29,19 @@ body,
 .panel {
 	height: 100%;
 }
-.panel {
-	overflow: hidden scroll;
-	padding: 0 1rem 1rem 1rem;
-	display: grid;
-	grid-gap: 1rem;
-	grid-template-rows: repeat(99,auto) 1fr;
-}
-.panel > header,
-.card,
-.media > *,
-.media .delete,
-.sign-in {
+.card {
 	border-radius: var(--radius);
 	padding: 8pt;
-}
-.panel > header,
-.card,
-.media > *,
-.media .delete,
-#resize,
-.sign-in {
+	background: transparent;
 	transition-duration: 100ms;
 	border: var(--border);
 	border-color: var(--border-color);
 }
-.card:hover,
-#resize:hover{
+.card:hover {
 	border-color: #aaa;
 }
 .card:focus,
 .card:focus-within,
-.card.open,
-#resize:focus {
+.card.open {
 	border-color: var(--text);
 }

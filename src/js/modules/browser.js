@@ -15,7 +15,7 @@ async function initBrowser(){
 
 	$$('textarea',$browser).forEach(initTextarea)
 	
-	$('.search',$browser).addEventListener('input',({target:{value:query}})=>{
+	$('#search',$browser).addEventListener('input',({target:{value:query}})=>{
 		$$('.preview>h4>.title',$browser).forEach($title=>{
 			const $preview = $title.parentElement.parentElement
 			const show = query ? $title.textContent.toLowerCase().includes(query.toLowerCase()) : true

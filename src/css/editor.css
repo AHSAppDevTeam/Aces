@@ -3,8 +3,6 @@
 	width: 36vw;
 }
 #editor > * {
-	margin: 0;
-	position: relative;
 	grid-column-end: span 2;
 }
 #editor > label.half-width {
@@ -26,9 +24,6 @@ header > [type=button] {
 	color:var(--text);
 }
 
-#editor .id {
-	cursor: pointer;
-}
 #editor .title {
 	font-size: 1.6rem;
 }

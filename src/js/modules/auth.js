@@ -43,7 +43,7 @@ async function update_auth(signed_in){
 	auth.sign.value = `Sign ${signed_in ? 'out' : 'in'}`
 	document.activeElement.blur()
 
-	$('.remove',$editor).disabled
-	= $('.publish',$editor).disabled
+	$('#remove',$editor).disabled
+	= $('#publish',$editor).disabled
 	= !signed_in
 }

@@ -10,7 +10,7 @@ async function initEditor() {
 		$('.body', $editor).innerHTML = md(target.value)
 	})
 
-	$('.render', $editor).addEventListener('click', ({ target }) => {
+	$('#render', $editor).addEventListener('click', ({ target }) => {
 		const previewing = target.value == 'Preview'
 		target.value = previewing ? 'Edit' : 'Preview'
 		$editor.classList.toggle('render', previewing)

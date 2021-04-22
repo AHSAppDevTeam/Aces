@@ -5,11 +5,11 @@ let secrets
 sign_in_with_token(localStorage.getItem('refresh_token'))
 
 const auth = {
-	sign: $`.sign`,
-	modal: $`.sign-in`,
+	sign: $`#sign`,
+	modal: $`#sign-in`,
 
-	email: $`.email`,
-	password: $`.password`,
+	email: $`#email`,
+	password: $`#password`,
 }
 auth.modal
  .addEventListener('submit',event=>{
