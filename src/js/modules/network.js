@@ -9,6 +9,19 @@ async function post(path,request){
 	) 
 	return await response.json()
 }
+async function imgbb(data){
+	const body = new FormData()
+	body.append('image',file)
+	const response = await fetch(
+		'https://'+secrets.imgbb,
+		{ method: 'POST', body }
+	)
+	const result = await response.json()
+	return {
+		image: result.data.image.url,
+		thumb: result.data.thumb.url,
+	}
+}
 async function db(path,request){
 	const response = await fetch(
 		db_path(path),

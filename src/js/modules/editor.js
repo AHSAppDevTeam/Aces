@@ -15,6 +15,11 @@ async function initEditor() {
 		target.value = previewing ? 'Edit' : 'Preview'
 		$editor.classList.toggle('render', previewing)
 	})
+	$('#upload', $editor).addEventListener('change'), async ({ target: { files } }) => {
+		const url_sets = files.map(imgbb)
+		$('#media',$editor).prepend(url_sets.map($thumb))
+	}
+
 
 	editArticle()
 }
@@ -35,7 +40,7 @@ async function updateEditor(id) {
 
 	if (!article) return false
 
-	const story = Object.assign(article,notif,{markdown})
+	const story = Object.assign(default_story,article,notif,{markdown})
 	document.title = story.title
 	for (const property in story) {
 		const $element = $('#' + property, $editor)
@@ -54,10 +59,18 @@ async function updateEditor(id) {
 				break
 		}
 	}
-	$('#media',$editor).replaceChildren(...(story.thumbURLs||[]).map(url=>{
-		const $thumb = $template('thumb')
-		$('img',$thumb).src = url
-		return $thumb
-	}))
+	const url_sets = story.thumbURLs.map((thumbURL,index)=>(
+		{
+			thumb: thumbURL,
+			image: story.videoIDs[index] || story.imageURLs[index-story.videoIDs.length]
+		}
+	))
+	$('#media',$editor).replaceChildren(...url_sets.map($thumb))
 	$$('textarea',$editor).forEach(updateTextarea)
+}
+function $thumb(url_set){
+	const $thumb = $template('thumb')
+	$thumb.dataset = url_set
+	$('img',$thumb).src = url_set.thumb
+	return $thumb
 }
