@@ -1,6 +1,7 @@
 label.card{
 	position: relative;
 	padding: 0;
+	display: block;
 }
 label.card:hover > span{
 	color: var(--hover-color);

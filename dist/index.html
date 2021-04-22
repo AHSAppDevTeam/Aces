@@ -138,59 +138,26 @@ header > [type=button] {
 	color:var(--text);
 }
 
-#editor .title {
+#editor > label > #title {
 	font-size: 1.6rem;
 }
-#editor .author {
+#editor > label > #author {
 	font-size: 1rem;
 }
-#editor .media {
+#editor > label > #media {
 	display: flex;
-	flex: 0 0 10rem;
-	height: 10rem;
 	overflow-x: scroll;
 }
-#editor .media > * {
-	margin-right: 8pt;
-	width: 8rem;
-	flex: 0 0 8rem;
-}
-#editor .media > img {
-	background: var(--border-color);
-}
-#editor .media .new {
-	display: flex;
-	flex-direction: column;
-}
-#editor.render .media .new {
-	display: none;
-}
-#editor .media .new .upload {
-	flex-grow: 1;
-	cursor: pointer;
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M4 1l-2 2zM4 1l2 2zM4 1v4zM2 7H6' fill='none' stroke='black' stroke-width='1' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
-}
-#editor .media .new .upload input {
-	display: none;
-}
-.media .image {
-	position: relative;
+#media > label.card.thumb {
 	cursor: move;
+	margin-right: 8pt;
+	flex: 0 0 8rem;
+	height: 8rem;
+	width: 10rem;
 }
-.media .image img {
-	width: 100%;
-	height: 100%;
+.thumb > img {
 	object-fit: contain;
-	pointer-events: none;
-}
-.media .image .delete {
-	position: absolute;
-	top: 4pt;
-	right: 4pt;
-	padding: 4pt;
-	cursor: pointer;
+	max-height: 100%;
 }
 #editor .body{
 	display: none;
@@ -294,6 +261,7 @@ header > [type=button] {
 label.card{
 	position: relative;
 	padding: 0;
+	display: block;
 }
 label.card:hover > span{
 	color: var(--hover-color);
@@ -839,7 +807,7 @@ body,
 			</header>
 			<label class=card>
 				<span>title</span>
-				<textarea id=title class=title accesskey=t></textarea>
+				<textarea id=title accesskey=t></textarea>
 			</label>
 			<label class=card>
 				<span>author</span>
@@ -984,10 +952,9 @@ body,
 			</article>
 		</template>
 		<template id='template-thumb'>
-			<section class='card image' draggable='true'>
+			<label class='card thumb' draggable='true'>
 				<img>
-				<input type='button' class='delete' value='×'>
-			</section>
+			</label>
 		</template>
 		<script>
 'use strict'
@@ -1194,7 +1161,7 @@ async function updateEditor(id) {
 				break
 		}
 	}
-	$('#media',$editor).append(...(story.thumbURLs||[]).map(url=>{
+	$('#media',$editor).replaceChildren(...(story.thumbURLs||[]).map(url=>{
 		const $thumb = $template('thumb')
 		$('img',$thumb).src = url
 		return $thumb

@@ -54,7 +54,7 @@ async function updateEditor(id) {
 				break
 		}
 	}
-	$('#media',$editor).append(...(story.thumbURLs||[]).map(url=>{
+	$('#media',$editor).replaceChildren(...(story.thumbURLs||[]).map(url=>{
 		const $thumb = $template('thumb')
 		$('img',$thumb).src = url
 		return $thumb
