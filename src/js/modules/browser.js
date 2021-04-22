@@ -40,16 +40,15 @@ function makeGroup(
 	$id.href = '#'+id
 	$id.innerHTML = '#'+id
 
-	$title = $('.title',$group)
+	const $title = $('.title',$group)
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
 		db(parent+'/'+id,{title})
 		postWebhook('#'+id,`➡️ \`${bracket(id,type)}\` ${title}`)
 	})
 
-
 	if(type=='category'){
-		$color = $('.color',$group) 
+		const $color = $('.color',$group) 
 		$color.value = color
 		$color.addEventListener('change',({target:{value:color}})=>{
 			db(parent+'/'+id,{color})
