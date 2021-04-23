@@ -64,6 +64,7 @@ async function updateEditor(id) {
 async function publishStory(){
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
+	const oldStory = {...story, ...await db('storys/'+id)}
 	await syncStory(story,1)
 	for(const type of ['story','article','snippet','notif']){
 		const keys = Object.keys(await db('schemas/'+type))
@@ -72,7 +73,6 @@ async function publishStory(){
 		)
 		db(type+'s/'+id,object)
 	}
-	const oldStory = await db('storys/'+id)
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
 function diff(newer,older){
@@ -81,12 +81,12 @@ function diff(newer,older){
 			case 1:
 				return 'Created '+key
 			case 0:
-				if(newer[key] != older[key])
-					return 'Modified '+key
+				return newer[key] === older[key]
+				? null : 'Modified '+key
 			case -1:
 				return 'Deleted '+key
 		}
-	}).join('\n')
+	}).filter(x=>x).join('\n')
 }
 async function syncStory(story,direction){
 	for(const property in story){
