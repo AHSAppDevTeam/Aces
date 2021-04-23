@@ -43,11 +43,11 @@ async function storyTemplate(){
 	return storyTemplate
 }
 async function updateEditor(id) {
-	const story = await db('storys/' + id)
+	let story = await db('storys/' + id)
 
 	if (!story) return false
 
-	Object.assign(story, await storyTemplate())
+	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
 	const urlSets = story.thumbURLs.map(
@@ -65,14 +65,27 @@ async function publishStory(){
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
 	await syncStory(story,1)
-	for(const type of ['article','snippet','notif']){
+	for(const type of ['story','article','snippet','notif']){
 		const keys = Object.keys(await db('schemas/'+type))
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
 		)
 		db(type+'s/'+id,object)
 	}
-	discord(id,'✏️'+story.title,JSON.stringify(story))
+	const oldStory = await db('storys/'+id)
+	discord(id,'✏️ '+story.title,diff(story,oldStory))
+}
+function diff(newer,older){
+	return Object.keys({...newer,...older}).map(key=>{
+		switch((key in newer)-(key in older)){
+			case 1:
+				return 'Created '+key
+			case 0:
+				return 'Modified '+key
+			case -1:
+				return 'Deleted '+key
+		}
+	}).join('\n')
 }
 async function syncStory(story,direction){
 	for(const property in story){
