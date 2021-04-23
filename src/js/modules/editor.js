@@ -2,23 +2,23 @@ let $editor, decorator
 async function initEditor() {
 	$editor = $('#editor')
 
-	initHighlighter($('.markdown', $editor))
+	initHighlighter($('#markdown-wrapper'))
+	$$('textarea',$editor).forEach(initTextarea)
 
-	$$('textarea',editor).forEach(initTextarea)
-
-	$('.markdown', $editor).addEventListener('input', ({ target }) => {
-		$('.body', $editor).innerHTML = md(target.value)
+	$('#markdown').addEventListener('input', ({ target: { value } }) => {
+		$('#body').innerHTML = md(value)
 	})
-
-	$('#render', $editor).addEventListener('click', ({ target }) => {
+	$('#render').addEventListener('click', ({ target }) => {
 		const previewing = target.value == 'Preview'
 		target.value = previewing ? 'Edit' : 'Preview'
 		$editor.classList.toggle('render', previewing)
 	})
-	$('#upload', $editor).addEventListener('change', async ({ target: { files } }) => {
+	$('#upload').addEventListener('change', async ({ target: { files } }) => {
 		const urlSets = await Promise.all(Array.from(files).map(imgbb))
 		$('#media',$editor).prepend(...urlSets.map($thumb))
 	})
+	$('#publish').addEventListener('click',publishStory)
+	remapEnter($('#url'))
 
 	editArticle()
 }
@@ -29,49 +29,80 @@ async function editArticle() {
 	updateEditor(id)
 	history.replaceState({}, '', id)
 }
-
-async function updateEditor(id) {
-	const [
-		article, markdown, notif
-	] = await Promise.all([
-		db('articles/' + id), db('markdowns/' + id), db('notifs/' + id)
-	])
-
-	if (!article) return false
-
-	const story = Object.assign(defaultStory,article,notif,{markdown})
-	document.title = story.title
-	for (const property in story) {
-		const $element = $('#' + property, $editor)
-		if (!$element) continue
-		const value = story[property]
-		switch ($element.type) {
-			case 'checkbox':
-			case 'radio':
-				$element.checked = value
-				break
-			case 'datetime-local':
-				$element.value = timestamp_to_date(value)
-				break
-			default:
-				$element.value = value
-				break
-		}
+async function storyTemplate(){
+	const storySchema = await db('schemas/story')
+	const storyTemplate = {}
+	for (const property in storySchema) {
+		storyTemplate[property] = {
+			'Array<String>': [],
+			'String': '',
+			'Boolean': false,
+			'Int': 0,
+		}[storySchema[property]]
 	}
+	return storyTemplate
+}
+async function updateEditor(id) {
+	const story = await db('storys/' + id)
+
+	if (!story) return false
+
+	Object.assign(story, await storyTemplate())
+	document.title = story.title
+	syncStory(story,0)
 	const urlSets = story.thumbURLs.map(
 		(thumbURL,index) =>
 		({
-			thumb: thumbURL,
-			image: story.videoIDs[index] || story.imageURLs[index-story.videoIDs.length]
+			thumbURL,
+			videoID: story.videoIDs[index],
+			imageURL: story.imageURLs[index-story.videoIDs.length],
 		})
 	)
-	$('#media',$editor).replaceChildren(...urlSets.map($thumb))
+	$('#media').replaceChildren(...urlSets.map($thumb))
 	$$('textarea',$editor).forEach(updateTextarea)
+}
+async function publishStory(){
+	const id = window.location.pathname.split('/').pop()
+	const story = await storyTemplate()
+	await syncStory(story,1)
+	for(const type of ['article','snippet','notif']){
+		const keys = Object.keys(await db('schemas/'+type))
+		const object = Object.fromEntries(
+			Object.entries(story).filter(([key])=>keys.includes(key))
+		)
+		db(type+'s/'+id,object)
+	}
+	discord(id,'✏️'+story.title,JSON.stringify(story))
+}
+async function syncStory(story,direction){
+	for(const property in story){
+		const $element = $('#' + property, $editor)
+		if (!$element) continue
+		switch ($element.type) {
+			case 'checkbox':
+			case 'radio':
+				direction
+				? story[property] = $element.checked
+				: $element.checked = story[property]
+				break
+			case 'datetime-local':
+				direction
+				? story[property] = dateToTimestamp($element.value)
+				: $element.value = timestampToDate(story[property])
+				break
+			default:
+				direction
+				? story[property] = $element.value
+				: $element.value = story[property]
+				break
+		}
+	}
 }
 function $thumb(urlSet){
 	const $thumb = $template('thumb')
-	$thumb.dataset.thumb = urlSet.thumb
-	$thumb.dataset.image = urlSet.image
-	$('img',$thumb).src = urlSet.thumb
+	$thumb.dataset.thumbURL = urlSet.thumbURL
+	$thumb.dataset.imageURL = urlSet.imageURL
+	$thumb.dataset.videoID = urlSet.videoID
+	$('img',$thumb).src = urlSet.thumbURL
 	return $thumb
 }

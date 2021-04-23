@@ -32,57 +32,59 @@
 					value=Publish
 					accesskey=p>
 			</header>
-			<label class=card>
+			<label class=card id=title-label>
 				<span>title</span>
 				<textarea id=title accesskey=t></textarea>
 			</label>
-			<label class=card>
+			<label class=card id=title-label>
 				<span>author</span>
 				<textarea id=author accesskey=a></textarea>
 			</label>
-			<label class='card half-width'><div>
-				<input id=featured type=checkbox>
-				feature
-			</div></label>
-			<label class='card half-width'><div>
-				<input id=notified type=checkbox>
-				notify
-			</div></label>
-			<label class=card>
+			<label class=card id=timestamp-label>
 				<span>publication time</span>
 				<input id=timestamp type=datetime-local>
 			</label>
-			<label class=card>
-				<span>notification time</span>
-				<input id=notifTimestamp type=datetime-local>
-			</label>
-			<label class=card>
+			<label class=card id=featured-label half-width><div>
+				<input id=featured type=checkbox>
+				feature
+			</div></label>
+			<label class=card id=notified-label half-width><div>
+				<input id=notified type=checkbox>
+				notify
+			</div></label>
+			<label class=card id=blurb-label>
 				<span>blurb (notification body)</span>
 				<textarea id=blurb></textarea>
 			</label>
-			<label class='card half-width'>
+			<label class=card id=notifTimestamp-label>
+				<span>notification time</span>
+				<input id=notifTimestamp type=datetime-local>
+			</label>
+			<label class=card id=upload-label half-width>
 				<span>upload images</span>
 				<input id=upload type=file multiple accept=image/*>
 			</label>
-			<label class='card half-width'>
+			<label class=card id=url-label half-width>
 				<span>image/YouTube URL</span>
 				<input id=url type=url>
 			</label>
-			<label class=card>
+			<label class=card id=media-label>
 				<span>images and videos</span>
 				<section id=media>
 				</section>
 			</label>
-			<label class=card>
+			<label class=card id=markdown-label>
 				<span>body (article text)</span>
-				<section class='markdown'>
+				<section id=markdown-wrapper class=markdown>
 					<label>
-						<textarea class='input' id='markdown' accesskey='b' multi-line></textarea>
+						<textarea class=input id=markdown accesskey=b multi-line></textarea>
 					</label>
-					<code class='output'></code>
+					<code class=output></code>
 				</section>
 			</label>
-			<section class='body'></section>
+			<label class=card id=body-label>
+				<section id=body></section>
+			</label>
 		</main>
 		<div id=resize class=card tabindex=0>
 			<span class=name>

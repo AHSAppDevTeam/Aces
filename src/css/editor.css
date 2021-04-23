@@ -5,14 +5,8 @@
 #editor > * {
 	grid-column-end: span 2;
 }
-#editor > label.half-width {
+#editor > label[half-width] {
 	grid-column-end: span 1;
-}
-#editor.render > :not(header) {
-	border-color: transparent;
-}
-#editor.render > label > span{
-	opacity: 0;
 }
 #editor header > * {
 	flex: 1 0 0;
@@ -45,16 +39,19 @@ header > [type=button] {
 	object-fit: contain;
 	max-height: 100%;
 }
-#editor .body{
+
+#editor:not(.render) > #body-label,
+#editor.render > #markdown-label,
+#editor.render > #upload-label,
+#editor.render > #url-label {
 	display: none;
-	overflow-wrap: break-word;
 }
-#editor .markdown {
-	flex-grow: 1;
+#editor.render > label > :last-child{
+	padding: 0;
 }
-#editor.render .body {
-	display: block;
+#editor.render > :not(header) {
+	border-color: transparent;
 }
-#editor.render .markdown {
-	display: none;
+#editor.render > label > span {
+	opacity: 0;
 }

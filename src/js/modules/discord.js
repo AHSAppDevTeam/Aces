@@ -1,4 +1,4 @@
-async function postWebhook(id='',title='',description=''){
+async function discord(id='',title='',description=''){
 	const payload = {
 		username: 'Aces',
 		avatar_url: 'https://edit.ahs.app/icon.png',
@@ -6,11 +6,11 @@ async function postWebhook(id='',title='',description=''){
 		embeds: [{
 			color: 0x995eff,
 			author: {
-				name: user,
+				name: user.slice(0,256),
 			},
 			url: 'https://edit.ahs.app/'+id,
-			title,
-			description,
+			title: title.slice(0,256),
+			description: description.slice(0,2048),
 		}],
 	}
 	const response = await post(secrets.webhook,payload)

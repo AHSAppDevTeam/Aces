@@ -32,6 +32,7 @@ body {
 body * {
 	box-sizing: border-box;
 	color: var(--text);
+	overflow-wrap: break-word;
 }
 body :focus{
 	outline: 0;

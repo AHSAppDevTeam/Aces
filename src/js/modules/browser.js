@@ -44,7 +44,7 @@ function makeGroup(
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
 		db(parent+'/'+id,{title})
-		postWebhook('#'+id,`➡️ \`${bracket(id,type)}\` ${title}`)
+		discord('#'+id,`➡️ \`${bracket(id,type)}\` ${title}`)
 	})
 
 	if(type=='category'){
@@ -52,7 +52,7 @@ function makeGroup(
 		$color.value = color
 		$color.addEventListener('change',({target:{value:color}})=>{
 			db(parent+'/'+id,{color})
-			postWebhook('#'+id,`🎨 \`${bracket(id,type)}\` ${color}`)
+			discord('#'+id,`🎨 \`${bracket(id,type)}\` ${color}`)
 		})
 	}
 
@@ -79,7 +79,7 @@ function makePreview(id,snippet){
 	$featured.addEventListener('change',({target:{checked:featured}})=>{
 		db('snippets/'+id,{featured})
 		db('articles/'+id,{featured})
-		postWebhook(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
+		discord(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
 	})
 
 	updatePreview($preview,snippet)

@@ -18,8 +18,8 @@ async function imgbb(data){
 	)
 	const result = await response.json()
 	return {
-		image: result.data.image.url,
-		thumb: result.data.thumb.url,
+		imageURL: result.data.image.url,
+		thumbURL: result.data.thumb.url,
 	}
 }
 async function db(path,request){
