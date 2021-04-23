@@ -81,7 +81,8 @@ function diff(newer,older){
 			case 1:
 				return 'Created '+key
 			case 0:
-				return 'Modified '+key
+				if(newer[key] != older[key])
+					return 'Modified '+key
 			case -1:
 				return 'Deleted '+key
 		}
