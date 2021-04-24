@@ -51,6 +51,9 @@ async function db(path,request){
 				object[modifiedPath[0]] = payload.data
 			}
 		})
+		window.addEventListener('beforeunload', () => {
+			source.close()
+		})
 	})
 }
 async function googleapis(path,request){

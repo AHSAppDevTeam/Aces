@@ -1249,8 +1249,7 @@ async function publishStory(){
 		db(type+'s/'+id,object)
 	}
 	if(story.categoryID !== oldStory.categoryID){
-		await db(
-			'categories/'+story.category+'/articleIDs',
+		db( 'categories/'+story.category+'/articleIDs',
 			(await db('categories'))
 				[story.categoryID]
 				.articleIDs
@@ -1261,8 +1260,7 @@ async function publishStory(){
 					(await db('snippets'))[b].timestamp
 				))
 		)
-		await db(
-			'categories/'+oldStory.category+'/articleIDs',
+		db( 'categories/'+oldStory.category+'/articleIDs',
 			(await db('categories'))
 				[story.categoryID]
 				.articleIDs
@@ -1664,6 +1662,9 @@ async function db(path,request){
 				object = object[modifiedPath.shift()]
 				object[modifiedPath[0]] = payload.data
 			}
+		})
+		window.addEventListener('beforeunload', () => {
+			source.close()
 		})
 	})
 }

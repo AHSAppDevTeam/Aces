@@ -88,8 +88,7 @@ async function publishStory(){
 		db(type+'s/'+id,object)
 	}
 	if(story.categoryID !== oldStory.categoryID){
-		await db(
-			'categories/'+story.category+'/articleIDs',
+		db( 'categories/'+story.category+'/articleIDs',
 			(await db('categories'))
 				[story.categoryID]
 				.articleIDs
@@ -100,8 +99,7 @@ async function publishStory(){
 					(await db('snippets'))[b].timestamp
 				))
 		)
-		await db(
-			'categories/'+oldStory.category+'/articleIDs',
+		db( 'categories/'+oldStory.category+'/articleIDs',
 			(await db('categories'))
 				[story.categoryID]
 				.articleIDs
