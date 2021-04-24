@@ -33,7 +33,6 @@ async function initAuth(){
  * Sign in to Firebase with email and password
  * @param {string} email 
  * @param {string} password 
- * @returns 
  */
 async function signInWithEmail( email, password ) {
 	const res = await googleapis(
@@ -44,7 +43,7 @@ async function signInWithEmail( email, password ) {
 		const classes = $('signIn').classList
 		classes.remove('loading')
 		classes.add('invalid')
-		return false
+		return
 	}
 	setAuth(res.idToken,res.refreshToken)
 }
@@ -52,15 +51,14 @@ async function signInWithEmail( email, password ) {
 /**
  * Sign in to Firebase with stored refresh token
  * @param {string} refreshToken 
- * @returns 
  */
 async function signInWithToken(refreshToken) {
-	if(!refreshToken) return false
+	if(!refreshToken) return
 	const res = await googleapis(
 		'securetoken.googleapis.com/v1/token',
 		{ refresh_token: refreshToken, grant_type: 'refresh_token' }
 	)
-	if(res.error) return false
+	if(res.error) return
 	setAuth(res.id_token,res.refresh_token)
 }
 
@@ -90,7 +88,7 @@ async function updateAuth(signedIn){
 	$('#sign').value = `Sign ${signedIn ? 'out' : 'in'}`
 	document.activeElement.blur()
 
-	$('#remove',$editor).disabled
-	= $('#publish',$editor).disabled
+	$('#remove').disabled
+	= $('#publish').disabled
 	= !signedIn
 }

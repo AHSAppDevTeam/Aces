@@ -1,3 +1,4 @@
+initWorker()
 initEditor()
 initBrowser()
 initResize()

@@ -28,6 +28,29 @@
 <dt><a href="#makeID">makeID()</a> ⇒ <code>string</code></dt>
 <dd><p>Gfycat-like human-friendly ID generator</p>
 </dd>
+<dt><a href="#post">post(path, request)</a> ⇒ <code>json</code></dt>
+<dd><p>Sends an HTTP GET request</p>
+</dd>
+<dt><a href="#imgbb">imgbb(data)</a> ⇒ <code><a href="#urlSet">urlSet</a></code></dt>
+<dd><p>Uploads an image to ImgBB.com</p>
+</dd>
+<dt><a href="#dbPath">dbPath(path)</a> ⇒ <code>string</code></dt>
+<dd><p>Expands relative path to Firebase realtime database URL</p>
+</dd>
+<dt><a href="#dbWrite">dbWrite(path, request)</a></dt>
+<dd><p>Writes to the database</p>
+</dd>
+<dt><a href="#dbOnce">dbOnce(path)</a> ⇒ <code>*</code></dt>
+<dd><p>Reads the database once</p>
+</dd>
+<dt><a href="#dbLive">dbLive(path, callback)</a> ⇒ <code>*</code></dt>
+<dd><p>Reads the database and updates it live</p>
+</dd>
+<dt><a href="#googleapis">googleapis(path, request)</a> ⇒ <code>*</code></dt>
+<dd></dd>
+<dt><a href="#initResize">initResize()</a></dt>
+<dd><p>Initiates the resize bar</p>
+</dd>
 <dt><a href="#initTextarea">initTextarea($textarea)</a></dt>
 <dd><p>Initiates a textarea</p>
 </dd>
@@ -50,6 +73,13 @@
 <dt><a href="#dateToTimestamp">dateToTimestamp(date)</a> ⇒ <code>number</code></dt>
 <dd></dd>
 <dt><a href="#randomElement">randomElement(array)</a> ⇒ <code>*</code></dt>
+<dd></dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#urlSet">urlSet</a> : <code>Object</code></dt>
 <dd></dd>
 </dl>
 
@@ -143,6 +173,96 @@ Gfycat-like human-friendly ID generator
 
 **Kind**: global function  
 **Returns**: <code>string</code> - ID  
+<a name="post"></a>
+
+## post(path, request) ⇒ <code>json</code>
+Sends an HTTP GET request
+
+**Kind**: global function  
+**Returns**: <code>json</code> - response  
+
+| Param | Type |
+| --- | --- |
+| path | <code>string</code> | 
+| request | <code>Object</code> | 
+
+<a name="imgbb"></a>
+
+## imgbb(data) ⇒ [<code>urlSet</code>](#urlSet)
+Uploads an image to ImgBB.com
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>\*</code> | URL or image file |
+
+<a name="dbPath"></a>
+
+## dbPath(path) ⇒ <code>string</code>
+Expands relative path to Firebase realtime database URL
+
+**Kind**: global function  
+**Returns**: <code>string</code> - full path  
+
+| Param | Type |
+| --- | --- |
+| path | <code>string</code> | 
+
+<a name="dbWrite"></a>
+
+## dbWrite(path, request)
+Writes to the database
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| path | <code>string</code> | 
+| request | <code>Object</code> | 
+
+<a name="dbOnce"></a>
+
+## dbOnce(path) ⇒ <code>\*</code>
+Reads the database once
+
+**Kind**: global function  
+**Returns**: <code>\*</code> - response  
+
+| Param | Type |
+| --- | --- |
+| path | <code>string</code> | 
+
+<a name="dbLive"></a>
+
+## dbLive(path, callback) ⇒ <code>\*</code>
+Reads the database and updates it live
+
+**Kind**: global function  
+**Returns**: <code>\*</code> - response  
+
+| Param | Type |
+| --- | --- |
+| path | <code>string</code> | 
+| callback | <code>function</code> | 
+
+<a name="googleapis"></a>
+
+## googleapis(path, request) ⇒ <code>\*</code>
+**Kind**: global function  
+**Returns**: <code>\*</code> - response  
+
+| Param | Type |
+| --- | --- |
+| path | <code>string</code> | 
+| request | <code>Object</code> | 
+
+<a name="initResize"></a>
+
+## initResize()
+Initiates the resize bar
+
+**Kind**: global function  
 <a name="initTextarea"></a>
 
 ## initTextarea($textarea)
@@ -234,4 +354,15 @@ Brackets an ID by its type
 | Param | Type | Description |
 | --- | --- | --- |
 | array | <code>array</code> | array |
+
+<a name="urlSet"></a>
+
+## urlSet : <code>Object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| imageURL | <code>string</code> | URL of full image |
+| thumbURL | <code>string</code> | URL of thumbnail |
 

@@ -195,7 +195,7 @@
 				// filter events
 				.replace(eventsFilterRegExp, eventsFilterTemplate)
 				// tabs
-				.replace(removeTabsRegExp, '')
+				.replace(removeTabsRegExp, "")
 				// blockquotes
 				.replace(blockQuotesRegExp, blockQuotesTemplate)
 				// images
@@ -221,9 +221,9 @@
 				// links
 				.replace(linksRegExp, linksTemplate)
 				// unorderd lists
-				.replace(listUlRegExp1, listUlTemplate).replace(listUlRegExp2, '')
+				.replace(listUlRegExp1, listUlTemplate).replace(listUlRegExp2, "")
 				// ordered lists
-				.replace(listOlRegExp1, listOlTemplate).replace(listOlRegExp2, '')
+				.replace(listOlRegExp1, listOlTemplate).replace(listOlRegExp2, "")
 				// strong
 				.replace(strongRegExp, strongTemplate)
 				// emphasis

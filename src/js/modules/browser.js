@@ -1,8 +1,9 @@
+function fetchBrowserResources(callback){
+	return ['locationIDs','locations','categories','snippets'].map(item=>dbLive(item,callback))
+} 
 async function initBrowser(){	
-
-	['locationIDs','locations','categories','snippets']
-	.forEach(item=>db(item,{callback:updateBrowser}))
-
+	await Promise.all(fetchBrowserResources(updateBrowser))
+	updateBrowser()
 	$('#search').addEventListener('input',({target:{value:query}})=>{
 		$$('.preview>h4>.title',$browser).forEach($title=>{
 			const $preview = $title.parentElement.parentElement
@@ -12,12 +13,9 @@ async function initBrowser(){
 	})
 }
 async function updateBrowser(){
-
 	const $browser = $('#browser')
 	const [ locationIDs, locations, categories, snippets ] =
-	await Promise.all([ 
-		db('locationIDs'), db('locations'), db('categories'), db('snippets')
-	])
+	await Promise.all(fetchBrowserResources())
 	
 	$browser.replaceChildren(
 		$browser.firstElementChild,
@@ -52,7 +50,7 @@ function makeGroup(
 	const $title = $('.title',$group)
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
-		db(parent+'/'+id,{request:{title}})
+		dbWrite(parent+'/'+id,{title})
 		discord('#'+id,`➡️ \`${bracket(id,type)}\` ${title}`)
 	})
 
@@ -60,7 +58,7 @@ function makeGroup(
 		const $color = $('.color',$group) 
 		$color.value = color
 		$color.addEventListener('change',({target:{value:color}})=>{
-			db(parent+'/'+id,{request:{color}})
+			dbWrite(parent+'/'+id,{color})
 			discord('#'+id,`🎨 \`${bracket(id,type)}\` ${color}`)
 		})
 	}
@@ -86,8 +84,8 @@ function makePreview(id,snippet){
 
 	const $featured = $('.featured',$preview)
 	$featured.addEventListener('change',({target:{checked:featured}})=>{
-		db('snippets/'+id,{request:{featured}})
-		db('articles/'+id,{request:{featured}})
+		dbWrite('snippets/'+id,{featured})
+		dbWrite('articles/'+id,{featured})
 		discord(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
 	})
 

@@ -1,11 +1,11 @@
 /**
- * Sends a message to the Discord channel
+ * Sends a message to the Discord webhook
  * @param {string} id 
  * @param {string} title 
  * @param {string} description 
  */
 async function discord(id='',title='',description=''){
-	const payload = {
+	post((await dbOnce('secrets/webhook')),{
 		username: 'Aces',
 		avatar_url: 'https://edit.ahs.app/icon.png',
 		content: '',
@@ -18,6 +18,5 @@ async function discord(id='',title='',description=''){
 			title: title.slice(0,256),
 			description: description.slice(0,2048),
 		}],
-	}
-	const response = await post((await dbOnce('secrets/webhook')),payload)
+	})
 }

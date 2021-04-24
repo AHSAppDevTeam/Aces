@@ -1,6 +1,5 @@
-let $editor, decorator
 async function initEditor() {
-	$editor = $('#editor')
+	const $editor = $('#editor')
 
 	initHighlighter($('#markdown-wrapper'))
 	$$('textarea',$editor).forEach(initTextarea)
@@ -15,7 +14,7 @@ async function initEditor() {
 	})
 	$('#upload').addEventListener('change', async ({ target: { files } }) => {
 		const urlSets = await Promise.all(Array.from(files).map(imgbb))
-		$('#media',$editor).prepend(...urlSets.map($thumb))
+		$('#media').prepend(...urlSets.map($thumb))
 	})
 	$('#publish').addEventListener('click',publishStory)
 	remapEnter($('#url'))
@@ -30,7 +29,7 @@ async function editArticle() {
 	history.replaceState({}, '', id)
 }
 async function storyTemplate(){
-	const storySchema = (await db('schemas')).story
+	const storySchema = (await dbLive('schemas')).story
 	const storyTemplate = {}
 	for (const property in storySchema) {
 		storyTemplate[property] = {
@@ -43,7 +42,7 @@ async function storyTemplate(){
 	return storyTemplate
 }
 async function updateEditor(id) {
-	let story = await db('storys/' + id,{once:true})
+	let story = await dbOnce('storys/' + id)
 
 	if (!story) return false
 
@@ -59,9 +58,9 @@ async function updateEditor(id) {
 		})
 	)
 	$('#media').replaceChildren(...urlSets.map($thumb))
-	$$('textarea',$editor).forEach(updateTextarea)
+	$$('#editor textarea').forEach(updateTextarea)
 	const [locationIDs,locations,categories] = await Promise.all([
-		db('locationIDs'),db('locations'),db('categories')
+		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
 	])
 	$('#categoryID').replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
 		const $group = document.createElement('optgroup')
@@ -78,31 +77,31 @@ async function updateEditor(id) {
 async function publishStory(){
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
-	const oldStory = {...story, ...await db('storys/'+id,{once:true})}
+	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	await syncStory(story,1)
 	for(const type of ['story','article','snippet','notif']){
-		const keys = Object.keys((await db('schemas'))[type])
+		const keys = Object.keys((await dbLive('schemas'))[type])
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
 		)
-		db(type+'s/'+id,object)
+		dbWrite(type+'s/'+id,object)
 	}
 	if(story.categoryID !== oldStory.categoryID){
-		const storySiblingIDs = (await db('categories'))
+		const storySiblingIDs = (await dbLive('categories'))
 			[story.categoryID]
 			.articleIDs
 			.concat([id])
 			.sort(async (a,b)=>(
-				(await db('snippets'))[a].timestamp
+				(await dbLive('snippets'))[a].timestamp
 				-
-				(await db('snippets'))[b].timestamp
+				(await dbLive('snippets'))[b].timestamp
 			))
-		const oldStorySiblingIDs = (await db('categories'))
+		const oldStorySiblingIDs = (await dbLive('categories'))
 			[oldStory.categoryID]
 			.articleIDs
 			.filter(x=>x!==id)
-		db( 'categories/'+story.categoryID+'/articleIDs', storySiblingIDs )
-		db( 'categories/'+oldStory.categoryID+'/articleIDs', oldStorySiblingIDs )
+		dbWrite( 'categories/'+story.categoryID+'/articleIDs', storySiblingIDs )
+		dbWrite( 'categories/'+oldStory.categoryID+'/articleIDs', oldStorySiblingIDs )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
@@ -121,7 +120,7 @@ function diff(newer,older){
 }
 async function syncStory(story,direction){
 	for(const property in story){
-		const $element = $('#' + property, $editor)
+		const $element = $('#' + property, $('#editor'))
 		if (!$element) continue
 		switch ($element.type) {
 			case 'checkbox':
