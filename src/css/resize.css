@@ -9,7 +9,8 @@
 	writing-mode: vertical-rl;
 	display: flex;
 	align-items: center;
-	color: var(--border-color)
+	color: var(--border-color);
+	touch-action: none;
 }
 #resize:hover {
 	color: var(--hover-color);
@@ -20,6 +21,7 @@
 #resize > :not(.dots) {
 	color: inherit;
 	overflow: hidden;
+	white-space: nowrap;
 	text-overflow: ellipsis;
 }
 #resize > .dots {
