@@ -8,8 +8,11 @@ async function initBrowser(){
 	
 	$browser.append(
 		...locationIDs
+			.filter(id=>id in locations)
 			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
+				.filter(id=>id in categories)
 				.map(id=>makeGroup('category', id, categories[id], categories[id].articleIDs
+					.filter(id=>id in snippets)
 					.map(id=>makePreview(id, snippets[id])
 	))))))
 
