@@ -81,7 +81,7 @@ async function publishStory(){
 	const oldStory = {...story, ...await db('storys/'+id)}
 	await syncStory(story,1)
 	for(const type of ['story','article','snippet','notif']){
-		const keys = Object.keys(await db('schemas/'+type))
+		const keys = Object.keys((await db('schemas/'))[type])
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
 		)

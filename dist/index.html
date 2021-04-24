@@ -1242,14 +1242,14 @@ async function publishStory(){
 	const oldStory = {...story, ...await db('storys/'+id)}
 	await syncStory(story,1)
 	for(const type of ['story','article','snippet','notif']){
-		const keys = Object.keys(await db('schemas/'+type))
+		const keys = Object.keys((await db('schemas/'))[type])
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
 		)
 		db(type+'s/'+id,object)
 	}
 	if(story.categoryID !== oldStory.categoryID){
-		db( 'categories/'+story.category+'/articleIDs',
+		db( 'categories/'+story.categoryID+'/articleIDs',
 			(await db('categories'))
 				[story.categoryID]
 				.articleIDs
@@ -1260,9 +1260,9 @@ async function publishStory(){
 					(await db('snippets'))[b].timestamp
 				))
 		)
-		db( 'categories/'+oldStory.category+'/articleIDs',
+		db( 'categories/'+oldStory.categoryID+'/articleIDs',
 			(await db('categories'))
-				[story.categoryID]
+				[oldStory.categoryID]
 				.articleIDs
 				.filter(x=>x!==id)
 		)
