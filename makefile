@@ -5,4 +5,4 @@ host:
 deploy: build
 	firebase deploy
 doc:
-	sh doc.sh
+	jsdoc2md src/js/modules/*.js > docs/functions.md
