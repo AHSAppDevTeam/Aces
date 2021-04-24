@@ -1042,15 +1042,29 @@ async function updateAuth(signedIn){
 	= $('#publish',$editor).disabled
 	= !signedIn
 }
-async function initBrowser(){
-	const $browser = $('#browser')
+async function initBrowser(){	
 
+	['locationIDs','locations','categories','snippets']
+	.forEach(item=>db(item,{callback:updateBrowser}))
+
+	$('#search').addEventListener('input',({target:{value:query}})=>{
+		$$('.preview>h4>.title',$browser).forEach($title=>{
+			const $preview = $title.parentElement.parentElement
+			const show = query ? $title.textContent.toLowerCase().includes(query.toLowerCase()) : true
+			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')
+		})
+	})
+}
+async function updateBrowser(){
+
+	const $browser = $('#browser')
 	const [ locationIDs, locations, categories, snippets ] =
 	await Promise.all([ 
 		db('locationIDs'), db('locations'), db('categories'), db('snippets')
 	])
 	
-	$browser.append(
+	$browser.replaceChildren(
+		$browser.firstElementChild,
 		...locationIDs
 			.filter(id=>id in locations)
 			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
@@ -1061,14 +1075,6 @@ async function initBrowser(){
 	))))))
 
 	$$('textarea',$browser).forEach(initTextarea)
-	
-	$('#search',$browser).addEventListener('input',({target:{value:query}})=>{
-		$$('.preview>h4>.title',$browser).forEach($title=>{
-			const $preview = $title.parentElement.parentElement
-			const show = query ? $title.textContent.toLowerCase().includes(query.toLowerCase()) : true
-			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')
-		})
-	})
 }
 function makeGroup(
 	type, id,
@@ -1090,7 +1096,7 @@ function makeGroup(
 	const $title = $('.title',$group)
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
-		db(parent+'/'+id,{title})
+		db(parent+'/'+id,{request:{title}})
 		discord('#'+id,`➡️ \`${bracket(id,type)}\` ${title}`)
 	})
 
@@ -1098,7 +1104,7 @@ function makeGroup(
 		const $color = $('.color',$group) 
 		$color.value = color
 		$color.addEventListener('change',({target:{value:color}})=>{
-			db(parent+'/'+id,{color})
+			db(parent+'/'+id,{request:{color}})
 			discord('#'+id,`🎨 \`${bracket(id,type)}\` ${color}`)
 		})
 	}
@@ -1124,8 +1130,8 @@ function makePreview(id,snippet){
 
 	const $featured = $('.featured',$preview)
 	$featured.addEventListener('change',({target:{checked:featured}})=>{
-		db('snippets/'+id,{featured})
-		db('articles/'+id,{featured})
+		db('snippets/'+id,{request:{featured}})
+		db('articles/'+id,{request:{featured}})
 		discord(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
 	})
 
@@ -1154,7 +1160,6 @@ async function discord(id='',title='',description=''){
 		}],
 	}
 	const response = await post((await db('secrets')).webhook,payload)
-	console.log(response)
 }
 const $ = (query,parent=document) => parent.querySelector(query)
 const $$ = (query,parent=document) => Array.from(parent.querySelectorAll(query))
@@ -1191,7 +1196,7 @@ async function editArticle() {
 	history.replaceState({}, '', id)
 }
 async function storyTemplate(){
-	const storySchema = await db('schemas/story')
+	const storySchema = (await db('schemas')).story
 	const storyTemplate = {}
 	for (const property in storySchema) {
 		storyTemplate[property] = {
@@ -1204,7 +1209,7 @@ async function storyTemplate(){
 	return storyTemplate
 }
 async function updateEditor(id) {
-	let story = await db('storys/' + id)
+	let story = await db('storys/' + id,{once:true})
 
 	if (!story) return false
 
@@ -1239,7 +1244,7 @@ async function updateEditor(id) {
 async function publishStory(){
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
-	const oldStory = {...story, ...await db('storys/'+id)}
+	const oldStory = {...story, ...await db('storys/'+id,{once:true})}
 	await syncStory(story,1)
 	for(const type of ['story','article','snippet','notif']){
 		const keys = Object.keys((await db('schemas'))[type])
@@ -1249,23 +1254,21 @@ async function publishStory(){
 		db(type+'s/'+id,object)
 	}
 	if(story.categoryID !== oldStory.categoryID){
-		db( 'categories/'+story.categoryID+'/articleIDs',
-			(await db('categories'))
-				[story.categoryID]
-				.articleIDs
-				.concat([id])
-				.sort(async (a,b)=>(
-					(await db('snippets'))[a].timestamp
-					-
-					(await db('snippets'))[b].timestamp
-				))
-		)
-		db( 'categories/'+oldStory.categoryID+'/articleIDs',
-			(await db('categories'))
-				[oldStory.categoryID]
-				.articleIDs
-				.filter(x=>x!==id)
-		)
+		const storySiblingIDs = (await db('categories'))
+			[story.categoryID]
+			.articleIDs
+			.concat([id])
+			.sort(async (a,b)=>(
+				(await db('snippets'))[a].timestamp
+				-
+				(await db('snippets'))[b].timestamp
+			))
+		const oldStorySiblingIDs = (await db('categories'))
+			[oldStory.categoryID]
+			.articleIDs
+			.filter(x=>x!==id)
+		db( 'categories/'+story.categoryID+'/articleIDs', storySiblingIDs )
+		db( 'categories/'+oldStory.categoryID+'/articleIDs', oldStorySiblingIDs )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
@@ -1634,24 +1637,28 @@ async function imgbb(data){
 		thumbURL: result.data.thumb.url,
 	}
 }
-async function db(path,request){
+async function db(path,{request=false,once=false,callback=false}={}){
 	
+	const url = dbPath(path)
+
 	if(request)
-		return fetch( dbPath(path), {
+		return fetch( url, {
 			body: JSON.stringify(request),
 			headers: { 'Content-Type': 'application/json' },
 			method: 'PATCH',
 		})
 
-	if(path in dbObject){
-		console.log(dbObject)
-		return dbObject[path]
-	}
-	console.log(false)
+	if(once)
+		return (await fetch(url)).json()
 
-	const source = new EventSource(dbPath(path))
-	let first = true
+	if(path in dbObject)
+		return dbObject[path]
+
+	dbObject[path] = ''
+	
 	return new Promise(resolve=>{
+		const source = new EventSource(url)
+		let first = true
 		source.addEventListener('put', ({data})=>{
 			const payload = JSON.parse(data)
 			if(first) {
@@ -1665,6 +1672,7 @@ async function db(path,request){
 				object = object[modifiedPath.shift()]
 				object[modifiedPath[0]] = payload.data
 			}
+			if(callback) callback()
 		})
 		window.addEventListener('beforeunload', () => {
 			source.close()

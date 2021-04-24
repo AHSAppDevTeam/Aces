@@ -22,21 +22,28 @@ async function imgbb(data){
 		thumbURL: result.data.thumb.url,
 	}
 }
-async function db(path,request){
+async function db(path,{request=false,once=false,callback=false}={}){
 	
+	const url = dbPath(path)
+
 	if(request)
-		return fetch( dbPath(path), {
+		return fetch( url, {
 			body: JSON.stringify(request),
 			headers: { 'Content-Type': 'application/json' },
 			method: 'PATCH',
 		})
 
+	if(once)
+		return (await fetch(url)).json()
+
 	if(path in dbObject)
 		return dbObject[path]
 
-	const source = new EventSource(dbPath(path))
-	let first = true
+	dbObject[path] = ''
+	
 	return new Promise(resolve=>{
+		const source = new EventSource(url)
+		let first = true
 		source.addEventListener('put', ({data})=>{
 			const payload = JSON.parse(data)
 			if(first) {
@@ -50,6 +57,7 @@ async function db(path,request){
 				object = object[modifiedPath.shift()]
 				object[modifiedPath[0]] = payload.data
 			}
+			if(callback) callback()
 		})
 		window.addEventListener('beforeunload', () => {
 			source.close()

@@ -30,7 +30,7 @@ async function editArticle() {
 	history.replaceState({}, '', id)
 }
 async function storyTemplate(){
-	const storySchema = await db('schemas/story')
+	const storySchema = (await db('schemas')).story
 	const storyTemplate = {}
 	for (const property in storySchema) {
 		storyTemplate[property] = {
@@ -43,7 +43,7 @@ async function storyTemplate(){
 	return storyTemplate
 }
 async function updateEditor(id) {
-	let story = await db('storys/' + id)
+	let story = await db('storys/' + id,{once:true})
 
 	if (!story) return false
 
@@ -78,7 +78,7 @@ async function updateEditor(id) {
 async function publishStory(){
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
-	const oldStory = {...story, ...await db('storys/'+id)}
+	const oldStory = {...story, ...await db('storys/'+id,{once:true})}
 	await syncStory(story,1)
 	for(const type of ['story','article','snippet','notif']){
 		const keys = Object.keys((await db('schemas'))[type])
@@ -88,23 +88,21 @@ async function publishStory(){
 		db(type+'s/'+id,object)
 	}
 	if(story.categoryID !== oldStory.categoryID){
-		db( 'categories/'+story.categoryID+'/articleIDs',
-			(await db('categories'))
-				[story.categoryID]
-				.articleIDs
-				.concat([id])
-				.sort(async (a,b)=>(
-					(await db('snippets'))[a].timestamp
-					-
-					(await db('snippets'))[b].timestamp
-				))
-		)
-		db( 'categories/'+oldStory.categoryID+'/articleIDs',
-			(await db('categories'))
-				[oldStory.categoryID]
-				.articleIDs
-				.filter(x=>x!==id)
-		)
+		const storySiblingIDs = (await db('categories'))
+			[story.categoryID]
+			.articleIDs
+			.concat([id])
+			.sort(async (a,b)=>(
+				(await db('snippets'))[a].timestamp
+				-
+				(await db('snippets'))[b].timestamp
+			))
+		const oldStorySiblingIDs = (await db('categories'))
+			[oldStory.categoryID]
+			.articleIDs
+			.filter(x=>x!==id)
+		db( 'categories/'+story.categoryID+'/articleIDs', storySiblingIDs )
+		db( 'categories/'+oldStory.categoryID+'/articleIDs', oldStorySiblingIDs )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }

@@ -14,5 +14,4 @@ async function discord(id='',title='',description=''){
 		}],
 	}
 	const response = await post((await db('secrets')).webhook,payload)
-	console.log(response)
 }

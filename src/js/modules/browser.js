@@ -1,12 +1,26 @@
-async function initBrowser(){
-	const $browser = $('#browser')
+async function initBrowser(){	
 
+	['locationIDs','locations','categories','snippets']
+	.forEach(item=>db(item,{callback:updateBrowser}))
+
+	$('#search').addEventListener('input',({target:{value:query}})=>{
+		$$('.preview>h4>.title',$browser).forEach($title=>{
+			const $preview = $title.parentElement.parentElement
+			const show = query ? $title.textContent.toLowerCase().includes(query.toLowerCase()) : true
+			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')
+		})
+	})
+}
+async function updateBrowser(){
+
+	const $browser = $('#browser')
 	const [ locationIDs, locations, categories, snippets ] =
 	await Promise.all([ 
 		db('locationIDs'), db('locations'), db('categories'), db('snippets')
 	])
 	
-	$browser.append(
+	$browser.replaceChildren(
+		$browser.firstElementChild,
 		...locationIDs
 			.filter(id=>id in locations)
 			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
@@ -17,14 +31,6 @@ async function initBrowser(){
 	))))))
 
 	$$('textarea',$browser).forEach(initTextarea)
-	
-	$('#search',$browser).addEventListener('input',({target:{value:query}})=>{
-		$$('.preview>h4>.title',$browser).forEach($title=>{
-			const $preview = $title.parentElement.parentElement
-			const show = query ? $title.textContent.toLowerCase().includes(query.toLowerCase()) : true
-			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')
-		})
-	})
 }
 function makeGroup(
 	type, id,
@@ -46,7 +52,7 @@ function makeGroup(
 	const $title = $('.title',$group)
 	$title.value = title
 	$title.addEventListener('change',({target:{value:title}})=>{
-		db(parent+'/'+id,{title})
+		db(parent+'/'+id,{request:{title}})
 		discord('#'+id,`➡️ \`${bracket(id,type)}\` ${title}`)
 	})
 
@@ -54,7 +60,7 @@ function makeGroup(
 		const $color = $('.color',$group) 
 		$color.value = color
 		$color.addEventListener('change',({target:{value:color}})=>{
-			db(parent+'/'+id,{color})
+			db(parent+'/'+id,{request:{color}})
 			discord('#'+id,`🎨 \`${bracket(id,type)}\` ${color}`)
 		})
 	}
@@ -80,8 +86,8 @@ function makePreview(id,snippet){
 
 	const $featured = $('.featured',$preview)
 	$featured.addEventListener('change',({target:{checked:featured}})=>{
-		db('snippets/'+id,{featured})
-		db('articles/'+id,{featured})
+		db('snippets/'+id,{request:{featured}})
+		db('articles/'+id,{request:{featured}})
 		discord(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
 	})
 
