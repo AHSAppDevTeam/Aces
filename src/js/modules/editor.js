@@ -87,6 +87,27 @@ async function publishStory(){
 		)
 		db(type+'s/'+id,object)
 	}
+	if(story.categoryID !== oldStory.categoryID){
+		await db(
+			'categories/'+story.category+'/articleIDs',
+			(await db('categories'))
+				[story.categoryID]
+				.articleIDs
+				.concat([id])
+				.sort(async (a,b)=>(
+					(await db('snippets'))[a].timestamp
+					-
+					(await db('snippets'))[b].timestamp
+				))
+		)
+		await db(
+			'categories/'+oldStory.category+'/articleIDs',
+			(await db('categories'))
+				[story.categoryID]
+				.articleIDs
+				.filter(x=>x!==id)
+		)
+	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
 function diff(newer,older){

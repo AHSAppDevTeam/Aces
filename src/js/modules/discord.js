@@ -13,6 +13,6 @@ async function discord(id='',title='',description=''){
 			description: description.slice(0,2048),
 		}],
 	}
-	const response = await post(secrets.webhook,payload)
+	const response = await post((await db('secrets')).webhook,payload)
 	console.log(response)
 }

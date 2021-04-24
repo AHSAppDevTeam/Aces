@@ -966,7 +966,6 @@ const DEBUG = true
 const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'
 let user = ''
 let token = ''
-let secrets = {}
 const dbObject = {}
 async function initAuth(){
 	const $sign = $('#sign')
@@ -1024,7 +1023,6 @@ async function signOut(){
 async function setAuth(idToken,refreshToken) {
 	token = '?auth=' + idToken
 	user = await getUser(idToken)
-	secrets = await db('secrets')
 	localStorage.setItem('refresh_token',refreshToken)
 	updateAuth(Boolean(user))
 }
@@ -1155,7 +1153,7 @@ async function discord(id='',title='',description=''){
 			description: description.slice(0,2048),
 		}],
 	}
-	const response = await post(secrets.webhook,payload)
+	const response = await post((await db('secrets')).webhook,payload)
 	console.log(response)
 }
 const $ = (query,parent=document) => parent.querySelector(query)
@@ -1249,6 +1247,27 @@ async function publishStory(){
 			Object.entries(story).filter(([key])=>keys.includes(key))
 		)
 		db(type+'s/'+id,object)
+	}
+	if(story.categoryID !== oldStory.categoryID){
+		await db(
+			'categories/'+story.category+'/articleIDs',
+			(await db('categories'))
+				[story.categoryID]
+				.articleIDs
+				.concat([id])
+				.sort(async (a,b)=>(
+					(await db('snippets'))[a].timestamp
+					-
+					(await db('snippets'))[b].timestamp
+				))
+		)
+		await db(
+			'categories/'+oldStory.category+'/articleIDs',
+			(await db('categories'))
+				[story.categoryID]
+				.articleIDs
+				.filter(x=>x!==id)
+		)
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
@@ -1608,7 +1627,7 @@ async function imgbb(data){
 	const body = new FormData()
 	body.append('image',data)
 	const response = await fetch(
-		'https://'+secrets.imgbb,
+		'https://' + (await db('secrets')).imgbb,
 		{ method: 'POST', body }
 	)
 	const result = await response.json()

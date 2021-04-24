@@ -54,7 +54,6 @@ async function signOut(){
 async function setAuth(idToken,refreshToken) {
 	token = '?auth=' + idToken
 	user = await getUser(idToken)
-	secrets = await db('secrets')
 	localStorage.setItem('refresh_token',refreshToken)
 	updateAuth(Boolean(user))
 }
