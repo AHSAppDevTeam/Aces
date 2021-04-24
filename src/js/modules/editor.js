@@ -60,6 +60,20 @@ async function updateEditor(id) {
 	)
 	$('#media').replaceChildren(...urlSets.map($thumb))
 	$$('textarea',$editor).forEach(updateTextarea)
+	const [locationIDs,locations,categories] = await Promise.all([
+		db('locationIDs'),db('locations'),db('categories')
+	])
+	$('#categoryID').replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
+		const $group = document.createElement('optgroup')
+		$group.setAttribute('label',locations[id].title)
+		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
+			const $option = document.createElement('option')
+			$option.value = id
+			$option.textContent = categories[id].title
+			return $option
+		}))
+		return $group
+	}))
 }
 async function publishStory(){
 	const id = window.location.pathname.split('/').pop()
