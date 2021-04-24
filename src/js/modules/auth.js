@@ -1,9 +1,13 @@
+/**
+ * Initiates the authentication elements
+ */
 async function initAuth(){
 	const $sign = $('#sign')
 	const $signIn = $('#sign-in')
 	const $email = $('#email')
 	const $password = $('#password')
 
+	// Try to sign in with preexisting token
 	signInWithToken(localStorage.getItem('refresh_token'))
 
 	$signIn.addEventListener('submit', event=>{
@@ -24,6 +28,13 @@ async function initAuth(){
 		document.activeElement.blur()
 	})
 }
+
+/**
+ * Sign in to Firebase with email and password
+ * @param {string} email 
+ * @param {string} password 
+ * @returns 
+ */
 async function signInWithEmail( email, password ) {
 	const res = await googleapis(
 		'identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
@@ -37,6 +48,12 @@ async function signInWithEmail( email, password ) {
 	}
 	setAuth(res.idToken,res.refreshToken)
 }
+
+/**
+ * Sign in to Firebase with stored refresh token
+ * @param {string} refreshToken 
+ * @returns 
+ */
 async function signInWithToken(refreshToken) {
 	if(!refreshToken) return false
 	const res = await googleapis(
@@ -46,6 +63,10 @@ async function signInWithToken(refreshToken) {
 	if(res.error) return false
 	setAuth(res.id_token,res.refresh_token)
 }
+
+/**
+ * Sign out of Firebase
+ */
 async function signOut(){
 	localStorage.setItem('refresh_token','')
 	token = user = ''
