@@ -23,7 +23,7 @@ async function imgbb(data){
 	}
 }
 async function db(path,request){
-
+	
 	if(request)
 		return fetch( dbPath(path), {
 			body: JSON.stringify(request),
