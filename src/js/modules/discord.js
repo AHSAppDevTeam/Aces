@@ -1,3 +1,9 @@
+/**
+ * Sends a message to the Discord channel
+ * @param {string} id 
+ * @param {string} title 
+ * @param {string} description 
+ */
 async function discord(id='',title='',description=''){
 	const payload = {
 		username: 'Aces',
@@ -13,5 +19,5 @@ async function discord(id='',title='',description=''){
 			description: description.slice(0,2048),
 		}],
 	}
-	const response = await post((await db('secrets')).webhook,payload)
+	const response = await post((await dbOnce('secrets/webhook')),payload)
 }
