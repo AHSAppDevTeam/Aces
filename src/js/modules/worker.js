@@ -12,19 +12,19 @@ self.addEventListener('fetch', event => {
 		source.addEventListener('put', ({data})=>{
 			console.log(data)
 			const payload = JSON.parse(data)
-			console.log('put')
+			let responseObject = payload.data
 			if(first) {
 				first = false
-				dbObject[path] = payload.data
 			} else {
+				const cached = await caches.match(event.request)
+				responseObject = await cached.json()
+				
 				let modifiedPath = payload.path.split('/').filter(x=>x)
-				let object = dbObject[path]
 				while(modifiedPath.length>1)
-				object = object[modifiedPath.shift()]
-				object[modifiedPath[0]] = payload.data
-				if(callback) callback()
+					responseObject = responseObject[modifiedPath.shift()]
+				responseObject[modifiedPath[0]] = payload.data
 			}
-			const response = new Response()
+			const response = new Response(JSON.stringify(responseObject))
 			const cache = await caches.open('v1')
 			cache.put(event.request, response.clone())
 			resolve(response)

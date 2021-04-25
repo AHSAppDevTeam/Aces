@@ -3,53 +3,37 @@ async function initWorker(){
 		navigator.serviceWorker.register('/worker.js')
 }
 self.addEventListener('fetch', event => {
-	const {headers, url} = event.request;
-	const isSSERequest = headers.get('Accept') === 'text/event-stream';
-
-	// Process only SSE connections
-	if (!isSSERequest) return
-
-	console.log('fetching!', event.request)
-
-	// Headers for SSE response
-	const sseHeaders = {
-		'content-type': 'text/event-stream',
-		'Transfer-Encoding': 'chunked',
-		'Connection': 'keep-alive',
-	};
-	// Function for formatting message to SSE response
-	const sseChunkData = (data, event, retry, id) =>
-		Object.entries({event, id, data, retry})
-		.filter(([, value]) => ![undefined, null].includes(value))
-		.map(([key, value]) => `${key}: ${value}`)
-		.join('\n') + '\n\n';
-
-	// Map with server connections, where key - url, value - EventSource
-	const serverConnections = {};
-	// For each request opens only one server connection and use it for next requests with the same url
-	const getServerConnection = url => {
-		if (!serverConnections[url]) {
-			serverConnections[url] = new EventSource(url);
-		}
-
-		return serverConnections[url];
-	};
-	// On message from server forward it to browser
-	const onServerMessage = (controller, {data, type, retry, lastEventId}) => {
-		const responseText = sseChunkData(data, type, retry, lastEventId);
-		const responseData = Uint8Array.from(responseText, x => x.charCodeAt(0));
-		console.log(responseText)
-		controller.enqueue(responseData);
-	};
-	const stream = new ReadableStream({
-		start: controller => {
-			getServerConnection(url).addEventListener('put',onServerMessage.bind(null, controller))
-		}
-	});
-	const response = new Response(stream, {headers: sseHeaders});
-
-	event.respondWith(response);
-});
+	// Process only dbLive requests
+	if (event.request.headers.get('Aces-Accept') !== 'text/event-stream') return
+	const cached = await caches.match(event.request)
+	event.respondWith(cached || await new Promise((resolve)=>{
+		const source = new EventSource(event.request.url)
+		let first = true
+		source.addEventListener('put', ({data})=>{
+			console.log(data)
+			const payload = JSON.parse(data)
+			let responseObject = payload.data
+			if(first) {
+				first = false
+			} else {
+				const cached = await caches.match(event.request)
+				responseObject = await cached.json()
+				
+				let modifiedPath = payload.path.split('/').filter(x=>x)
+				while(modifiedPath.length>1)
+					responseObject = responseObject[modifiedPath.shift()]
+				responseObject[modifiedPath[0]] = payload.data
+			}
+			const response = new Response(JSON.stringify(responseObject))
+			const cache = await caches.open('v1')
+			cache.put(event.request, response.clone())
+			resolve(response)
+		})
+		window.addEventListener('beforeunload', () => {
+			source.close()
+		})			
+	}))
+})
 
 self.addEventListener('install', (evt) => evt.waitUntil(self.skipWaiting()));
 self.addEventListener('activate', (evt) => evt.waitUntil(self.clients.claim()));
