@@ -3,18 +3,19 @@ async function initWorker(){
 		navigator.serviceWorker.register('/worker.js')
 }
 self.addEventListener('fetch', event => {
-	console.log('hi')
 	const {headers, url} = event.request;
 	const isSSERequest = headers.get('Accept') === 'text/event-stream';
 
 	// Process only SSE connections
 	if (!isSSERequest) return
 
-	console.log(event.request)
+	console.log('fetching!', event.request)
 
 	// Headers for SSE response
 	const sseHeaders = {
-	'content-type': 'text/event-stream',
+		'content-type': 'text/event-stream',
+		'Transfer-Encoding': 'chunked',
+		'Connection': 'keep-alive',
 	};
 	// Function for formatting message to SSE response
 	const sseChunkData = (data, event, retry, id) =>
@@ -37,13 +38,12 @@ self.addEventListener('fetch', event => {
 	const onServerMessage = (controller, {data, type, retry, lastEventId}) => {
 		const responseText = sseChunkData(data, type, retry, lastEventId);
 		const responseData = Uint8Array.from(responseText, x => x.charCodeAt(0));
+		console.log(responseText)
 		controller.enqueue(responseData);
 	};
 	const stream = new ReadableStream({
 		start: controller => {
-			onServerMessage(controller, {data: 'Hello!'});
-
-			getServerConnection(url).onmessage = onServerMessage.bind(null, controller);
+			getServerConnection(url).addEventListener('put',onServerMessage.bind(null, controller))
 		}
 	});
 	const response = new Response(stream, {headers: sseHeaders});

@@ -45,26 +45,17 @@ const imgbb = async ( data ) => {
  */
 const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
 
-/**
- * Writes to the database
- * @param {string} path 
- * @param {Object} request 
- */
-const dbWrite = async ( path, request ) => await fetch(
-	dbPath(path), 
-	{
-		body: JSON.stringify(request),
-		headers: { 'Content-Type': 'application/json' },
-		method: 'PATCH',
-	}
-)
+const db = async ( path='', request={} ) => (await fetch(
+	dbPath(path),
+	request
+)).json()
 
 /**
  * Reads the database once
  * @param {string} path 
  * @returns {*} response
  */
-const dbOnce = async ( path ) => (await fetch(dbPath(path))).json()
+const dbOnce = async ( path ) => db( path )
 
 /**
  * Reads the database and updates it live
@@ -72,37 +63,20 @@ const dbOnce = async ( path ) => (await fetch(dbPath(path))).json()
  * @param {function} callback 
  * @returns {*} response
  */
-const dbLive = async ( path, callback ) => {
-	if(path in dbObject)
-		return dbObject[path]
+const dbLive = async ( path ) => db(path, { 
+	headers: { 'Aces-Accept': 'text/event-stream' } 
+})
 
-	dbObject[path] = ''
-	
-	return new Promise(resolve=>{
-		const source = new EventSource(dbPath(path))
-		console.log(source)
-		let first = true
-		source.addEventListener('put', ({data})=>{
-			const payload = JSON.parse(data)
-			console.log('put')
-			if(first) {
-				first = false
-				dbObject[path] = payload.data
-				resolve(payload.data)
-			} else {
-				let modifiedPath = payload.path.split('/').filter(x=>x)
-				let object = dbObject[path]
-				while(modifiedPath.length>1)
-				object = object[modifiedPath.shift()]
-				object[modifiedPath[0]] = payload.data
-				if(callback) callback()
-			}
-		})
-		window.addEventListener('beforeunload', () => {
-			source.close()
-		})
-	})
-}
+/**
+ * Writes to the database
+ * @param {string} path 
+ * @param {Object} body 
+ */
+const dbWrite = async ( path, body ) => db(path, {
+	body: JSON.stringify(body),
+	headers: { 'Content-Type': 'application/json' },
+	method: 'PATCH',
+})
 
 /**
  * 
