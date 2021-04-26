@@ -1011,7 +1011,7 @@ async function signInWithEmail( email, password ) {
 		{ email, password, returnSecureToken: true }
 	)
 	if(res.error) {
-		const classes = $('signIn').classList
+		const classes = $('#signIn').classList
 		classes.remove('loading')
 		classes.add('invalid')
 		return
@@ -1068,6 +1068,12 @@ function fetchBrowserResources(callback){
 } 
 async function initBrowser(){	
 	await Promise.all(fetchBrowserResources(updateBrowser))
+	Object.assign(navigator.serviceWorker.subscriptionList,{
+		locationsIDs: updateBrowser,
+		locations: updateBrowser,
+		categories: updateBrowser,
+		snippets: updateBrowser,
+	})
 	updateBrowser()
 	$('#search').addEventListener('input',({target:{value:query}})=>{
 		$$('.preview>h4>.title',$browser).forEach($title=>{
@@ -1235,6 +1241,7 @@ async function editArticle() {
 	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
 	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
 	if (!id.includes('-')) return
+	console.log(id)
 	updateEditor(id)
 	history.replaceState({}, '', id)
 }
@@ -1253,7 +1260,7 @@ async function storyTemplate(){
 }
 async function updateEditor(id) {
 	let story = await dbOnce('storys/' + id)
-
+	console.log(story)
 	if (!story) return false
 
 	story = {...await storyTemplate(),...story}
@@ -1721,7 +1728,6 @@ const dbOnce = async ( path ) => db( path )
 /**
  * Reads the database and updates it live
  * @param {string} path 
- * @param {function} callback 
  * @returns {*} response
  */
 const dbLive = async ( path ) => db(path, { 
@@ -1871,8 +1877,14 @@ const dateToTimestamp = date => Math.trunc(new Date(date).getTime()/1000) - offs
  */
 const randomElement = array => array[Math.floor(Math.random()*array.length)]
 async function initWorker(){
-	if ('serviceWorker' in navigator)
-		navigator.serviceWorker.register('/worker.js')
+	if (!('serviceWorker' in navigator)) return
+	navigator.serviceWorker.register('/worker.js')
+	navigator.serviceWorker.subscriptionList = { }
+	navigator.serviceWorker.addEventListener('message', ({data:{type,path}}) => {
+		console.log(data)
+		const list = navigator.serviceWorker.subscriptionList
+		if(type=='update' && path in list) (list[path])()
+	})
 }
 initWorker()
 initEditor()

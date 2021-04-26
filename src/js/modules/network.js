@@ -60,7 +60,6 @@ const dbOnce = async ( path ) => db( path )
 /**
  * Reads the database and updates it live
  * @param {string} path 
- * @param {function} callback 
  * @returns {*} response
  */
 const dbLive = async ( path ) => db(path, { 

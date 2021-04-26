@@ -1,35 +1,44 @@
-self.addEventListener('fetch', async (event) => {
-	// Process only dbLive requests
-	if (event.request.headers.get('Aces-Accept') !== 'text/event-stream') return
-	const cached = await caches.match(event.request)
-	event.respondWith(cached || await new Promise(async (resolve)=>{
-		const source = new EventSource(event.request.url)
-		let first = true
-		source.addEventListener('put', async ({data})=>{
-			console.log(data)
-			const payload = JSON.parse(data)
-			let responseObject = payload.data
-			if(first) {
-				first = false
-			} else {
-				const cached = await caches.match(event.request)
-				responseObject = await cached.json()
-				
-				let modifiedPath = payload.path.split('/').filter(x=>x)
-				while(modifiedPath.length>1)
-					responseObject = responseObject[modifiedPath.shift()]
-				responseObject[modifiedPath[0]] = payload.data
-			}
-			const response = new Response(JSON.stringify(responseObject))
-			const cache = await caches.open('v1')
-			cache.put(event.request, response.clone())
-			resolve(response)
-		})
-		window.addEventListener('beforeunload', () => {
-			source.close()
-		})			
-	}))
-})
+self.addEventListener('fetch', event => event.respondWith(response(event.request)))
 
-self.addEventListener('install', (evt) => evt.waitUntil(self.skipWaiting()));
-self.addEventListener('activate', (evt) => evt.waitUntil(self.clients.claim()));
+self.addEventListener('install', (evt) => evt.waitUntil(self.skipWaiting()))
+self.addEventListener('activate', (evt) => evt.waitUntil(self.clients.claim()))
+
+const response = request => new Promise(async (resolve)=>{
+	
+	if(!request.headers.get('Aces-Accept'))
+		return resolve(fetch(request))
+
+	const cache = await caches.open('v1')
+	const cachedResponse = await cache.match(request)
+	if(cachedResponse)
+		return resolve(cachedResponse)
+
+	const source = new EventSource(request.url)
+	let first = true
+	source.addEventListener('put', async ({data})=>{
+		console.log(data)
+		const payload = JSON.parse(data)
+		let responseObject = payload.data
+		if(first) {
+			first = false
+		} else {
+			const cached = await caches.match(event.request)
+			responseObject = await cached.json()
+			
+			let modifiedPath = payload.path.split('/').filter(x=>x)
+			while(modifiedPath.length>1)
+				responseObject = responseObject[modifiedPath.shift()]
+			responseObject[modifiedPath[0]] = payload.data
+			const clients = await self.clients.matchAll({type:'window'})
+			for(const client of clients)
+				client.postMessage({
+					type: 'update',
+					path: request.headers.get('path'),
+				})
+		}
+		const response = new Response(JSON.stringify(responseObject))
+		const cache = await caches.open('v1')
+		cache.put(request, response.clone())
+		resolve(response)
+	})
+})

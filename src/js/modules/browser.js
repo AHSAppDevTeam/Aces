@@ -3,6 +3,12 @@ function fetchBrowserResources(callback){
 } 
 async function initBrowser(){	
 	await Promise.all(fetchBrowserResources(updateBrowser))
+	Object.assign(navigator.serviceWorker.subscriptionList,{
+		locationsIDs: updateBrowser,
+		locations: updateBrowser,
+		categories: updateBrowser,
+		snippets: updateBrowser,
+	})
 	updateBrowser()
 	$('#search').addEventListener('input',({target:{value:query}})=>{
 		$$('.preview>h4>.title',$browser).forEach($title=>{
