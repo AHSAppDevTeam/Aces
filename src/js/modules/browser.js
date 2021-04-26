@@ -11,7 +11,7 @@ async function initBrowser(){
 	})
 	updateBrowser()
 	$('#search').addEventListener('input',({target:{value:query}})=>{
-		$$('.preview>h4>.title',$browser).forEach($title=>{
+		$$('.preview>h4>.title',$('#browser')).forEach($title=>{
 			const $preview = $title.parentElement.parentElement
 			const show = query ? $title.textContent.toLowerCase().includes(query.toLowerCase()) : true
 			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')

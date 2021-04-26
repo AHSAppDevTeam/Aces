@@ -25,7 +25,6 @@ async function editArticle() {
 	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
 	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
 	if (!id.includes('-')) return
-	console.log(id)
 	updateEditor(id)
 	history.replaceState({}, '', id)
 }
@@ -44,7 +43,6 @@ async function storyTemplate(){
 }
 async function updateEditor(id) {
 	let story = await dbOnce('storys/' + id)
-	console.log(story)
 	if (!story) return false
 
 	story = {...await storyTemplate(),...story}

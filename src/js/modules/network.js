@@ -43,7 +43,7 @@ const imgbb = async ( data ) => {
  * @param {string} path 
  * @returns {string} full path
  */
-const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
+const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+(path.includes('secrets') ? token : '')
 
 const db = async ( path='', request={} ) => (await fetch(
 	dbPath(path),

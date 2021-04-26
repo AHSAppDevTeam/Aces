@@ -1076,7 +1076,7 @@ async function initBrowser(){
 	})
 	updateBrowser()
 	$('#search').addEventListener('input',({target:{value:query}})=>{
-		$$('.preview>h4>.title',$browser).forEach($title=>{
+		$$('.preview>h4>.title',$('#browser')).forEach($title=>{
 			const $preview = $title.parentElement.parentElement
 			const show = query ? $title.textContent.toLowerCase().includes(query.toLowerCase()) : true
 			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')
@@ -1241,7 +1241,6 @@ async function editArticle() {
 	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
 	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
 	if (!id.includes('-')) return
-	console.log(id)
 	updateEditor(id)
 	history.replaceState({}, '', id)
 }
@@ -1260,7 +1259,6 @@ async function storyTemplate(){
 }
 async function updateEditor(id) {
 	let story = await dbOnce('storys/' + id)
-	console.log(story)
 	if (!story) return false
 
 	story = {...await storyTemplate(),...story}
@@ -1711,7 +1709,7 @@ const imgbb = async ( data ) => {
  * @param {string} path 
  * @returns {string} full path
  */
-const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+token
+const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+(path.includes('secrets') ? token : '')
 
 const db = async ( path='', request={} ) => (await fetch(
 	dbPath(path),
@@ -1878,7 +1876,7 @@ const dateToTimestamp = date => Math.trunc(new Date(date).getTime()/1000) - offs
 const randomElement = array => array[Math.floor(Math.random()*array.length)]
 async function initWorker(){
 	if (!('serviceWorker' in navigator)) return
-	navigator.serviceWorker.register('/worker.js')
+	// navigator.serviceWorker.register('/worker.js')
 	navigator.serviceWorker.subscriptionList = { }
 	navigator.serviceWorker.addEventListener('message', ({data:{type,path}}) => {
 		console.log(data)
