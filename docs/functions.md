@@ -37,16 +37,16 @@
 <dt><a href="#dbPath">dbPath(path)</a> ⇒ <code>string</code></dt>
 <dd><p>Expands relative path to Firebase realtime database URL</p>
 </dd>
-<dt><a href="#dbWrite">dbWrite(path, request)</a></dt>
-<dd><p>Writes to the database</p>
-</dd>
-<dt><a href="#dbOnce">dbOnce(path)</a> ⇒ <code>*</code></dt>
+<dt><a href="#dbOnce">dbOnce(path)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Reads the database once</p>
 </dd>
-<dt><a href="#dbLive">dbLive(path, callback)</a> ⇒ <code>*</code></dt>
+<dt><a href="#dbLive">dbLive(path)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Reads the database and updates it live</p>
 </dd>
-<dt><a href="#googleapis">googleapis(path, request)</a> ⇒ <code>*</code></dt>
+<dt><a href="#dbWrite">dbWrite(path, body)</a> ⇒ <code>Promise</code></dt>
+<dd><p>Writes to the database</p>
+</dd>
+<dt><a href="#googleapis">googleapis(path, request)</a> ⇒ <code>Promise</code></dt>
 <dd></dd>
 <dt><a href="#initResize">initResize()</a></dt>
 <dd><p>Initiates the resize bar</p>
@@ -209,25 +209,13 @@ Expands relative path to Firebase realtime database URL
 | --- | --- |
 | path | <code>string</code> | 
 
-<a name="dbWrite"></a>
-
-## dbWrite(path, request)
-Writes to the database
-
-**Kind**: global function  
-
-| Param | Type |
-| --- | --- |
-| path | <code>string</code> | 
-| request | <code>Object</code> | 
-
 <a name="dbOnce"></a>
 
-## dbOnce(path) ⇒ <code>\*</code>
+## dbOnce(path) ⇒ <code>Promise</code>
 Reads the database once
 
 **Kind**: global function  
-**Returns**: <code>\*</code> - response  
+**Returns**: <code>Promise</code> - response  
 
 | Param | Type |
 | --- | --- |
@@ -235,22 +223,34 @@ Reads the database once
 
 <a name="dbLive"></a>
 
-## dbLive(path, callback) ⇒ <code>\*</code>
+## dbLive(path) ⇒ <code>Promise</code>
 Reads the database and updates it live
 
 **Kind**: global function  
-**Returns**: <code>\*</code> - response  
+**Returns**: <code>Promise</code> - response  
 
 | Param | Type |
 | --- | --- |
 | path | <code>string</code> | 
-| callback | <code>function</code> | 
+
+<a name="dbWrite"></a>
+
+## dbWrite(path, body) ⇒ <code>Promise</code>
+Writes to the database
+
+**Kind**: global function  
+**Returns**: <code>Promise</code> - return  
+
+| Param | Type |
+| --- | --- |
+| path | <code>string</code> | 
+| body | <code>Object</code> | 
 
 <a name="googleapis"></a>
 
-## googleapis(path, request) ⇒ <code>\*</code>
+## googleapis(path, request) ⇒ <code>Promise</code>
 **Kind**: global function  
-**Returns**: <code>\*</code> - response  
+**Returns**: <code>Promise</code> - response  
 
 | Param | Type |
 | --- | --- |

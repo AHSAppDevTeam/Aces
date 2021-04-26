@@ -53,14 +53,14 @@ const db = async ( path='', request={} ) => (await fetch(
 /**
  * Reads the database once
  * @param {string} path 
- * @returns {*} response
+ * @returns {Promise} response
  */
 const dbOnce = async ( path ) => db( path )
 
 /**
  * Reads the database and updates it live
  * @param {string} path 
- * @returns {*} response
+ * @returns {Promise} response
  */
 const dbLive = async ( path ) => db(path, { 
 	headers: { 'Aces-Accept': 'text/event-stream' } 
@@ -70,17 +70,18 @@ const dbLive = async ( path ) => db(path, {
  * Writes to the database
  * @param {string} path 
  * @param {Object} body 
+ * @returns {Promise} return
  */
 const dbWrite = async ( path, body ) => db(path, {
 	body: JSON.stringify(body),
 	headers: { 'Content-Type': 'application/json' },
 	method: 'PATCH',
-})
+}).json()
 
 /**
  * 
  * @param {string} path 
  * @param {Object} request 
- * @returns {*} response
+ * @returns {Promise} response
  */
 const googleapis = async (path,request) => (await post(path+'?key='+KEY,request)).json()
