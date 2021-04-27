@@ -1,16 +1,14 @@
 self.addEventListener('fetch', event => event.respondWith(response(event.request)))
 
-self.addEventListener('install', (evt) => evt.waitUntil(self.skipWaiting()))
-self.addEventListener('activate', (evt) => evt.waitUntil(self.clients.claim()))
+self.addEventListener('install', event => event.waitUntil(self.skipWaiting()))
+self.addEventListener('activate', event => event.waitUntil(self.clients.claim()))
 
 const response = request => new Promise(async (resolve)=>{
-	if(!request.headers.get('Aces-Accept'))
-		return resolve(fetch(request))
-	
+	if(!request.headers.get('Aces-Accept')) return resolve(fetch(request))
+		
 	const cache = await caches.open('v4')
 	const cachedResponse = await cache.match(request)
-	if(cachedResponse)
-		return resolve(cachedResponse)
+	if(cachedResponse) return resolve(cachedResponse)
 
 	const source = new EventSource(request.url)
 	let first = true
@@ -18,9 +16,7 @@ const response = request => new Promise(async (resolve)=>{
 		console.log(data)
 		const payload = JSON.parse(data)
 		let responseObject = payload.data
-		if(first) {
-			first = false
-		} else {
+		if(first) { first = false } else {
 			const cachedResponse = await cache.match(request)
 			responseObject = await cachedResponse.json()
 			let modifiedPath = payload.path.split('/').filter(x=>x)
@@ -35,8 +31,7 @@ const response = request => new Promise(async (resolve)=>{
 			// 	})
 		}
 		const response = new Response(JSON.stringify(responseObject))
-		console.log(await response.json())
-		cache.put(request, response.clone())
-		resolve(response)
+		cache.put(request,response.clone())
+		resolve(response.clone())
 	})
 })

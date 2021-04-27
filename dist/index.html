@@ -1063,11 +1063,9 @@ async function updateAuth(signedIn){
 	= $('#publish').disabled
 	= !signedIn
 }
-function fetchBrowserResources(callback){
-	return ['locationIDs','locations','categories','snippets'].map(item=>dbLive(item,callback))
-} 
-async function initBrowser(){	
-	await Promise.all(fetchBrowserResources(updateBrowser))
+const dbBrowserResources = () => Promise.all(['locationIDs','locations','categories','snippets'].map(dbLive))
+async function initBrowser(){
+	dbBrowserResources()
 	Object.assign(navigator.serviceWorker.subscriptionList,{
 		locationsIDs: updateBrowser,
 		locations: updateBrowser,
@@ -1085,9 +1083,8 @@ async function initBrowser(){
 }
 async function updateBrowser(){
 	const $browser = $('#browser')
-	const [ locationIDs, locations, categories, snippets ] =
-	await Promise.all(fetchBrowserResources())
-	
+	const [ locationIDs, locations, categories, snippets ] = await dbBrowserResources()
+	console.log(locationIDs)
 	$browser.replaceChildren(
 		$browser.firstElementChild,
 		...locationIDs
@@ -1711,24 +1708,21 @@ const imgbb = async ( data ) => {
  */
 const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+(path.includes('secrets') ? token : '')
 
-const db = async ( path='', request={} ) => (await fetch(
-	dbPath(path),
-	request
-)).json()
+const db = async ( path='', request={} ) => ( await fetch( dbPath(path), request ) ).json()
 
 /**
  * Reads the database once
  * @param {string} path 
- * @returns {*} response
+ * @returns {Promise} response
  */
 const dbOnce = async ( path ) => db( path )
 
 /**
  * Reads the database and updates it live
  * @param {string} path 
- * @returns {*} response
+ * @returns {Promise} response
  */
-const dbLive = async ( path ) => db(path, { 
+const dbLive = async ( path ) => db( path, { 
 	headers: { 'Aces-Accept': 'text/event-stream' } 
 })
 
@@ -1736,8 +1730,9 @@ const dbLive = async ( path ) => db(path, {
  * Writes to the database
  * @param {string} path 
  * @param {Object} body 
+ * @returns {Promise} return
  */
-const dbWrite = async ( path, body ) => db(path, {
+const dbWrite = async ( path, body ) => db( path, {
 	body: JSON.stringify(body),
 	headers: { 'Content-Type': 'application/json' },
 	method: 'PATCH',
@@ -1747,7 +1742,7 @@ const dbWrite = async ( path, body ) => db(path, {
  * 
  * @param {string} path 
  * @param {Object} request 
- * @returns {*} response
+ * @returns {Promise} response
  */
 const googleapis = async (path,request) => (await post(path+'?key='+KEY,request)).json()
 /**
@@ -1876,7 +1871,7 @@ const dateToTimestamp = date => Math.trunc(new Date(date).getTime()/1000) - offs
 const randomElement = array => array[Math.floor(Math.random()*array.length)]
 async function initWorker(){
 	if (!('serviceWorker' in navigator)) return
-	// navigator.serviceWorker.register('/worker.js')
+	navigator.serviceWorker.register('/worker.js')
 	navigator.serviceWorker.subscriptionList = { }
 	navigator.serviceWorker.addEventListener('message', ({data:{type,path}}) => {
 		console.log(data)

@@ -1,8 +1,6 @@
-function fetchBrowserResources(callback){
-	return ['locationIDs','locations','categories','snippets'].map(item=>dbLive(item,callback))
-} 
-async function initBrowser(){	
-	await Promise.all(fetchBrowserResources(updateBrowser))
+const dbBrowserResources = () => Promise.all(['locationIDs','locations','categories','snippets'].map(dbLive))
+async function initBrowser(){
+	dbBrowserResources()
 	Object.assign(navigator.serviceWorker.subscriptionList,{
 		locationsIDs: updateBrowser,
 		locations: updateBrowser,
@@ -20,9 +18,8 @@ async function initBrowser(){
 }
 async function updateBrowser(){
 	const $browser = $('#browser')
-	const [ locationIDs, locations, categories, snippets ] =
-	await Promise.all(fetchBrowserResources())
-	
+	const [ locationIDs, locations, categories, snippets ] = await dbBrowserResources()
+	console.log(locationIDs)
 	$browser.replaceChildren(
 		$browser.firstElementChild,
 		...locationIDs

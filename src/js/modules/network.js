@@ -45,10 +45,7 @@ const imgbb = async ( data ) => {
  */
 const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+(path.includes('secrets') ? token : '')
 
-const db = async ( path='', request={} ) => (await fetch(
-	dbPath(path),
-	request
-)).json()
+const db = async ( path='', request={} ) => ( await fetch( dbPath(path), request ) ).json()
 
 /**
  * Reads the database once
@@ -62,7 +59,7 @@ const dbOnce = async ( path ) => db( path )
  * @param {string} path 
  * @returns {Promise} response
  */
-const dbLive = async ( path ) => db(path, { 
+const dbLive = async ( path ) => db( path, { 
 	headers: { 'Aces-Accept': 'text/event-stream' } 
 })
 
@@ -72,11 +69,11 @@ const dbLive = async ( path ) => db(path, {
  * @param {Object} body 
  * @returns {Promise} return
  */
-const dbWrite = async ( path, body ) => db(path, {
+const dbWrite = async ( path, body ) => db( path, {
 	body: JSON.stringify(body),
 	headers: { 'Content-Type': 'application/json' },
 	method: 'PATCH',
-}).json()
+})
 
 /**
  * 
