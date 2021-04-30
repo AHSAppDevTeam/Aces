@@ -40,12 +40,20 @@ const imgbb = async ( data ) => {
 
 /**
  * Expands relative path to Firebase realtime database URL
- * @param {string} path 
+ * @param {string} path Relative path
+ * @param {boolean} legacy Use legacy database
  * @returns {string} full path
  */
-const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+(path.includes('secrets') ? token : '')
+const dbPath = ( path, legacy ) => (
+	'https://'+
+	(legacy ? 'arcadia-high-mobile' : 'ahs-app')+
+	'.firebaseio.com/'+
+	path+
+	'.json'+
+	(path.includes('secrets') ? token : '')
+)
 
-const db = async ( path='', request={} ) => ( await fetch( dbPath(path), request ) ).json()
+const db = async ( path='', request={}, legacy=false ) => ( await fetch( dbPath(path, legacy), request ) ).json()
 
 /**
  * Reads the database once
@@ -67,13 +75,14 @@ const dbLive = async ( path ) => db( path, {
  * Writes to the database
  * @param {string} path 
  * @param {Object} body 
+ * @param {boolean} legacy Use legacy database
  * @returns {Promise} return
  */
-const dbWrite = async ( path, body ) => db( path, {
+const dbWrite = async ( path, body, legacy ) => db( path, {
 	body: JSON.stringify(body),
 	headers: { 'Content-Type': 'application/json' },
 	method: 'PATCH',
-})
+}, legacy )
 
 /**
  * 

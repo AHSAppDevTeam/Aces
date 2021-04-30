@@ -1242,17 +1242,16 @@ async function editArticle() {
 	history.replaceState({}, '', id)
 }
 async function storyTemplate(){
-	const storySchema = (await dbLive('schemas')).story
-	const storyTemplate = {}
-	for (const property in storySchema) {
-		storyTemplate[property] = {
+	const schema = (await dbLive('schemas')).story
+	const template = {}
+	for (const key in schema)
+		template[key] = {
 			'Array<String>': [],
 			'String': '',
 			'Boolean': false,
 			'Int': 0,
-		}[storySchema[property]]
-	}
-	return storyTemplate
+		}[schema[key]]
+	return template
 }
 async function updateEditor(id) {
 	let story = await dbOnce('storys/' + id)
@@ -1298,6 +1297,19 @@ async function publishStory(){
 		)
 		dbWrite(type+'s/'+id,object)
 	}
+	
+	const legacyMap = await dbLive('schemas').legacy
+	const legacyStory = Object.fromEntries(
+		Object.entries(story).map(
+			([key,value]) => [legacyMap[key],value]
+		)
+	)
+	const locations = await dbLive('locations')
+	const [locationID] = Object.entries(locations).find(
+		([id,location]) => location.categoryIDs.includes(story.categoryID)
+	)
+	dbWrite(locationID+'/'+story.categoryID+'/'+id,legacyStory,true)
+	
 	if(story.categoryID !== oldStory.categoryID){
 		const storySiblingIDs = (await dbLive('categories'))
 			[story.categoryID]
@@ -1703,12 +1715,20 @@ const imgbb = async ( data ) => {
 
 /**
  * Expands relative path to Firebase realtime database URL
- * @param {string} path 
+ * @param {string} path Relative path
+ * @param {boolean} legacy Use legacy database
  * @returns {string} full path
  */
-const dbPath = path => 'https://ahs-app.firebaseio.com/'+path+'.json'+(path.includes('secrets') ? token : '')
+const dbPath = ( path, legacy ) => (
+	'https://'+
+	(legacy ? 'arcadia-high-mobile' : 'ahs-app')+
+	'.firebaseio.com/'+
+	path+
+	'.json'+
+	(path.includes('secrets') ? token : '')
+)
 
-const db = async ( path='', request={} ) => ( await fetch( dbPath(path), request ) ).json()
+const db = async ( path='', request={}, legacy=false ) => ( await fetch( dbPath(path, legacy), request ) ).json()
 
 /**
  * Reads the database once
@@ -1730,13 +1750,14 @@ const dbLive = async ( path ) => db( path, {
  * Writes to the database
  * @param {string} path 
  * @param {Object} body 
+ * @param {boolean} legacy Use legacy database
  * @returns {Promise} return
  */
-const dbWrite = async ( path, body ) => db( path, {
+const dbWrite = async ( path, body, legacy ) => db( path, {
 	body: JSON.stringify(body),
 	headers: { 'Content-Type': 'application/json' },
 	method: 'PATCH',
-})
+}, legacy )
 
 /**
  * 
@@ -1871,7 +1892,7 @@ const dateToTimestamp = date => Math.trunc(new Date(date).getTime()/1000) - offs
 const randomElement = array => array[Math.floor(Math.random()*array.length)]
 async function initWorker(){
 	if (!('serviceWorker' in navigator)) return
-	navigator.serviceWorker.register('/worker.js')
+	// navigator.serviceWorker.register('/worker.js')
 	navigator.serviceWorker.subscriptionList = { }
 	navigator.serviceWorker.addEventListener('message', ({data:{type,path}}) => {
 		console.log(data)

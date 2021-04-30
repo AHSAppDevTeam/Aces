@@ -29,17 +29,16 @@ async function editArticle() {
 	history.replaceState({}, '', id)
 }
 async function storyTemplate(){
-	const storySchema = (await dbLive('schemas')).story
-	const storyTemplate = {}
-	for (const property in storySchema) {
-		storyTemplate[property] = {
+	const schema = (await dbLive('schemas')).story
+	const template = {}
+	for (const key in schema)
+		template[key] = {
 			'Array<String>': [],
 			'String': '',
 			'Boolean': false,
 			'Int': 0,
-		}[storySchema[property]]
-	}
-	return storyTemplate
+		}[schema[key]]
+	return template
 }
 async function updateEditor(id) {
 	let story = await dbOnce('storys/' + id)
@@ -85,6 +84,19 @@ async function publishStory(){
 		)
 		dbWrite(type+'s/'+id,object)
 	}
+	
+	const legacyMap = await dbLive('schemas').legacy
+	const legacyStory = Object.fromEntries(
+		Object.entries(story).map(
+			([key,value]) => [legacyMap[key],value]
+		)
+	)
+	const locations = await dbLive('locations')
+	const [locationID] = Object.entries(locations).find(
+		([id,location]) => location.categoryIDs.includes(story.categoryID)
+	)
+	dbWrite(locationID+'/'+story.categoryID+'/'+id,legacyStory,true)
+	
 	if(story.categoryID !== oldStory.categoryID){
 		const storySiblingIDs = (await dbLive('categories'))
 			[story.categoryID]
