@@ -19,7 +19,6 @@ async function initBrowser(){
 async function updateBrowser(){
 	const $browser = $('#browser')
 	const [ locationIDs, locations, categories, snippets ] = await dbBrowserResources()
-	console.log(locationIDs)
 	$browser.replaceChildren(
 		$browser.firstElementChild,
 		...locationIDs

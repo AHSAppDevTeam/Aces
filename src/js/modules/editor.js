@@ -72,11 +72,17 @@ async function updateEditor(id) {
 		return $group
 	}))
 }
+async function legacyAddress(categoryID){
+	return Object.entries(await dbLive('locations')).find(
+		([,{categoryIDs}]) => categoryIDs.includes(categoryID)
+	)[0] + '/' + categoryID
+}
 async function publishStory(){
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	await syncStory(story,1)
+	if(!user) return
 	for(const type of ['story','article','snippet','notif']){
 		const keys = Object.keys((await dbLive('schemas'))[type])
 		const object = Object.fromEntries(
@@ -85,19 +91,23 @@ async function publishStory(){
 		dbWrite(type+'s/'+id,object)
 	}
 	
-	const legacyMap = await dbLive('schemas').legacy
+	const legacyMap = (await dbLive('schemas')).legacy
 	const legacyStory = Object.fromEntries(
-		Object.entries(story).map(
-			([key,value]) => [legacyMap[key],value]
-		)
+		Object.entries(story)
+		.filter(([key])=>key in legacyMap)
+		.map(([key,value]) => [legacyMap[key],value])
 	)
-	const locations = await dbLive('locations')
-	const [locationID] = Object.entries(locations).find(
-		([id,location]) => location.categoryIDs.includes(story.categoryID)
-	)
-	dbWrite(locationID+'/'+story.categoryID+'/'+id,legacyStory,true)
 	
+	const locations = Object.entries(await dbLive('locations'))
+	dbWrite(await legacyAddress(story.categoryID)+'/'+id,legacyStory,true)
+
 	if(story.categoryID !== oldStory.categoryID){
+
+	const oldLocationID = locations.find(
+		([,{categoryIDs}]) => categoryIDs.includes(oldStory.categoryID)
+	)
+	dbWrite(await legacyAddress(oldStory.categoryID)+'/'+id,null,true)
+
 		const storySiblingIDs = (await dbLive('categories'))
 			[story.categoryID]
 			.articleIDs

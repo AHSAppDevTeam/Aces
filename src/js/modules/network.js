@@ -50,7 +50,7 @@ const dbPath = ( path, legacy ) => (
 	'.firebaseio.com/'+
 	path+
 	'.json'+
-	(path.includes('secrets') ? token : '')
+	token
 )
 
 const db = async ( path='', request={}, legacy=false ) => ( await fetch( dbPath(path, legacy), request ) ).json()
