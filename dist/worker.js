@@ -2,12 +2,12 @@ self.addEventListener('fetch', event => event.respondWith(response(event.request
 
 self.addEventListener('install', event => event.waitUntil(self.skipWaiting()))
 self.addEventListener('activate', event => event.waitUntil(self.clients.claim()))
-
+self.sources = []
 const response = request => new Promise(async (resolve)=>{
 	if(!request.headers.get('Aces-Accept')) return resolve(fetch(request))
-		
 	const cache = await caches.open('v4')
 	const cachedResponse = await cache.match(request)
+	console.log(request.url,cachedResponse)
 	if(cachedResponse) return resolve(cachedResponse)
 
 	const source = new EventSource(request.url)

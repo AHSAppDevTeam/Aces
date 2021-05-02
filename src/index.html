@@ -103,28 +103,34 @@
 		</div>
 		<aside id=browser class=panel>
 			<header class=card>
+				<input type=button
+					class=card
+					id=new
+					title='draft a new story'
+					value='＋'
+					accesskey=n >
 				<input type=text
 					class=card
 					id=search
 					title='search articles (alt+/)'
 					placeholder='Search titles'
 					accesskey='/'>
-				<a type=button
+				<input type=button
 					class=card
 					id=sources
 					title='view resources'
-					href='sources.html'
-					target='_blank'>🕮</a>
+					value=🕮
+					accesskey=R >
 				<input type=button
 					class=card
 					id=sign
 					title='sign in/out (alt+s)'
 					value='Sign in'
-					accesskey='s'>
+					accesskey=s >
 			</header>
 			<!-- insert previews -->
 		</aside>
-		<form id=sign-in class=card tabindex='0'>
+		<form id=sign-in class=card tabindex=0 method=dialog>
 			<label class=card>
 				<span>email</span>
 				<input id='email' type='email'
@@ -138,7 +144,6 @@
 			<input type=submit class=card value='sign in'>
 			<input type=button class=cancel value='✕'>
 		</form>
-
 		<!-- TEMPLATES -->
 		<template id='template-location'>
 			<section class='group location'>

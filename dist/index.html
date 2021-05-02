@@ -876,28 +876,34 @@ body,
 		</div>
 		<aside id=browser class=panel>
 			<header class=card>
+				<input type=button
+					class=card
+					id=new
+					title='draft a new story'
+					value='＋'
+					accesskey=n >
 				<input type=text
 					class=card
 					id=search
 					title='search articles (alt+/)'
 					placeholder='Search titles'
 					accesskey='/'>
-				<a type=button
+				<input type=button
 					class=card
 					id=sources
 					title='view resources'
-					href='sources.html'
-					target='_blank'>🕮</a>
+					value=🕮
+					accesskey=R >
 				<input type=button
 					class=card
 					id=sign
 					title='sign in/out (alt+s)'
 					value='Sign in'
-					accesskey='s'>
+					accesskey=s >
 			</header>
 			<!-- insert previews -->
 		</aside>
-		<form id=sign-in class=card tabindex='0'>
+		<form id=sign-in class=card tabindex=0 method=dialog>
 			<label class=card>
 				<span>email</span>
 				<input id='email' type='email'
@@ -911,7 +917,6 @@ body,
 			<input type=submit class=card value='sign in'>
 			<input type=button class=cancel value='✕'>
 		</form>
-
 		<!-- TEMPLATES -->
 		<template id='template-location'>
 			<section class='group location'>
@@ -1080,6 +1085,11 @@ async function initBrowser(){
 			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')
 		})
 	})
+	$('#sources').addEventListener('click',async ()=>{
+		Object.values(await dbOnce('sources')).forEach(
+			url => window.open(url,'_blank')
+		)
+	})
 }
 async function updateBrowser(){
 	const $browser = $('#browser')
@@ -1229,6 +1239,21 @@ async function initEditor() {
 		$('#media').prepend(...urlSets.map($thumb))
 	})
 	$('#publish').addEventListener('click',publishStory)
+	
+	const [locationIDs,locations,categories] = await Promise.all([
+		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
+	])
+	$('#categoryID').replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
+		const $group = document.createElement('optgroup')
+		$group.setAttribute('label',locations[id].title)
+		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
+			const $option = document.createElement('option')
+			$option.value = id
+			$option.textContent = categories[id].title
+			return $option
+		}))
+		return $group
+	}))
 	remapEnter($('#url'))
 
 	editArticle()
@@ -1269,23 +1294,6 @@ async function updateEditor(id) {
 	)
 	$('#media').replaceChildren(...urlSets.map($thumb))
 	$$('#editor textarea').forEach(updateTextarea)
-	const [locationIDs,locations,categories] = await Promise.all([
-		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
-	])
-	const $categoryID = $('#categoryID')
-	const $categoryIDValue = $categoryID.value
-	$categoryID.replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
-		const $group = document.createElement('optgroup')
-		$group.setAttribute('label',locations[id].title)
-		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
-			const $option = document.createElement('option')
-			$option.value = id
-			$option.textContent = categories[id].title
-			return $option
-		}))
-		return $group
-	}))
-	$categoryID.value = $categoryIDValue
 }
 async function legacyAddress(categoryID){
 	return Object.entries(await dbLive('locations')).find(
@@ -1334,6 +1342,7 @@ async function publishStory(){
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
+
 function diff(newer,older){
 	return Object.keys({...newer,...older}).map(key=>{
 		switch((key in newer)-(key in older)){

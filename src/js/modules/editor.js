@@ -17,6 +17,21 @@ async function initEditor() {
 		$('#media').prepend(...urlSets.map($thumb))
 	})
 	$('#publish').addEventListener('click',publishStory)
+	
+	const [locationIDs,locations,categories] = await Promise.all([
+		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
+	])
+	$('#categoryID').replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
+		const $group = document.createElement('optgroup')
+		$group.setAttribute('label',locations[id].title)
+		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
+			const $option = document.createElement('option')
+			$option.value = id
+			$option.textContent = categories[id].title
+			return $option
+		}))
+		return $group
+	}))
 	remapEnter($('#url'))
 
 	editArticle()
@@ -57,23 +72,6 @@ async function updateEditor(id) {
 	)
 	$('#media').replaceChildren(...urlSets.map($thumb))
 	$$('#editor textarea').forEach(updateTextarea)
-	const [locationIDs,locations,categories] = await Promise.all([
-		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
-	])
-	const $categoryID = $('#categoryID')
-	const $categoryIDValue = $categoryID.value
-	$categoryID.replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
-		const $group = document.createElement('optgroup')
-		$group.setAttribute('label',locations[id].title)
-		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
-			const $option = document.createElement('option')
-			$option.value = id
-			$option.textContent = categories[id].title
-			return $option
-		}))
-		return $group
-	}))
-	$categoryID.value = $categoryIDValue
 }
 async function legacyAddress(categoryID){
 	return Object.entries(await dbLive('locations')).find(
@@ -122,6 +120,7 @@ async function publishStory(){
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
+
 function diff(newer,older){
 	return Object.keys({...newer,...older}).map(key=>{
 		switch((key in newer)-(key in older)){

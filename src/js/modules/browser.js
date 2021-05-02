@@ -15,6 +15,11 @@ async function initBrowser(){
 			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')
 		})
 	})
+	$('#sources').addEventListener('click',async ()=>{
+		Object.values(await dbOnce('sources')).forEach(
+			url => window.open(url,'_blank')
+		)
+	})
 }
 async function updateBrowser(){
 	const $browser = $('#browser')
