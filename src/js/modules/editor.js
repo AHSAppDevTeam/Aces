@@ -60,7 +60,9 @@ async function updateEditor(id) {
 	const [locationIDs,locations,categories] = await Promise.all([
 		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
 	])
-	$('#categoryID').replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
+	const $categoryID = $('#categoryID')
+	const $categoryIDValue = $categoryID.value
+	$categoryID.replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
 		const $group = document.createElement('optgroup')
 		$group.setAttribute('label',locations[id].title)
 		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
@@ -71,6 +73,7 @@ async function updateEditor(id) {
 		}))
 		return $group
 	}))
+	$categoryID.value = $categoryIDValue
 }
 async function legacyAddress(categoryID){
 	return Object.entries(await dbLive('locations')).find(
@@ -97,17 +100,9 @@ async function publishStory(){
 		.filter(([key])=>key in legacyMap)
 		.map(([key,value]) => [legacyMap[key],value])
 	)
-	
-	const locations = Object.entries(await dbLive('locations'))
-	dbWrite(await legacyAddress(story.categoryID)+'/'+id,legacyStory,true)
+	dbWrite( await legacyAddress(story.categoryID)+'/'+id, legacyStory, true)
 
 	if(story.categoryID !== oldStory.categoryID){
-
-	const oldLocationID = locations.find(
-		([,{categoryIDs}]) => categoryIDs.includes(oldStory.categoryID)
-	)
-	dbWrite(await legacyAddress(oldStory.categoryID)+'/'+id,null,true)
-
 		const storySiblingIDs = (await dbLive('categories'))
 			[story.categoryID]
 			.articleIDs
@@ -123,6 +118,7 @@ async function publishStory(){
 			.filter(x=>x!==id)
 		dbWrite( 'categories/'+story.categoryID+'/articleIDs', storySiblingIDs )
 		dbWrite( 'categories/'+oldStory.categoryID+'/articleIDs', oldStorySiblingIDs )
+		dbWrite( await legacyAddress(oldStory.categoryID)+'/'+id, null, true )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
