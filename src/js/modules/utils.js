@@ -1,4 +1,4 @@
-const getTimestamp = async () => Math.floor(Date.now()/1000)
+const timestamp = () => Math.floor(Date.now()/1000)
 
 /**
  * Shifts every character 13 places down the alphabet; swaps - and .

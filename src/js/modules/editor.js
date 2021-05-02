@@ -35,13 +35,13 @@ async function initEditor() {
 	remapEnter($('#url'))
 
 	editArticle()
+	window.addEventListener('popstate',editArticle)
 }
 async function editArticle() {
 	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
 	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
-	if (!id.includes('-')) return
+	if (!id.includes('-')) id = makeID()
 	updateEditor(id)
-	history.replaceState({}, '', id)
 }
 async function storyTemplate(){
 	const schema = (await dbLive('schemas')).story
@@ -53,12 +53,19 @@ async function storyTemplate(){
 			'Boolean': false,
 			'Int': 0,
 		}[schema[key]]
-	return template
+	return {...template,...{
+title: 'Untitled Article',
+author: 'Content Editors',
+timestamp: timestamp(),
+notifTimestamp: timestamp(),
+categoryID: 'Drafts',
+blurb: 'You will not believe what this fox did!',
+markdown: 'A *quick* brown **fox** jumps over a lazy [dog](https://en.wikipedia.org/wiki/Dog).'
+	}}
 }
 async function updateEditor(id) {
-	let story = await dbOnce('storys/' + id)
-	if (!story) return false
-
+	history.replaceState({}, '', id)
+	let story = await dbOnce('storys/' + id) || {}
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)

@@ -20,6 +20,7 @@ async function initBrowser(){
 			url => window.open(url,'_blank')
 		)
 	})
+	$('#new').addEventListener('click', async () => updateEditor(makeID()) )
 }
 async function updateBrowser(){
 	const $browser = $('#browser')

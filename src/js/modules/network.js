@@ -78,11 +78,11 @@ const dbLive = async ( path ) => db( path, {
  * @param {boolean} legacy Use legacy database
  * @returns {Promise} return
  */
-const dbWrite = async ( path, body, legacy ) => db( path, {
+const dbWrite = async ( path, body, legacy ) => user ? db( path, {
 	body: JSON.stringify(body),
 	headers: { 'Content-Type': 'application/json' },
 	method: 'PATCH',
-}, legacy )
+}, legacy ) : false
 
 /**
  * 
