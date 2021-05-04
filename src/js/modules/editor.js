@@ -37,9 +37,7 @@ async function initEditor() {
 			return $option
 		}))
 		return $group
-	}))
-	$categoryID.addEventListener('input',()=>dispatchChange($categoryID))
-	
+	}))	
 
 	editArticle()
 	window.addEventListener('popstate',editArticle)
@@ -155,8 +153,8 @@ async function syncStory(story,direction){
 				break
 			case 'datetime-local':
 				direction
-				? story[property] = dateToTimestamp($element.value)
-				: $element.value = timestampToDate(story[property])
+				? story[property] = ISOStringToTimestamp($element.value)
+				: $element.value = timestampToISOString(story[property])
 				break
 			default:
 				direction
@@ -165,6 +163,7 @@ async function syncStory(story,direction){
 				break
 		}
 	}
+	story.date = timestampToHumanString(story.timestamp)
 	if(direction) {
 		story.videoIDs = []
 		story.imageURLs = []
