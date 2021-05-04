@@ -32,9 +32,15 @@ header > [type=button] {
 #media > label.card.thumb {
 	cursor: move;
 	margin-right: 8pt;
-	flex: 0 0 8rem;
-	height: 8rem;
+	flex: 0 0 10rem;
+	height: 10rem;
 	width: 10rem;
+}
+.thumb > .close {
+	position: absolute;
+	padding: 0;
+	width: 2rem;
+	height: 2rem;
 }
 .thumb > img {
 	object-fit: contain;

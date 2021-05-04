@@ -60,15 +60,18 @@ async function storyTemplate(){
 			'Boolean': false,
 			'Int': 0,
 		}[schema[key]]
-	return {...template,...{
-title: 'Untitled Article',
-author: 'Content Editors',
-timestamp: timestamp(),
-notifTimestamp: timestamp(),
-categoryID: 'Drafts',
-blurb: 'You will not believe what this fox did!',
-markdown: 'A *quick* brown **fox** jumps over a lazy [dog](https://en.wikipedia.org/wiki/Dog).'
-	}}
+	return {
+		...template,
+		...{
+			title: 'Untitled Article',
+			author: 'Content Editors',
+			timestamp: timestamp(),
+			notifTimestamp: timestamp(),
+			categoryID: 'Drafts',
+			blurb: 'You will not believe what this fox did!',
+			markdown: 'A *quick* brown **fox** jumps over a lazy [dog](https://en.wikipedia.org/wiki/Dog).'
+		}
+	}
 }
 async function updateEditor(id) {
 	history.replaceState({}, '', id)
@@ -188,5 +191,9 @@ function $thumb(urlSet){
 	const $thumb = $template('thumb')
 	$thumb.dataset.media = JSON.stringify(urlSet)
 	$('img',$thumb).src = urlSet.thumbURL
+	$('.close',$thumb).addEventListener('click',()=>{
+		$thumb.remove()
+		dispatchChange($('#editor'))
+	},{once:true})
 	return $thumb
 }
