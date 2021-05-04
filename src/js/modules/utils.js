@@ -47,7 +47,7 @@ const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleD
  * @param {string} ISOString ISO datetime string
  * @returns {number} Unix timestamp in seconds 
  */
-const ISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString).getTime()/1000) - offset()
+const ISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').getTime()/1000) - offset()
 
 
 /**
