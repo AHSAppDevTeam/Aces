@@ -163,11 +163,14 @@ async function syncStory(story,direction){
 		}
 	}
 	if(direction) {
-		story.videoIDs = story.imageURLs = story.thumbURLs = []
-		$$('#media>.thumb').forEach(({dataset:{thumbURL,imageURL,videoID}})=>{
+		story.videoIDs = []
+		story.imageURLs = []
+		story.thumbURLs = []
+		$$('#media>.thumb').forEach( ({dataset:{media}}) => {
+			const {thumbURL, imageURL, videoID} = JSON.parse(media)
 			story.thumbURLs.push(thumbURL)
 			if(imageURL) story.imageURLs.push(imageURL)
-			if(videoID) story.videoID.push(videoID)
+			if(videoID) story.videoIDs.push(videoID)
 		})
 	} else {
 		const urlSets = story.thumbURLs.map(
@@ -183,9 +186,7 @@ async function syncStory(story,direction){
 }
 function $thumb(urlSet){
 	const $thumb = $template('thumb')
-	$thumb.dataset.thumbURL = urlSet.thumbURL
-	$thumb.dataset.imageURL = urlSet.imageURL
-	$thumb.dataset.videoID = urlSet.videoID
+	$thumb.dataset.media = JSON.stringify(urlSet)
 	$('img',$thumb).src = urlSet.thumbURL
 	return $thumb
 }

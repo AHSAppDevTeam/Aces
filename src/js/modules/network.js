@@ -33,7 +33,7 @@ const imgbb = async ( data ) => {
 	)
 	const result = await response.json()
 	return {
-		imageURL: result.data.image.url,
+		imageURL: result.data.medium.url,
 		thumbURL: result.data.thumb.url,
 	}
 }
