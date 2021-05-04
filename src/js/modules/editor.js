@@ -1,21 +1,33 @@
 async function initEditor() {
 	const $editor = $('#editor')
+	const $upload = $('#upload')
+	const $body = $('#body')
+	const $markdown = $('#markdown')
+	const $media = $('#media')
+	const $categoryID = $('#categoryID')
+	const $$textarea = $$('textarea',$editor)
+	const $url = $('#url')
+	const $markdownWrapper = $('#markdown-wrapper')
 
-	initHighlighter($('#markdown-wrapper'))
-	$$('textarea',$editor).forEach(initTextarea)
-
-	$('#markdown').addEventListener('input', ({ target: { value } }) => {
-		$('#body').innerHTML = md(value)
-	})
-	$('#upload').addEventListener('change', async ({ target: { files } }) => {
-		const urlSets = await Promise.all(Array.from(files).map(imgbb))
-		$('#media').prepend(...urlSets.map($thumb))
-	})
 	$editor.addEventListener('change',publishStory)
+
+	initHighlighter($markdownWrapper)
+	$$textarea.forEach(initTextarea)
+	remapEnter($url)
+
+	$markdown.addEventListener('input', ({ target: { value } }) => {
+		$body.innerHTML = md(value)
+		dispatchChange($body)
+	})
+	$upload.addEventListener('change', async ({ target: { files } }) => {
+		const urlSets = await Promise.all(Array.from(files).map(imgbb))
+		$media.prepend(...urlSets.map($thumb))
+		dispatchChange($media)
+	})
 	const [locationIDs,locations,categories] = await Promise.all([
 		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
 	])
-	$('#categoryID').replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
+	$categoryID.replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
 		const $group = document.createElement('optgroup')
 		$group.setAttribute('label',locations[id].title)
 		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
@@ -26,7 +38,8 @@ async function initEditor() {
 		}))
 		return $group
 	}))
-	remapEnter($('#url'))
+	$categoryID.addEventListener('input',dispatchChange)
+	
 
 	editArticle()
 	window.addEventListener('popstate',editArticle)
@@ -63,7 +76,7 @@ async function updateEditor(id) {
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
-	$$('#editor textarea').forEach(updateTextarea)
+	$$('#editor textarea').forEach(dispatchInput)
 }
 async function legacyAddress(categoryID){
 	return Object.entries(await dbLive('locations')).find(
@@ -119,7 +132,7 @@ function diff(newer,older){
 			case 1:
 				return 'Created '+key
 			case 0:
-				return newer[key] === older[key]
+				return JSON.stringify(newer[key]) === JSON.stringify(older[key])
 				? null : 'Modified '+key
 			case -1:
 				return 'Deleted '+key
