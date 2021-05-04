@@ -38,7 +38,7 @@ async function initEditor() {
 		}))
 		return $group
 	}))
-	$categoryID.addEventListener('input',dispatchChange)
+	$categoryID.addEventListener('input',()=>dispatchChange($categoryID))
 	
 
 	editArticle()
@@ -94,7 +94,7 @@ async function publishStory(){
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
 		)
-		dbWrite(type+'s/'+id,object)
+		dbWrite(type+'s',{[id]: object})
 	}
 	
 	const legacyMap = (await dbLive('schemas')).legacy
@@ -103,7 +103,7 @@ async function publishStory(){
 		.filter(([key])=>key in legacyMap)
 		.map(([key,value]) => [legacyMap[key],value])
 	)
-	dbWrite( await legacyAddress(story.categoryID)+'/'+id, legacyStory, true)
+	dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
 
 	if(story.categoryID !== oldStory.categoryID){
 		const storySiblingIDs = (await dbLive('categories'))
@@ -119,9 +119,9 @@ async function publishStory(){
 			[oldStory.categoryID]
 			.articleIDs
 			.filter(x=>x!==id)
-		dbWrite( 'categories/'+story.categoryID+'/articleIDs', storySiblingIDs )
-		dbWrite( 'categories/'+oldStory.categoryID+'/articleIDs', oldStorySiblingIDs )
-		dbWrite( await legacyAddress(oldStory.categoryID)+'/'+id, null, true )
+		dbWrite( 'categories/'+story.categoryID, {articleIDs: storySiblingIDs} )
+		dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldStorySiblingIDs} )
+		dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
