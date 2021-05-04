@@ -7,17 +7,11 @@ async function initEditor() {
 	$('#markdown').addEventListener('input', ({ target: { value } }) => {
 		$('#body').innerHTML = md(value)
 	})
-	$('#render').addEventListener('click', ({ target }) => {
-		const previewing = target.value == 'Preview'
-		target.value = previewing ? 'Edit' : 'Preview'
-		$editor.classList.toggle('render', previewing)
-	})
 	$('#upload').addEventListener('change', async ({ target: { files } }) => {
 		const urlSets = await Promise.all(Array.from(files).map(imgbb))
 		$('#media').prepend(...urlSets.map($thumb))
 	})
-	$('#publish').addEventListener('click',publishStory)
-	
+	$editor.addEventListener('change',publishStory)
 	const [locationIDs,locations,categories] = await Promise.all([
 		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
 	])
@@ -69,15 +63,6 @@ async function updateEditor(id) {
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
-	const urlSets = story.thumbURLs.map(
-		(thumbURL,index) =>
-		({
-			thumbURL,
-			videoID: story.videoIDs[index],
-			imageURL: story.imageURLs[index-story.videoIDs.length],
-		})
-	)
-	$('#media').replaceChildren(...urlSets.map($thumb))
 	$$('#editor textarea').forEach(updateTextarea)
 }
 async function legacyAddress(categoryID){
@@ -163,6 +148,24 @@ async function syncStory(story,direction){
 				: $element.value = story[property]
 				break
 		}
+	}
+	if(direction) {
+		story.videoIDs = story.imageURLs = story.thumbURLs = []
+		$$('#media>.thumb').forEach(({dataset:{thumbURL,imageURL,videoID}})=>{
+			story.thumbURLs.push(thumbURL)
+			if(imageURL) story.imageURLs.push(imageURL)
+			if(videoID) story.videoID.push(videoID)
+		})
+	} else {
+		const urlSets = story.thumbURLs.map(
+			(thumbURL,index) =>
+			({
+				thumbURL,
+				videoID: story.videoIDs[index],
+				imageURL: story.imageURLs[index-story.videoIDs.length],
+			})
+		)
+		$('#media').replaceChildren(...urlSets.map($thumb))
 	}
 }
 function $thumb(urlSet){

@@ -87,8 +87,4 @@ async function updateAuth(signedIn){
 	document.body.classList.toggle('signed-in',signedIn)
 	$('#sign').value = `Sign ${signedIn ? 'out' : 'in'}`
 	document.activeElement.blur()
-
-	$('#remove').disabled
-	= $('#publish').disabled
-	= !signedIn
 }

@@ -788,25 +788,6 @@ body,
 	</head>
 	<body>
 		<main id=editor class=panel>
-			<header class=card>
-				<input type=button class=card
-					id=remove
-					title='remove article (alt+r)'
-					value=Remove
-					accesskey=r
-					disabled >
-				<input type=button class=card
-					id=render
-					title='toggle preview/edit mode (alt+v)'
-					value=Preview
-					accesskey=v >
-				<input type=button class=card
-					id=publish
-					title='publish article (alt+p)'
-					value=Publish
-					accesskey=p
-					disabled >
-			</header>
 			<label class=card id=title-label>
 				<span>title</span>
 				<textarea id=title accesskey=t></textarea>
@@ -1065,10 +1046,6 @@ async function updateAuth(signedIn){
 	document.body.classList.toggle('signed-in',signedIn)
 	$('#sign').value = `Sign ${signedIn ? 'out' : 'in'}`
 	document.activeElement.blur()
-
-	$('#remove').disabled
-	= $('#publish').disabled
-	= !signedIn
 }
 const dbBrowserResources = () => Promise.all(['locationIDs','locations','categories','snippets'].map(dbLive))
 async function initBrowser(){
@@ -1232,17 +1209,11 @@ async function initEditor() {
 	$('#markdown').addEventListener('input', ({ target: { value } }) => {
 		$('#body').innerHTML = md(value)
 	})
-	$('#render').addEventListener('click', ({ target }) => {
-		const previewing = target.value == 'Preview'
-		target.value = previewing ? 'Edit' : 'Preview'
-		$editor.classList.toggle('render', previewing)
-	})
 	$('#upload').addEventListener('change', async ({ target: { files } }) => {
 		const urlSets = await Promise.all(Array.from(files).map(imgbb))
 		$('#media').prepend(...urlSets.map($thumb))
 	})
-	$('#publish').addEventListener('click',publishStory)
-	
+	$editor.addEventListener('change',publishStory)
 	const [locationIDs,locations,categories] = await Promise.all([
 		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
 	])
@@ -1294,15 +1265,6 @@ async function updateEditor(id) {
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
-	const urlSets = story.thumbURLs.map(
-		(thumbURL,index) =>
-		({
-			thumbURL,
-			videoID: story.videoIDs[index],
-			imageURL: story.imageURLs[index-story.videoIDs.length],
-		})
-	)
-	$('#media').replaceChildren(...urlSets.map($thumb))
 	$$('#editor textarea').forEach(updateTextarea)
 }
 async function legacyAddress(categoryID){
@@ -1388,6 +1350,24 @@ async function syncStory(story,direction){
 				: $element.value = story[property]
 				break
 		}
+	}
+	if(direction) {
+		story.videoIDs = story.imageURLs = story.thumbURLs = []
+		$$('#media>.thumb').forEach(({dataset:{thumbURL,imageURL,videoID}})=>{
+			story.thumbURLs.push(thumbURL)
+			if(imageURL) story.imageURLs.push(imageURL)
+			if(videoID) story.videoID.push(videoID)
+		})
+	} else {
+		const urlSets = story.thumbURLs.map(
+			(thumbURL,index) =>
+			({
+				thumbURL,
+				videoID: story.videoIDs[index],
+				imageURL: story.imageURLs[index-story.videoIDs.length],
+			})
+		)
+		$('#media').replaceChildren(...urlSets.map($thumb))
 	}
 }
 function $thumb(urlSet){
