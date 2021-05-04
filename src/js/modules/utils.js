@@ -34,7 +34,7 @@ const offset = () => new Date().getTimezoneOffset()*60
  */
 const timestampToDate = timestamp => new Date((parseInt(timestamp) + offset())*1000)
 
-const timestampToISOString = timestamp => timestampToDate(timestamp).toISOString().slice(0,16)
+const timestampToISOString = timestamp => timestampToDate(timestamp).toISOString().slice(0,19)
 
 const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleDateString(undefined, {
 	weekday: 'long',
@@ -47,7 +47,7 @@ const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleD
  * @param {string} ISOString ISO datetime string
  * @returns {number} Unix timestamp in seconds 
  */
-const ISOStringToTimestamp = date => Math.trunc(new Date(date).getTime()/1000) - offset()
+const ISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString).getTime()/1000) - offset()
 
 
 /**
