@@ -20,7 +20,7 @@ const initResize = async () => {
 		$editor.style.width = (event.x-$resize.offsetWidth/2)/window.innerWidth*100+'vw'
 		
 		// the resized textareas need to have their line wrapping adjusted
-		$$('textarea').forEach(updateTextarea)
+		$$('textarea').forEach(dispatchInput)
 		
 		// prevent default behaviors which may accidentally other stuff
 		event.preventDefault()

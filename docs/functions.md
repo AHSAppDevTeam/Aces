@@ -34,7 +34,7 @@
 <dt><a href="#imgbb">imgbb(data)</a> ⇒ <code><a href="#urlSet">urlSet</a></code></dt>
 <dd><p>Uploads an image to ImgBB.com</p>
 </dd>
-<dt><a href="#dbPath">dbPath(path)</a> ⇒ <code>string</code></dt>
+<dt><a href="#dbPath">dbPath(path, legacy)</a> ⇒ <code>string</code></dt>
 <dd><p>Expands relative path to Firebase realtime database URL</p>
 </dd>
 <dt><a href="#dbOnce">dbOnce(path)</a> ⇒ <code>Promise</code></dt>
@@ -43,7 +43,7 @@
 <dt><a href="#dbLive">dbLive(path)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Reads the database and updates it live</p>
 </dd>
-<dt><a href="#dbWrite">dbWrite(path, body)</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#dbWrite">dbWrite(path, body, legacy)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Writes to the database</p>
 </dd>
 <dt><a href="#googleapis">googleapis(path, request)</a> ⇒ <code>Promise</code></dt>
@@ -54,7 +54,7 @@
 <dt><a href="#initTextarea">initTextarea($textarea)</a></dt>
 <dd><p>Initiates a textarea</p>
 </dd>
-<dt><a href="#updateTextarea">updateTextarea($textarea)</a></dt>
+<dt><a href="#dispatchInput">dispatchInput($textarea)</a></dt>
 <dd><p>Programmatically trigger the &#39;input&#39; event on a textarea</p>
 </dd>
 <dt><a href="#remapEnter">remapEnter($input)</a></dt>
@@ -199,15 +199,16 @@ Uploads an image to ImgBB.com
 
 <a name="dbPath"></a>
 
-## dbPath(path) ⇒ <code>string</code>
+## dbPath(path, legacy) ⇒ <code>string</code>
 Expands relative path to Firebase realtime database URL
 
 **Kind**: global function  
 **Returns**: <code>string</code> - full path  
 
-| Param | Type |
-| --- | --- |
-| path | <code>string</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Relative path |
+| legacy | <code>boolean</code> | Use legacy database |
 
 <a name="dbOnce"></a>
 
@@ -235,16 +236,17 @@ Reads the database and updates it live
 
 <a name="dbWrite"></a>
 
-## dbWrite(path, body) ⇒ <code>Promise</code>
+## dbWrite(path, body, legacy) ⇒ <code>Promise</code>
 Writes to the database
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - return  
 
-| Param | Type |
-| --- | --- |
-| path | <code>string</code> | 
-| body | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> |  |
+| body | <code>Object</code> |  |
+| legacy | <code>boolean</code> | Use legacy database |
 
 <a name="googleapis"></a>
 
@@ -274,9 +276,9 @@ Initiates a textarea
 | --- | --- |
 | $textarea | <code>Element</code> | 
 
-<a name="updateTextarea"></a>
+<a name="dispatchInput"></a>
 
-## updateTextarea($textarea)
+## dispatchInput($textarea)
 Programmatically trigger the 'input' event on a textarea
 
 **Kind**: global function  

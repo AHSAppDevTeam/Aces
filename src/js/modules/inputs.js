@@ -18,17 +18,24 @@ async function initTextarea($textarea){
 	// if the window resizes horizontally, update the textarea's display heights
 	window.addEventListener('resize',()=>{
 		if(window.oldInnerWidth !== window.innerWidth) {
-			$$('textarea').forEach(updateTextarea)
+			$$('textarea').forEach(dispatchInput)
 			window.oldInnerWidth = window.innerWidth
 		}
 	})
 }
 /**
- * Programmatically trigger the 'input' event on a textarea
- * @param {Element} $textarea
+ * Programmatically trigger the 'input' event on an element
+ * @param {Element} $element
  */
-async function updateTextarea($textarea){
-	$textarea.dispatchEvent(new Event('input'))
+async function dispatchInput($element){
+	$element.dispatchEvent(new Event('input'))
+}
+/**
+ * Programmatically trigger the 'change' event on an element
+ * @param {Element} $element 
+ */
+async function dispatchChange($element){
+	$element.dispatchEvent(new Event('change'))
 }
 /**
  * Assign the enter key to trigger the 'change' event

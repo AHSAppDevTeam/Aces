@@ -115,6 +115,7 @@ input[disabled] {
 #editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	width: 36vw;
+	padding-top: 1rem;
 }
 #editor > * {
 	grid-column-end: span 2;
@@ -1202,22 +1203,34 @@ const $template = id => $('#template-'+id).content.cloneNode(true).querySelector
 
 async function initEditor() {
 	const $editor = $('#editor')
+	const $upload = $('#upload')
+	const $body = $('#body')
+	const $markdown = $('#markdown')
+	const $media = $('#media')
+	const $categoryID = $('#categoryID')
+	const $$textarea = $$('textarea',$editor)
+	const $url = $('#url')
+	const $markdownWrapper = $('#markdown-wrapper')
 
-	initHighlighter($('#markdown-wrapper'))
-	$$('textarea',$editor).forEach(initTextarea)
-
-	$('#markdown').addEventListener('input', ({ target: { value } }) => {
-		$('#body').innerHTML = md(value)
-	})
-	$('#upload').addEventListener('change', async ({ target: { files } }) => {
-		const urlSets = await Promise.all(Array.from(files).map(imgbb))
-		$('#media').prepend(...urlSets.map($thumb))
-	})
 	$editor.addEventListener('change',publishStory)
+
+	initHighlighter($markdownWrapper)
+	$$textarea.forEach(initTextarea)
+	remapEnter($url)
+
+	$markdown.addEventListener('input', ({ target: { value } }) => {
+		$body.innerHTML = md(value)
+		dispatchChange($body)
+	})
+	$upload.addEventListener('change', async ({ target: { files } }) => {
+		const urlSets = await Promise.all(Array.from(files).map(imgbb))
+		$media.prepend(...urlSets.map($thumb))
+		dispatchChange($media)
+	})
 	const [locationIDs,locations,categories] = await Promise.all([
 		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
 	])
-	$('#categoryID').replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
+	$categoryID.replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
 		const $group = document.createElement('optgroup')
 		$group.setAttribute('label',locations[id].title)
 		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
@@ -1228,7 +1241,8 @@ async function initEditor() {
 		}))
 		return $group
 	}))
-	remapEnter($('#url'))
+	$categoryID.addEventListener('input',dispatchChange)
+	
 
 	editArticle()
 	window.addEventListener('popstate',editArticle)
@@ -1265,7 +1279,7 @@ async function updateEditor(id) {
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
-	$$('#editor textarea').forEach(updateTextarea)
+	$$('#editor textarea').forEach(dispatchInput)
 }
 async function legacyAddress(categoryID){
 	return Object.entries(await dbLive('locations')).find(
@@ -1422,6 +1436,57 @@ function makeID(){
 	.split(',')
 	
 	return [randomElement(adjectives),randomElement(adjectives),randomElement(animals)].join('-')
+}
+/**
+ * Initiates a textarea
+ * @param {Element} $textarea
+ */
+async function initTextarea($textarea){
+	// reset default attributes
+	$textarea.setAttribute('rows',1)
+
+	// on input, adjust the <textarea>'s display height to that of its contents
+	$textarea.addEventListener('input',()=>{
+		$textarea.style.height = 'auto'
+		$textarea.style.height = $textarea.scrollHeight+'px'
+	})
+
+	// unless the textarea is multi-line, make the enter key trigger the 'change' event
+	if(!$textarea.hasAttribute('multi-line')) remapEnter($textarea)
+
+	// if the window resizes horizontally, update the textarea's display heights
+	window.addEventListener('resize',()=>{
+		if(window.oldInnerWidth !== window.innerWidth) {
+			$$('textarea').forEach(dispatchInput)
+			window.oldInnerWidth = window.innerWidth
+		}
+	})
+}
+/**
+ * Programmatically trigger the 'input' event on an element
+ * @param {Element} $element
+ */
+async function dispatchInput($element){
+	$element.dispatchEvent(new Event('input'))
+}
+/**
+ * Programmatically trigger the 'change' event on an element
+ * @param {Element} $element 
+ */
+async function dispatchChange($element){
+	$element.dispatchEvent(new Event('change'))
+}
+/**
+ * Assign the enter key to trigger the 'change' event
+ * @param {Element} $input 
+ */
+function remapEnter($input){
+	$input.addEventListener('keydown',event=>{
+		if(event.key!='Enter') return
+		event.preventDefault()
+		$input.blur()
+		return false
+	})
 }
 // The MIT License (MIT)
 
@@ -1792,7 +1857,7 @@ const initResize = async () => {
 		$editor.style.width = (event.x-$resize.offsetWidth/2)/window.innerWidth*100+'vw'
 		
 		// the resized textareas need to have their line wrapping adjusted
-		$$('textarea').forEach(updateTextarea)
+		$$('textarea').forEach(dispatchInput)
 		
 		// prevent default behaviors which may accidentally other stuff
 		event.preventDefault()
@@ -1800,50 +1865,6 @@ const initResize = async () => {
 
 	// unfocus the resize bar if the mouse click or finger dragging ends
 	window.addEventListener('pointerup',()=>$resize.blur())
-}
-/**
- * Initiates a textarea
- * @param {Element} $textarea
- */
-async function initTextarea($textarea){
-	// reset default attributes
-	$textarea.setAttribute('rows',1)
-
-	// on input, adjust the <textarea>'s display height to that of its contents
-	$textarea.addEventListener('input',()=>{
-		$textarea.style.height = 'auto'
-		$textarea.style.height = $textarea.scrollHeight+'px'
-	})
-
-	// unless the textarea is multi-line, make the enter key trigger the 'change' event
-	if(!$textarea.hasAttribute('multi-line')) remapEnter($textarea)
-
-	// if the window resizes horizontally, update the textarea's display heights
-	window.addEventListener('resize',()=>{
-		if(window.oldInnerWidth !== window.innerWidth) {
-			$$('textarea').forEach(updateTextarea)
-			window.oldInnerWidth = window.innerWidth
-		}
-	})
-}
-/**
- * Programmatically trigger the 'input' event on a textarea
- * @param {Element} $textarea
- */
-async function updateTextarea($textarea){
-	$textarea.dispatchEvent(new Event('input'))
-}
-/**
- * Assign the enter key to trigger the 'change' event
- * @param {Element} $input 
- */
-function remapEnter($input){
-	$input.addEventListener('keydown',event=>{
-		if(event.key!='Enter') return
-		event.preventDefault()
-		$input.blur()
-		return false
-	})
 }
 const timestamp = () => Math.floor(Date.now()/1000)
 
