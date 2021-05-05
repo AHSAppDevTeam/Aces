@@ -23,6 +23,11 @@
 	padding: 2pt 4pt;
 	z-index: -1;
 }
+.panel::after{
+	content: '';
+	display: block;
+	height: 1rem;
+}
 html,
 body,
 #resize,
