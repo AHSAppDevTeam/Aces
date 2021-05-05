@@ -31,10 +31,10 @@ const imgbb = async ( data ) => {
 		'https://' + await dbOnce('secrets/imgbb'),
 		{ method: 'POST', body }
 	)
-	const result = await response.json()
+	const { data: { image, medium, thumb } } = await response.json()
 	return {
-		imageURL: result.data.medium.url,
-		thumbURL: result.data.thumb.url,
+		imageURL: medium ? medium.url : image.url,
+		thumbURL: thumb.url,
 	}
 }
 
