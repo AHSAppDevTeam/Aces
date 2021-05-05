@@ -49,4 +49,5 @@ body,
 .card.changed:hover,
 .card.changed:focus-within {
 	border-color: var(--success-color);
+	border-style: dashed;
 }
