@@ -729,7 +729,7 @@ template {
 .panel::after{
 	content: '';
 	display: block;
-	height: 2pt;
+	height: 1rem;
 }
 html,
 body,
@@ -1209,29 +1209,29 @@ const $template = id => $('#template-'+id).content.cloneNode(true).querySelector
 
 async function initEditor() {
 	const $editor = $('#editor')
-	const $upload = $('#upload')
-	const $markdown = $('#markdown')
 	const $media = $('#media')
 	const $categoryID = $('#categoryID')
 	const $$textarea = $$('textarea',$editor)
 	const $url = $('#url')
 	const $markdownWrapper = $('#markdown-wrapper')
 
-	$editor.addEventListener('change',publishStory)
+	$editor.addEventListener('change',async ({target}) => {
+		switch(target.id){
+			case 'upload':
+				const urlSets = await Promise.all(Array.from(target.files).map(imgbb))
+				$media.prepend(...urlSets.map($thumb))
+				break
+			case 'url':
+				$media.prepend($thumb(await imgbb(target.value)))
+				break
+		}
+		publishStory(target)
+	})
 
 	initHighlighter($markdownWrapper)
 	$$textarea.forEach(initTextarea)
 	remapEnter($url)
-
-	$upload.addEventListener('change', async ({ target: { files } }) => {
-		const urlSets = await Promise.all(Array.from(files).map(imgbb))
-		$media.prepend(...urlSets.map($thumb))
-		dispatchChange($media)
-	})
-	$url.addEventListener('change', async ({ target: { value } }) => {
-		$media.prepend($thumb(imgbb(value)))
-		dispatchChange($media)
-	})
+	
 	const [locationIDs,locations,categories] = await Promise.all([
 		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
 	])
@@ -1292,7 +1292,7 @@ async function legacyAddress(categoryID){
 		([,{categoryIDs}]) => categoryIDs.includes(categoryID)
 	)[0] + '/' + categoryID
 }
-async function publishStory({target}){
+async function publishStory(target){
 	target.parentElement.classList.add('changed')
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
