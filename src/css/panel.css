@@ -45,3 +45,8 @@ body,
 .card.open {
 	border-color: var(--text);
 }
+.card.changed,
+.card.changed:hover,
+.card.changed:focus-within {
+	border-color: var(--success-color);
+}

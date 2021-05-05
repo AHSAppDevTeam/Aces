@@ -83,7 +83,8 @@ async function legacyAddress(categoryID){
 		([,{categoryIDs}]) => categoryIDs.includes(categoryID)
 	)[0] + '/' + categoryID
 }
-async function publishStory(){
+async function publishStory({target}){
+	target.parentElement.classList.add('changed')
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
@@ -124,6 +125,7 @@ async function publishStory(){
 		dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
+	target.parentElement.classList.remove('changed')
 }
 
 function diff(newer,older){

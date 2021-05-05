@@ -307,6 +307,7 @@ input::placeholder {
 	--border-color: hsl(220deg,20%,20%);
 	--hover-color: hsl(220deg,20%,40%);
 	--link-color: #8af;
+	--success-color: #8fa;
 	--background: hsl(220deg,20%,8%);
 	--cover: #000d;
 	--text: #ddd;
@@ -740,6 +741,11 @@ body,
 .card:focus-within:not(header),
 .card.open {
 	border-color: var(--text);
+}
+.card.changed,
+.card.changed:hover,
+.card.changed:focus-within {
+	border-color: var(--success-color);
 }
 #resize {
 	border-radius: 0;
@@ -1274,7 +1280,8 @@ async function legacyAddress(categoryID){
 		([,{categoryIDs}]) => categoryIDs.includes(categoryID)
 	)[0] + '/' + categoryID
 }
-async function publishStory(){
+async function publishStory({target}){
+	target.parentElement.classList.add('changed')
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
@@ -1315,6 +1322,7 @@ async function publishStory(){
 		dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
+	target.parentElement.classList.remove('changed')
 }
 
 function diff(newer,older){
