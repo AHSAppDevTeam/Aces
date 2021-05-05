@@ -1359,8 +1359,8 @@ async function syncStory(story,direction){
 		story.videoIDs = []
 		story.imageURLs = []
 		story.thumbURLs = []
-		$$('#media>.thumb').forEach( ({dataset:{media}}) => {
-			const {thumbURL, imageURL, videoID} = JSON.parse(media)
+		$$('#media>.thumb').forEach( ({dataset}) => {
+			const {thumbURL, imageURL, videoID} = JSON.parse(dataset.media)
 			story.thumbURLs.push(thumbURL)
 			if(imageURL) story.imageURLs.push(imageURL)
 			if(videoID) story.videoIDs.push(videoID)
