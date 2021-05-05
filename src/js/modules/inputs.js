@@ -13,7 +13,7 @@ async function initTextarea($textarea){
 	})
 
 	// unless the textarea is multi-line, make the enter key trigger the 'change' event
-	if(!$textarea.hasAttribute('multi-line')) remapEnter($textarea)
+	remapEnter($textarea, $textarea.hasAttribute('multi-line'))
 
 	// if the window resizes horizontally, update the textarea's display heights
 	window.addEventListener('resize',()=>{
@@ -41,9 +41,9 @@ async function dispatchChange($element){
  * Assign the enter key to trigger the 'change' event
  * @param {Element} $input 
  */
-function remapEnter($input){
+function remapEnter($input,needCtrl=false){
 	$input.addEventListener('keydown',event=>{
-		if(event.key!='Enter') return
+		if(!(event.key==='Enter' && (!needCtrl || event.ctrlKey))) return
 		event.preventDefault()
 		$input.blur()
 		return false
