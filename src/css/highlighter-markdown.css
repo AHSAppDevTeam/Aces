@@ -11,7 +11,7 @@
 	text-decoration: line-through;
 }
 .markdown .link {
-	color: blue;
+	color: var(--link-color);
 }
 .markdown .list {
 	background: linear-gradient(90deg, #ff08,transparent 2ch);

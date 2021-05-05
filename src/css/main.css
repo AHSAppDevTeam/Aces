@@ -2,21 +2,21 @@
 	--radius: 4pt;
 	--border-color: #ccc;
 	--hover-color: #888;
+	--link-color: #248;
 	--border: solid 2pt var(--border-color);
 	--background: white;
 	--cover: #fffd;
 	--text: black;
 }
 
-@media (prefers-color-scheme: dark){
-	:root{
-		--border-color: hsl(220deg,20%,20%);
-		--hover-color: hsl(220deg,20%,40%);
-		--background: hsl(220deg,20%,8%);
-		--cover: #000d;
-		--text: #ddd;
-	}
-}
+@media (prefers-color-scheme: dark) { :root {
+	--border-color: hsl(220deg,20%,20%);
+	--hover-color: hsl(220deg,20%,40%);
+	--link-color: #8af;
+	--background: hsl(220deg,20%,8%);
+	--cover: #000d;
+	--text: #ddd;
+} }
 
 html {
 	font-family: 'pt-root', Sans-serif;

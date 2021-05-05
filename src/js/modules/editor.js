@@ -157,7 +157,7 @@ async function syncStory(story,direction){
 				break
 			default:
 				direction
-				? story[property] = $element.value
+				? story[property] = typography($element.value)
 				: $element.value = story[property]
 				break
 		}

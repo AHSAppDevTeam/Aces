@@ -187,7 +187,7 @@ header > [type=button] {
 	text-decoration: line-through;
 }
 .markdown .link {
-	color: blue;
+	color: var(--link-color);
 }
 .markdown .list {
 	background: linear-gradient(90deg, #ff08,transparent 2ch);
@@ -296,21 +296,21 @@ input::placeholder {
 	--radius: 4pt;
 	--border-color: #ccc;
 	--hover-color: #888;
+	--link-color: #248;
 	--border: solid 2pt var(--border-color);
 	--background: white;
 	--cover: #fffd;
 	--text: black;
 }
 
-@media (prefers-color-scheme: dark){
-	:root{
-		--border-color: hsl(220deg,20%,20%);
-		--hover-color: hsl(220deg,20%,40%);
-		--background: hsl(220deg,20%,8%);
-		--cover: #000d;
-		--text: #ddd;
-	}
-}
+@media (prefers-color-scheme: dark) { :root {
+	--border-color: hsl(220deg,20%,20%);
+	--hover-color: hsl(220deg,20%,40%);
+	--link-color: #8af;
+	--background: hsl(220deg,20%,8%);
+	--cover: #000d;
+	--text: #ddd;
+} }
 
 html {
 	font-family: 'pt-root', Sans-serif;
@@ -1294,7 +1294,7 @@ async function publishStory(){
 		.filter(([key])=>key in legacyMap)
 		.map(([key,value]) => [legacyMap[key],value])
 	)
-	// dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
+	dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
 
 	if(story.categoryID !== oldStory.categoryID){
 		const storySiblingIDs = (await dbLive('categories'))
@@ -1312,7 +1312,7 @@ async function publishStory(){
 			.filter(x=>x!==id)
 		dbWrite( 'categories/'+story.categoryID, {articleIDs: storySiblingIDs} )
 		dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldStorySiblingIDs} )
-		// dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
+		dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
@@ -1348,7 +1348,7 @@ async function syncStory(story,direction){
 				break
 			default:
 				direction
-				? story[property] = $element.value
+				? story[property] = typography($element.value)
 				: $element.value = story[property]
 				break
 		}
@@ -1663,6 +1663,12 @@ function remapEnter($input){
 		// format, removes tabs, leading and trailing spaces
 		markdown = (
 			markdown
+				// expand url shorthand
+				.replace(/(\(\/\/)/g,'(https://')
+				// turn raw URLs into links.
+				.replace(/(?<!\]\()(https?:\/\/)(\S+)/g,'[$2](https://$2)')
+				// turn raw email addresses into email links.
+				.replace(/(?<!\]\()(\S+@\S+\.\S+)/g,'[$1](mailto:$1)')
 				// collect code blocks and replace with placeholder
 				// we do this to avoid code blocks matching the paragraph regexp
 				.replace(blockCodeRegExp, function (match, lang, block) {
@@ -1861,6 +1867,21 @@ const initResize = async () => {
 	// unfocus the resize bar if the mouse click or finger dragging ends
 	window.addEventListener('pointerup',()=>$resize.blur())
 }
+const typography = text => text
+		// Smart quotes
+		/* opening singles */
+		.replace(/(^|[-\u2014\s(\["])'/g,'$1&lsquo;')
+		/* closing singles & apostrophes */
+		.replace(/'/g,'&rsquo;')
+		/* opening doubles */
+		.replace(/(^|[-\u2014/\[(\u2018\s])"/g,'$1&ldquo;')
+		/* closing doubles */
+		.replace(/"/g,'&rdquo;')
+	// Dashes
+		/* em-dashes */
+		.replace(/\s--\s?/g,'&thinsp;&mdash;&thinsp;')
+		/* en-dashes */
+		.replace(/--/g,'&ndash;')
 const timestamp = () => Math.floor(Date.now()/1000)
 
 /**
