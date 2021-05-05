@@ -56,8 +56,8 @@
 	height: 1em;	
 }
 .actions > .toggle > svg:last-child {
-	fill: var(--text);
-	stroke: var(--text);
+	fill: var(--text-color);
+	stroke: var(--text-color);
 }
 .actions .featured:not(:checked) + svg{
 	fill: transparent;

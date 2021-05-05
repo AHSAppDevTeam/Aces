@@ -11,7 +11,7 @@
 .markdown textarea {
 	/* hide the text but show the text caret */
 	color: transparent !important;
-	caret-color: var(--text);
+	caret-color: var(--text-color);
 }
 
 .markdown {

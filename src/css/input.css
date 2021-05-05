@@ -7,7 +7,12 @@ label.card:hover > span{
 	color: var(--hover-color);
 }
 label.card:focus-within > span{
-	color: var(--text);
+	color: var(--text-color);
+}
+label.card.changed > span,
+label.card.changed:hover > span,
+label.card.changed:focus-within > span {
+	color: var(--success-color);
 }
 label.card > span {
 	position: absolute;

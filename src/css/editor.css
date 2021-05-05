@@ -16,7 +16,7 @@
 header > [type=button] {
 	cursor: pointer;
 	text-decoration: none;
-	color:var(--text);
+	color:var(--text-color);
 }
 
 #editor > label > #title {

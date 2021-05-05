@@ -6,7 +6,7 @@
 	--border: solid 2pt var(--border-color);
 	--background: white;
 	--cover: #fffd;
-	--text: black;
+	--text-color: black;
 }
 
 @media (prefers-color-scheme: dark) { :root {
@@ -16,7 +16,7 @@
 	--success-color: #8fa;
 	--background: hsl(220deg,20%,8%);
 	--cover: #000d;
-	--text: #ddd;
+	--text-color: #ddd;
 } }
 
 html {
@@ -32,7 +32,7 @@ body {
 }
 body * {
 	box-sizing: border-box;
-	color: var(--text);
+	color: var(--text-color);
 	overflow-wrap: break-word;
 }
 body :focus{

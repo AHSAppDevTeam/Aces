@@ -106,8 +106,8 @@ input[disabled] {
 	height: 1em;	
 }
 .actions > .toggle > svg:last-child {
-	fill: var(--text);
-	stroke: var(--text);
+	fill: var(--text-color);
+	stroke: var(--text-color);
 }
 .actions .featured:not(:checked) + svg{
 	fill: transparent;
@@ -130,7 +130,7 @@ input[disabled] {
 header > [type=button] {
 	cursor: pointer;
 	text-decoration: none;
-	color:var(--text);
+	color:var(--text-color);
 }
 
 #editor > label > #title {
@@ -211,7 +211,7 @@ header > [type=button] {
 .markdown textarea {
 	/* hide the text but show the text caret */
 	color: transparent !important;
-	caret-color: var(--text);
+	caret-color: var(--text-color);
 }
 
 .markdown {
@@ -255,7 +255,12 @@ label.card:hover > span{
 	color: var(--hover-color);
 }
 label.card:focus-within > span{
-	color: var(--text);
+	color: var(--text-color);
+}
+label.card.changed > span,
+label.card.changed:hover > span,
+label.card.changed:focus-within > span {
+	color: var(--success-color);
 }
 label.card > span {
 	position: absolute;
@@ -300,7 +305,7 @@ input::placeholder {
 	--border: solid 2pt var(--border-color);
 	--background: white;
 	--cover: #fffd;
-	--text: black;
+	--text-color: black;
 }
 
 @media (prefers-color-scheme: dark) { :root {
@@ -310,7 +315,7 @@ input::placeholder {
 	--success-color: #8fa;
 	--background: hsl(220deg,20%,8%);
 	--cover: #000d;
-	--text: #ddd;
+	--text-color: #ddd;
 } }
 
 html {
@@ -326,7 +331,7 @@ body {
 }
 body * {
 	box-sizing: border-box;
-	color: var(--text);
+	color: var(--text-color);
 	overflow-wrap: break-word;
 }
 body :focus{
@@ -740,7 +745,7 @@ body,
 .card:focus,
 .card:focus-within:not(header),
 .card.open {
-	border-color: var(--text);
+	border-color: var(--text-color);
 }
 .card.changed,
 .card.changed:hover,
@@ -765,7 +770,7 @@ body,
 	color: var(--hover-color);
 }
 #resize:focus {
-	color: var(--text);
+	color: var(--text-color);
 }
 #resize > :not(.dots) {
 	color: inherit;

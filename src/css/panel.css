@@ -43,7 +43,7 @@ body,
 .card:focus,
 .card:focus-within:not(header),
 .card.open {
-	border-color: var(--text);
+	border-color: var(--text-color);
 }
 .card.changed,
 .card.changed:hover,

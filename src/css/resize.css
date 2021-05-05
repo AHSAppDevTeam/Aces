@@ -16,7 +16,7 @@
 	color: var(--hover-color);
 }
 #resize:focus {
-	color: var(--text);
+	color: var(--text-color);
 }
 #resize > :not(.dots) {
 	color: inherit;
