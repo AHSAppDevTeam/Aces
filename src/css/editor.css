@@ -46,19 +46,3 @@ header > [type=button] {
 	object-fit: contain;
 	max-height: 100%;
 }
-
-#editor:not(.render) > #body-label,
-#editor.render > #markdown-label,
-#editor.render > #upload-label,
-#editor.render > #url-label {
-	display: none;
-}
-#editor.render > label > :last-child{
-	padding: 0;
-}
-#editor.render > :not(header) {
-	border-color: transparent;
-}
-#editor.render > label > span {
-	opacity: 0;
-}

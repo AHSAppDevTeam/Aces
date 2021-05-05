@@ -1,7 +1,6 @@
 async function initEditor() {
 	const $editor = $('#editor')
 	const $upload = $('#upload')
-	const $body = $('#body')
 	const $markdown = $('#markdown')
 	const $media = $('#media')
 	const $categoryID = $('#categoryID')
@@ -15,13 +14,13 @@ async function initEditor() {
 	$$textarea.forEach(initTextarea)
 	remapEnter($url)
 
-	$markdown.addEventListener('input', ({ target: { value } }) => {
-		$body.innerHTML = md(value)
-		dispatchChange($body)
-	})
 	$upload.addEventListener('change', async ({ target: { files } }) => {
 		const urlSets = await Promise.all(Array.from(files).map(imgbb))
 		$media.prepend(...urlSets.map($thumb))
+		dispatchChange($media)
+	})
+	$url.addEventListener('change', async ({ target: { value } }) => {
+		$media.prepend($thumb(imgbb(value)))
 		dispatchChange($media)
 	})
 	const [locationIDs,locations,categories] = await Promise.all([
@@ -163,8 +162,9 @@ async function syncStory(story,direction){
 				break
 		}
 	}
-	story.date = timestampToHumanString(story.timestamp)
 	if(direction) {
+		story.date = timestampToHumanString(story.timestamp)
+		story.body = md(story.markdown)
 		story.videoIDs = []
 		story.imageURLs = []
 		story.thumbURLs = []

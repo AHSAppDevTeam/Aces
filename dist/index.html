@@ -160,22 +160,6 @@ header > [type=button] {
 	object-fit: contain;
 	max-height: 100%;
 }
-
-#editor:not(.render) > #body-label,
-#editor.render > #markdown-label,
-#editor.render > #upload-label,
-#editor.render > #url-label {
-	display: none;
-}
-#editor.render > label > :last-child{
-	padding: 0;
-}
-#editor.render > :not(header) {
-	border-color: transparent;
-}
-#editor.render > label > span {
-	opacity: 0;
-}
 @font-face {
 	font-family: 'pt-root';
 	src: url('pt-root/bold.woff') format('woff');
@@ -849,9 +833,6 @@ body,
 					<code class=output></code>
 				</section>
 			</label>
-			<label class=card id=body-label>
-				<section id=body></section>
-			</label>
 		</main>
 		<div id=resize class=card tabindex=0>
 			<span class=name>
@@ -1211,7 +1192,6 @@ const $template = id => $('#template-'+id).content.cloneNode(true).querySelector
 async function initEditor() {
 	const $editor = $('#editor')
 	const $upload = $('#upload')
-	const $body = $('#body')
 	const $markdown = $('#markdown')
 	const $media = $('#media')
 	const $categoryID = $('#categoryID')
@@ -1225,13 +1205,13 @@ async function initEditor() {
 	$$textarea.forEach(initTextarea)
 	remapEnter($url)
 
-	$markdown.addEventListener('input', ({ target: { value } }) => {
-		$body.innerHTML = md(value)
-		dispatchChange($body)
-	})
 	$upload.addEventListener('change', async ({ target: { files } }) => {
 		const urlSets = await Promise.all(Array.from(files).map(imgbb))
 		$media.prepend(...urlSets.map($thumb))
+		dispatchChange($media)
+	})
+	$url.addEventListener('change', async ({ target: { value } }) => {
+		$media.prepend($thumb(imgbb(value)))
 		dispatchChange($media)
 	})
 	const [locationIDs,locations,categories] = await Promise.all([
@@ -1314,7 +1294,7 @@ async function publishStory(){
 		.filter(([key])=>key in legacyMap)
 		.map(([key,value]) => [legacyMap[key],value])
 	)
-	dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
+	// dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
 
 	if(story.categoryID !== oldStory.categoryID){
 		const storySiblingIDs = (await dbLive('categories'))
@@ -1332,7 +1312,7 @@ async function publishStory(){
 			.filter(x=>x!==id)
 		dbWrite( 'categories/'+story.categoryID, {articleIDs: storySiblingIDs} )
 		dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldStorySiblingIDs} )
-		dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
+		// dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
 }
@@ -1373,8 +1353,9 @@ async function syncStory(story,direction){
 				break
 		}
 	}
-	story.date = timestampToHumanString(story.timestamp)
 	if(direction) {
+		story.date = timestampToHumanString(story.timestamp)
+		story.body = md(story.markdown)
 		story.videoIDs = []
 		story.imageURLs = []
 		story.thumbURLs = []
@@ -1916,7 +1897,7 @@ const offset = () => new Date().getTimezoneOffset()*60
  */
 const timestampToDate = timestamp => new Date((parseInt(timestamp) + offset())*1000)
 
-const timestampToISOString = timestamp => timestampToDate(timestamp).toISOString().slice(0,16)
+const timestampToISOString = timestamp => timestampToDate(timestamp).toISOString().slice(0,19)
 
 const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleDateString(undefined, {
 	weekday: 'long',
@@ -1929,7 +1910,7 @@ const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleD
  * @param {string} ISOString ISO datetime string
  * @returns {number} Unix timestamp in seconds 
  */
-const ISOStringToTimestamp = date => Math.trunc(new Date(date).getTime()/1000) - offset()
+const ISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').getTime()/1000) - offset()
 
 
 /**
