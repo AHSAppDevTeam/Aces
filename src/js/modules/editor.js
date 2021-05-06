@@ -87,9 +87,10 @@ async function publishStory(target){
 	target.parentElement.classList.add('changed')
 	const id = window.location.pathname.split('/').pop()
 	const story = await storyTemplate()
-	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	await syncStory(story,1)
+	history.replaceState({}, '', id+'?state='+encodeURIComponent(JSON.stringify(story)))
 	if(!user) return
+	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	for(const type of ['story','article','snippet','notif']){
 		const keys = Object.keys((await dbLive('schemas'))[type])
 		const object = Object.fromEntries(
