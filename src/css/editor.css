@@ -1,0 +1,48 @@
+#editor {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	width: 36vw;
+	padding-top: 1rem;
+}
+#editor > * {
+	grid-column-end: span 2;
+}
+#editor > label[half-width] {
+	grid-column-end: span 1;
+}
+#editor header > * {
+	flex: 1 0 0;
+	width: 0;
+}
+header > [type=button] {
+	cursor: pointer;
+	text-decoration: none;
+	color:var(--text-color);
+}
+
+#editor > label > #title {
+	font-size: 1.6rem;
+}
+#editor > label > #author {
+	font-size: 1rem;
+}
+#editor > label > #media {
+	display: flex;
+	overflow-x: scroll;
+}
+#media > label.card.thumb {
+	cursor: move;
+	margin-right: 8pt;
+	flex: 0 0 10rem;
+	height: 10rem;
+	width: 10rem;
+}
+.thumb > .close {
+	position: absolute;
+	padding: 0;
+	width: 2rem;
+	height: 2rem;
+}
+.thumb > img {
+	object-fit: contain;
+	max-height: 100%;
+}

@@ -1,0 +1,45 @@
+#browser {
+	flex: 1;
+	scroll-behavior: smooth;
+}
+#browser .title{
+	scroll-margin: 4rem;
+	text-decoration: none;
+	flex-grow: 1;
+}
+.group > header {
+	display: flex;
+	gap: 8pt;
+}
+.group > header > label:first-child {
+	flex-grow: 1;
+}
+.group > header > label:last-child {
+	flex-basis: 4rem;
+}
+.group.location > header .title {
+	font-size: 2rem;
+}
+.group.category {
+	margin-top: 1rem;
+}
+.group.category > header {
+	grid-column: 1 / -1;
+}
+.group.category > header .title{
+	font-size: 1.5rem;
+}
+#browser > section > section {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	grid-auto-rows: auto;
+	grid-gap: 8pt;
+	scroll-margin-top: 1rem;
+}
+#browser > header {
+	flex-wrap: wrap;
+}
+#browser > header > #search {
+	width: 0;
+	flex-grow: 1;
+}

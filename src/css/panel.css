@@ -1,0 +1,58 @@
+.panel {
+	overflow: hidden scroll;
+	padding: 0 1rem;
+	display: grid;
+	grid-gap: 1rem;
+	grid-auto-rows: 1fr;
+}
+.panel > header {
+	position: sticky;
+	display: flex;
+	top: 0;
+	margin-inline: -1rem;
+	border-inline: 0;
+	border-top: 0;
+	border-radius: 0;
+	height: 3rem;
+	gap: 0.5rem;
+	z-index: 1;
+	background-color: var(--background);
+}
+.panel > header > * {
+	border-radius: var(--radius);
+	padding: 2pt 4pt;
+	z-index: -1;
+}
+.panel::after{
+	content: '';
+	display: block;
+	height: 1rem;
+}
+html,
+body,
+#resize,
+.panel {
+	height: 100%;
+}
+.card {
+	border-radius: var(--radius);
+	padding: 8pt;
+	background: transparent;
+	transition-duration: 100ms;
+	border: var(--border);
+	border-color: var(--border-color);
+}
+.card:hover:not(header) {
+	border-color: var(--hover-color);
+}
+.card:focus,
+.card:focus-within:not(header),
+.card.open {
+	border-color: var(--text-color);
+}
+.card.changed,
+.card.changed:hover,
+.card.changed:focus-within {
+	border-color: var(--success-color);
+	border-style: dashed;
+}

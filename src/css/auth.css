@@ -1,0 +1,38 @@
+#sign-in {
+	position: fixed;
+	top: 8pt;
+	right: 8pt;
+
+	width: 24rem;
+	max-width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	
+	background:var(--background);
+	z-index: 10;
+
+	box-shadow: 0 0 0 100vmax #0004;
+}
+#sign-in:not(:focus):not(:focus-within){
+	pointer-events: none;
+	opacity: 0;
+}
+#sign-in .cancel {
+	background: transparent;
+	border: 0;
+}
+#sign-in > * + * {
+	margin-top: 8pt;
+}
+#sign-in.loading{
+	border-color: blue;
+}
+#sign-in.invalid{
+	border-color: red;
+}
+
+input[disabled] {
+	display: none;
+}
+

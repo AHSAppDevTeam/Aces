@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang=en-US dir=ltr>
+  	<head>
+		<meta charset=utf-8>
+
+		<title>Aces</title>
+		<meta name=description content='Arcadia High School App Content Editing System'>
+		<meta name=author content='Xing Liu'>
+		<meta name=viewport content='width=device-width, initial-scale=1.0'>
+
+		<link rel=icon type=image/png href=/icon.png>
+		<style>
+%s
+		</style>
+	</head>
+	<body>
+		<main id=editor class=panel>
+			<label class=card id=title-label>
+				<span>title</span>
+				<textarea id=title accesskey=t></textarea>
+			</label>
+			<label class=card id=categoryID-label>
+				<span>category</span>
+				<select id=categoryID></select>
+			</label>
+			<label class=card id=title-label>
+				<span>author</span>
+				<textarea id=author accesskey=a></textarea>
+			</label>
+			<label class=card id=timestamp-label>
+				<span>publication time</span>
+				<input id=timestamp type=datetime-local>
+			</label>
+			<label class=card id=featured-label half-width><div>
+				<input id=featured type=checkbox>
+				feature
+			</div></label>
+			<label class=card id=notified-label half-width><div>
+				<input id=notified type=checkbox>
+				notify
+			</div></label>
+			<label class=card id=blurb-label>
+				<span>blurb (notification body)</span>
+				<textarea id=blurb></textarea>
+			</label>
+			<label class=card id=notifTimestamp-label>
+				<span>notification time</span>
+				<input id=notifTimestamp type=datetime-local>
+			</label>
+			<label class=card id=upload-label half-width>
+				<span>upload images</span>
+				<input id=upload type=file multiple accept=image/*>
+			</label>
+			<label class=card id=url-label half-width>
+				<span>image/YouTube URL</span>
+				<input id=url type=url>
+			</label>
+			<label class=card id=media-label>
+				<span>images and videos</span>
+				<section id=media>
+				</section>
+			</label>
+			<label class=card id=markdown-label>
+				<span>body (article text)</span>
+				<section id=markdown-wrapper class=markdown>
+					<textarea class=input id=markdown accesskey=b multi-line></textarea>
+					<code class=output></code>
+				</section>
+			</label>
+		</main>
+		<div id=resize class=card tabindex=0>
+			<span class=name>
+				AHS App Content Editing System
+			</span>
+			<span class=dots>
+				&bull;&bull;&bull;
+			</span>
+			<span class=author>
+				Designed and programmed by Xing Liu
+			</span>
+		</div>
+		<aside id=browser class=panel>
+			<header class=card>
+				<input type=button
+					class=card
+					id=new
+					title='draft a new story'
+					value='＋'
+					accesskey=n >
+				<input type=text
+					class=card
+					id=search
+					title='search articles (alt+/)'
+					placeholder='Search titles'
+					accesskey='/'>
+				<input type=button
+					class=card
+					id=sources
+					title='view resources'
+					value=🕮
+					accesskey=R >
+				<input type=button
+					class=card
+					id=sign
+					title='sign in/out (alt+s)'
+					value='Sign in'
+					accesskey=s >
+			</header>
+			<!-- insert previews -->
+		</aside>
+		<form id=sign-in class=card tabindex=0 method=dialog>
+			<label class=card>
+				<span>email</span>
+				<input id='email' type='email'
+				autocomplete='on' spellcheck='false' required>
+			</label>
+			<label class=card>
+				<span>password</span>
+				<input id='password' type='password'
+				autocomplete='on' spellcheck='false' required>
+			</label>
+			<input type=submit class=card value='sign in'>
+			<input type=button class=cancel value='✕'>
+		</form>
+		<!-- TEMPLATES -->
+		<template id='template-location'>
+			<section class='group location'>
+				<header>
+					<label class='card'>
+						<span>location title</span>
+						<textarea class='title input'></textarea>
+					</label>
+					<a class='id' hidden></a>
+				</header>
+			</section>
+		</template>
+		<template id='template-category'>
+			<section class='group category'>
+				<header>
+					<label class='card'>
+						<span>category title</span>
+						<textarea class='title input'></textarea>
+					</label>
+					<a class='id' hidden></a>
+					<label class='card'>
+						<span>color</span>
+						<input type='color' class='color'>
+					</label>
+				</header>
+			</section>
+		</template>
+		<template id='template-preview'>
+			<article class='preview card not-published'>
+				<a class='title'></a>
+				<section class=menu>
+					<label title='feature/unfeature (f)' class='action toggle'>
+						<input class='featured' type='checkbox'>
+						<svg viewBox='-1 -1 26 26' stroke-width='1.8' width='24' height='24'>
+							<path d='M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z'/>
+						</svg>
+					</label>
+					<label title='move to archive (a)' class='action button'>
+						<svg viewBox='0 0 24 24' stroke-width='0' width='24' height='24'>
+							<path d='M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.81.97H5.44l.8-.97zM5 19V8h14v11H5zm8.45-9h-2.9v3H8l4 4 4-4h-2.55z'/>
+						</svg>
+					</label>
+					<label class=media></label>
+				</section>
+			</article>
+		</template>
+		<template id='template-thumb'>
+			<label class='card thumb' draggable='true'>
+				<input type=button class='card close' value=✕>
+				<img>
+			</label>
+		</template>
+		<script>
+%s
+		</script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+#resize {
+	border-radius: 0;
+	padding-block: 0;
+	padding-inline: 4pt;
+	font-size: .6rem;
+	font-weight: 700;
+	border-inline-width: 0;
+	cursor: col-resize;
+	writing-mode: vertical-rl;
+	display: flex;
+	align-items: center;
+	color: var(--border-color);
+	touch-action: none;
+}
+#resize:hover {
+	color: var(--hover-color);
+}
+#resize:focus {
+	color: var(--text-color);
+}
+#resize > :not(.dots) {
+	color: inherit;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+#resize > .dots {
+	letter-spacing: 1ch;
+	flex-grow: 1;
+	text-align: center;
+}
+#resize > .author {
+	transform: rotate(180deg);
+}

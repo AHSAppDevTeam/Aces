@@ -1,18 +1,9 @@
 #!/bin/sh
-
-# add random version number to links in order to clear cache
-rand=$(date +%s)
-sed -i -e "s/\?v=\w\+/\?v=$rand/g" editor.html
-
-# merge scripts
-cd scripts
-cat modules/*.js \
-config.js auth.js init.js secrets.js \
-search.js resize.js editor.js preview.js \
-article.js remote.js webhook.js \
-> ../dist/editor.min.js
-
-# merge styles
-cd ../styles
-cat modules/*.css main.css editor.css auth.css \
-> ../dist/editor.min.css
+cd src
+html=$(cat index.html)
+js=$(cd js && cat config.js modules/*.js init.js)
+css=$(cd css && cat *.css)
+cd ..
+printf "$html" "$css" "$js" > dist/index.html
+cat src/js/worker.js > dist/worker.js
+echo "built site"

@@ -1,0 +1,34 @@
+/* TextareaDecorator.css
+ * written by Colin Kuebler 2012
+ * Part of LDT, dual licensed under GPLv3 and MIT
+ * Provides styles for rendering a textarea on top of a pre with scrollbars
+ */
+.markdown code, .markdown textarea {
+	font-size: 1rem;
+	font-family: inherit;
+}
+
+.markdown {
+	overflow: hidden;
+	position: relative;
+}
+
+.markdown > code {
+	margin: 0;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+.markdown > textarea {
+	/* hide the text but show the text caret */
+	color: transparent !important;
+	caret-color: var(--text-color);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+	padding: inherit;
+	cursor: text;
+	background: transparent;
+}
