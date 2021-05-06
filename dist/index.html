@@ -93,25 +93,6 @@ input[disabled] {
 	width: 0;
 	flex-grow: 1;
 }
-
-.preview > * {
-	overflow-wrap: break-word;
-}
-
-.actions .featured {
-	display: none;
-}
-.actions > .toggle {
-	width: 1em;
-	height: 1em;	
-}
-.actions > .toggle > svg:last-child {
-	fill: var(--text-color);
-	stroke: var(--text-color);
-}
-.actions .featured:not(:checked) + svg{
-	fill: transparent;
-}
 #editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	width: 36vw;
@@ -748,6 +729,51 @@ body,
 	border-color: var(--success-color);
 	border-style: dashed;
 }
+.preview {
+	display: flex;
+	flex-direction: column;
+}
+.preview > .title {
+	overflow-wrap: break-word;
+	flex-grow: 1;
+}
+.preview > .menu {
+	display: flex;
+	margin-top: 8pt;
+	padding-top: 8pt;
+	gap: 8pt;
+	border-top: var(--border);
+}
+.preview > .menu > .media {
+	display: contents;
+}
+.preview > .menu > .media > img {
+	width: 1rem;
+	height: 1rem;
+	object-fit: contain;
+	background: var(--border-color);
+} 
+.menu > .action {
+	width: 1em;
+	height: 1em;	
+	cursor: pointer;
+}
+.menu > .toggle > input {
+	display: none;
+}
+.menu > .action > svg {
+	fill: var(--hover-color);
+	stroke: var(--hover-color);
+	width: 100%;
+	height: 100%;
+}
+.menu > .action:hover > svg {
+	fill: var(--text-color);
+	stroke: var(--text-color);
+}
+.menu .featured:not(:checked) + svg{
+	fill: transparent;
+}
 #resize {
 	border-radius: 0;
 	padding-block: 0;
@@ -922,19 +948,20 @@ body,
 		</template>
 		<template id='template-preview'>
 			<article class='preview card not-published'>
-				<h4><a class='title'></a></h4>
-				<section class='actions'>
-					<label title='feature/unfeature (f)' class='toggle'>
+				<a class='title'></a>
+				<section class=menu>
+					<label title='feature/unfeature (f)' class='action toggle'>
 						<input class='featured' type='checkbox'>
 						<svg viewBox='-1 -1 26 26' stroke-width='1.8' width='24' height='24'>
 							<path d='M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z'/>
 						</svg>
 					</label>
-					<!--<label title='move to archive (a)' class='archive'>
+					<label title='move to archive (a)' class='action button'>
 						<svg viewBox='0 0 24 24' stroke-width='0' width='24' height='24'>
 							<path d='M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.81.97H5.44l.8-.97zM5 19V8h14v11H5zm8.45-9h-2.9v3H8l4 4 4-4h-2.55z'/>
 						</svg>
-					</label>-->
+					</label>
+					<label class=media></label>
 				</section>
 			</article>
 		</template>
@@ -1148,6 +1175,11 @@ function makePreview(id,snippet){
 function updatePreview($preview,snippet){
 	$('.title',$preview).innerHTML = snippet.title
 	$('.featured',$preview).checked = snippet.featured
+	$('.media',$preview).replaceChildren(...(snippet.thumbURLs||[]).map(thumbURL=>{
+		const $img = document.createElement('img')
+		$img.src = thumbURL
+		return $img
+	}))
 }
 /**
  * Sends a message to the Discord webhook
@@ -1295,11 +1327,16 @@ async function publishStory(target){
 	}
 	
 	const legacyMap = (await dbLive('schemas')).legacy
-	const legacyStory = Object.fromEntries(
-		Object.entries(story)
-		.filter(([key])=>key in legacyMap)
-		.map(([key,value]) => [legacyMap[key],value])
-	)
+	const legacyStory = {
+		...Object.fromEntries(
+			Object.entries(story)
+			.filter(([key])=>key in legacyMap)
+			.map(([key,value]) => [legacyMap[key],value])
+		),
+		...{
+			hasHTML: true,
+		}
+	}
 	dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
 
 	if(story.categoryID !== oldStory.categoryID){

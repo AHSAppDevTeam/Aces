@@ -105,4 +105,9 @@ function makePreview(id,snippet){
 function updatePreview($preview,snippet){
 	$('.title',$preview).innerHTML = snippet.title
 	$('.featured',$preview).checked = snippet.featured
+	$('.media',$preview).replaceChildren(...(snippet.thumbURLs||[]).map(thumbURL=>{
+		const $img = document.createElement('img')
+		$img.src = thumbURL
+		return $img
+	}))
 }

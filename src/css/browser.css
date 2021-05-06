@@ -43,22 +43,3 @@
 	width: 0;
 	flex-grow: 1;
 }
-
-.preview > * {
-	overflow-wrap: break-word;
-}
-
-.actions .featured {
-	display: none;
-}
-.actions > .toggle {
-	width: 1em;
-	height: 1em;	
-}
-.actions > .toggle > svg:last-child {
-	fill: var(--text-color);
-	stroke: var(--text-color);
-}
-.actions .featured:not(:checked) + svg{
-	fill: transparent;
-}
