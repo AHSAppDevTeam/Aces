@@ -1,22 +1,7 @@
-.preview {
-	display: flex;
-	flex-direction: column;
-}
-.preview > .title {
-	overflow-wrap: break-word;
-	flex-grow: 1;
-}
-.preview > .menu {
-	display: flex;
-	margin-top: 8pt;
-	padding-top: 8pt;
-	gap: 8pt;
-	border-top: var(--border);
-}
-.preview > .menu > .media {
+.menu > .media {
 	display: contents;
 }
-.preview > .menu > .media > img {
+.menu > .media > img {
 	width: 1rem;
 	height: 1rem;
 	object-fit: contain;
@@ -26,9 +11,6 @@
 	width: 1em;
 	height: 1em;	
 	cursor: pointer;
-}
-.menu > .toggle > input {
-	display: none;
 }
 .menu > .action > svg {
 	fill: var(--hover-color);

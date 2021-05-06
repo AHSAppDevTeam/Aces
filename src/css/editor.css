@@ -29,20 +29,17 @@ header > [type=button] {
 	display: flex;
 	overflow-x: scroll;
 }
-#media > .card.thumb {
+#media > .thumb {
 	cursor: move;
 	margin-right: 8pt;
 	flex: 0 0 10rem;
-	height: 10rem;
-	width: 10rem;
-}
-.thumb > .close {
-	position: absolute;
-	padding: 0;
-	width: 2rem;
-	height: 2rem;
+	height: 12rem;
+	width: 8rem;
 }
 .thumb > img {
 	object-fit: contain;
+	object-position: center;
 	max-height: 100%;
+	pointer-events: none;
+	height: 8rem;
 }

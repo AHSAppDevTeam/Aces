@@ -22,7 +22,7 @@ label.card > span {
 	font-size: .8rem;
 	padding-inline: .2ch;
 	font-weight: 700;
-	background: var(--background);
+	background: var(--background-color);
 	color: var(--border-color);
 	max-width: 100%;
 	overflow: hidden;

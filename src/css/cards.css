@@ -1,0 +1,46 @@
+
+.card {
+	border-radius: var(--radius);
+	padding: 8pt;
+	background: transparent;
+	transition-duration: 100ms;
+	border: var(--border);
+	border-color: var(--border-color);
+}
+.card:hover:not(header) {
+	border-color: var(--hover-color);
+}
+.card:focus,
+.card:focus-within:not(header),
+.card.open {
+	border-color: var(--text-color);
+}
+.card.changed,
+.card.changed:hover,
+.card.changed:focus-within {
+	border-color: var(--success-color);
+	border-style: dashed;
+}
+.card.info {
+	display: flex;
+	flex-direction: column;
+}
+.card.info > :first-child {
+	overflow-wrap: break-word;
+	flex-grow: 1;
+}
+.card > .menu {
+	display: flex;
+	margin-top: 8pt;
+	padding-top: 8pt;
+	gap: 8pt;
+	border-top: var(--border);
+}
+.card > .menu > * {
+	width: 1rem;
+	height: 1rem;
+	padding: 0;
+}
+.card > .menu > .action > input {
+	display: none;
+}

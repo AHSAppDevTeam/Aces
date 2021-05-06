@@ -201,16 +201,24 @@ async function syncStory(story,direction){
 }
 function $thumb(urlSet){
 	const $thumb = $template('thumb')
+	const $media = $('#media')
 	$thumb.dataset.media = JSON.stringify(urlSet)
 	$('img',$thumb).src = urlSet.thumbURL
-	$('.close',$thumb).addEventListener('click',()=>{
+	$('.delete',$thumb).addEventListener('click',()=>{
 		$thumb.remove()
 		dispatchChange($('#editor'))
 	},{once:true})
+	$('.move-ahead',$thumb).addEventListener('click',()=>{
+		if($thumb.previousSibling) $media.insertBefore($thumb,$thumb.previousSibling)
+		dispatchChange($media)
+	})
+	$('.move-behind',$thumb).addEventListener('click',()=>{
+		if($thumb.nextSibling) $media.insertBefore($thumb.nextSibling,$thumb)
+		dispatchChange($media)
+	})
 	$thumb.addEventListener('dragover',event=>event.preventDefault())
 	$thumb.addEventListener('dragstart',()=>$thumb.classList.add('dragged'))
 	$thumb.addEventListener('drop',()=>{
-		const $media = $('#media')
 		const $dragged = ('.dragged',$media)
 		$dragged.classList.remove('dragged')
 		$media.insertBefore($thumb,$dragged)

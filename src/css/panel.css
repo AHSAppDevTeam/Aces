@@ -16,7 +16,7 @@
 	height: 3rem;
 	gap: 0.5rem;
 	z-index: 1;
-	background-color: var(--background);
+	background-color: var(--background-color);
 }
 .panel > header > * {
 	border-radius: var(--radius);
@@ -33,26 +33,4 @@ body,
 #resize,
 .panel {
 	height: 100%;
-}
-.card {
-	border-radius: var(--radius);
-	padding: 8pt;
-	background: transparent;
-	transition-duration: 100ms;
-	border: var(--border);
-	border-color: var(--border-color);
-}
-.card:hover:not(header) {
-	border-color: var(--hover-color);
-}
-.card:focus,
-.card:focus-within:not(header),
-.card.open {
-	border-color: var(--text-color);
-}
-.card.changed,
-.card.changed:hover,
-.card.changed:focus-within {
-	border-color: var(--success-color);
-	border-style: dashed;
 }

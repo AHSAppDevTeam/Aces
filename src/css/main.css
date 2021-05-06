@@ -5,7 +5,7 @@
 	--link-color: #248;
 	--success-color: #2a8;
 	--border: solid 2pt var(--border-color);
-	--background: white;
+	--background-color: white;
 	--cover: #fffd;
 	--text-color: black;
 }
@@ -15,7 +15,7 @@
 	--hover-color: hsl(220deg,20%,40%);
 	--link-color: #8af;
 	--success-color: #8fa;
-	--background: hsl(220deg,20%,8%);
+	--background-color: hsl(220deg,20%,8%);
 	--cover: #000d;
 	--text-color: #ddd;
 } }
@@ -29,7 +29,7 @@ html {
 }
 body {
 	display: flex;
-	background: var(--background);
+	background: var(--background-color);
 }
 body * {
 	box-sizing: border-box;
