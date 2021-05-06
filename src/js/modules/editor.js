@@ -99,11 +99,16 @@ async function publishStory(target){
 	}
 	
 	const legacyMap = (await dbLive('schemas')).legacy
-	const legacyStory = Object.fromEntries(
-		Object.entries(story)
-		.filter(([key])=>key in legacyMap)
-		.map(([key,value]) => [legacyMap[key],value])
-	)
+	const legacyStory = {
+		...Object.fromEntries(
+			Object.entries(story)
+			.filter(([key])=>key in legacyMap)
+			.map(([key,value]) => [legacyMap[key],value])
+		),
+		...{
+			hasHTML: true,
+		}
+	}
 	dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
 
 	if(story.categoryID !== oldStory.categoryID){

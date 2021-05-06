@@ -36,6 +36,9 @@ body * {
 	color: var(--text-color);
 	overflow-wrap: break-word;
 }
+body:not(input):not(textarea){
+	user-select: none;
+}
 body :focus{
 	outline: 0;
 }
