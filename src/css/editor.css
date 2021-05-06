@@ -29,7 +29,7 @@ header > [type=button] {
 	display: flex;
 	overflow-x: scroll;
 }
-#media > label.card.thumb {
+#media > .card.thumb {
 	cursor: move;
 	margin-right: 8pt;
 	flex: 0 0 10rem;

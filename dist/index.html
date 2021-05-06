@@ -124,7 +124,7 @@ header > [type=button] {
 	display: flex;
 	overflow-x: scroll;
 }
-#media > label.card.thumb {
+#media > .card.thumb {
 	cursor: move;
 	margin-right: 8pt;
 	flex: 0 0 10rem;
@@ -966,10 +966,10 @@ body,
 			</article>
 		</template>
 		<template id='template-thumb'>
-			<label class='card thumb' draggable='true'>
-				<input type=button class='card close' value=✕>
+			<section class='card thumb' draggable='true'>
+				<input type=button class='card close' value='✕'>
 				<img>
-			</label>
+			</section>
 		</template>
 		<script>
 'use strict'
@@ -1080,7 +1080,7 @@ async function initBrowser(){
 	updateBrowser()
 	$('#search').addEventListener('input',({target:{value:query}})=>{
 		$$('.preview>h4>.title',$('#browser')).forEach($title=>{
-			const $preview = $title.parentElement.parentElement
+			const $preview = $title.parentElement
 			const show = query ? $title.textContent.toLowerCase().includes(query.toLowerCase()) : true
 			show ? $preview.removeAttribute('hidden') : $preview.setAttribute('hidden','')
 		})
@@ -1435,6 +1435,15 @@ function $thumb(urlSet){
 		$thumb.remove()
 		dispatchChange($('#editor'))
 	},{once:true})
+	$thumb.addEventListener('dragover',event=>event.preventDefault())
+	$thumb.addEventListener('dragstart',()=>$thumb.classList.add('dragged'))
+	$thumb.addEventListener('drop',()=>{
+		const $media = $('#media')
+		const $dragged = ('.dragged',$media)
+		$dragged.classList.remove('dragged')
+		$media.insertBefore($thumb,$dragged)
+		dispatchChange($media)
+	})
 	return $thumb
 }
 async function initHighlighter($section){

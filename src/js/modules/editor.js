@@ -207,5 +207,14 @@ function $thumb(urlSet){
 		$thumb.remove()
 		dispatchChange($('#editor'))
 	},{once:true})
+	$thumb.addEventListener('dragover',event=>event.preventDefault())
+	$thumb.addEventListener('dragstart',()=>$thumb.classList.add('dragged'))
+	$thumb.addEventListener('drop',()=>{
+		const $media = $('#media')
+		const $dragged = ('.dragged',$media)
+		$dragged.classList.remove('dragged')
+		$media.insertBefore($thumb,$dragged)
+		dispatchChange($media)
+	})
 	return $thumb
 }
