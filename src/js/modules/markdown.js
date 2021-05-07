@@ -181,9 +181,9 @@
 				// expand url shorthand
 				.replace(/(\(\/\/)/g,'(https://')
 				// turn raw URLs into links.
-				.replace(/((?!\]\())|^.?)(https?:\/\/)(\S+)/g,'$1[$3](https://$3)')
+				.replace(/((?!\]\()|^.?)(https?:\/\/)(\S+)/g,'$1[$3](https://$3)')
 				// turn raw email addresses into email links.
-				.replace(/((?!\]\())|^.?))(\S+@\S+\.\S+)/g,'[$1](mailto:$1)')
+				.replace(/((?!\]\()|^.?)(\S+@\S+\.\S+)/g,'[$1](mailto:$1)')
 				// collect code blocks and replace with placeholder
 				// we do this to avoid code blocks matching the paragraph regexp
 				.replace(blockCodeRegExp, function (match, lang, block) {
