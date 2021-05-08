@@ -12,7 +12,10 @@ import os
 import sys
 
 os.chdir(os.path.join(os.path.dirname(__file__),'dist'))
-port = int(sys.argv[1]) or 8000
+
+try: port = int(sys.argv[1])
+except IndexError: port = 8000
+
 HOST = ('0.0.0.0', port)
 
 
