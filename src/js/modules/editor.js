@@ -65,7 +65,7 @@ async function storyTemplate(){
 			timestamp: timestamp(),
 			notifTimestamp: timestamp(),
 			categoryID: 'Drafts',
-			blurb: 'You will not believe what this fox did!',
+			blurb: 'Notification text.',
 			markdown: 'A *quick* brown **fox** jumps over a lazy [dog](https://en.wikipedia.org/wiki/Dog).'
 		}
 	}
