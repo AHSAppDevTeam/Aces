@@ -97,6 +97,7 @@ async function publishStory(target){
 	if(!user) return
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	for(const type of ['story','article','snippet','notif']){
+		if(type==='notif' && !story.notified) continue
 		const keys = Object.keys((await dbLive('schemas'))[type])
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
