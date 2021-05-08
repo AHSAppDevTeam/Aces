@@ -1,15 +1,15 @@
 const typography = text => text
 		// Smart quotes
 		/* opening singles */
-		.replace(/(^|[-\u2014\s(\["])'/g,'$1&lsquo;')
+		.replace(/(^|[-\u2014\s(\["])'/g,'$1‘')
 		/* closing singles & apostrophes */
-		.replace(/'/g,'&rsquo;')
+		.replace(/'/g,'’')
 		/* opening doubles */
-		.replace(/(^|[-\u2014/\[(\u2018\s])"/g,'$1&ldquo;')
+		.replace(/(^|[-\u2014/\[(\u2018\s])"/g,'$1“')
 		/* closing doubles */
-		.replace(/"/g,'&rdquo;')
+		.replace(/"/g,'”')
 	// Dashes
 		/* em-dashes */
-		.replace(/\s--\s?/g,'&thinsp;&mdash;&thinsp;')
+		.replace(/\s--\s?/g,' — ')
 		/* en-dashes */
-		.replace(/--/g,'&ndash;')
+		.replace(/--/g,'–')
