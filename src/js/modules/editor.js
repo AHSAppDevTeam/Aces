@@ -118,21 +118,14 @@ async function publishStory(target){
 	dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
 
 	if(story.categoryID !== oldStory.categoryID){
-		const storySiblingIDs = (await dbLive('categories'))
-			[story.categoryID]
-			.articleIDs
-			.concat([id])
-			.sort(async (a,b)=>(
-				(await dbLive('snippets'))[a].timestamp
-				-
-				(await dbLive('snippets'))[b].timestamp
-			))
-		const oldStorySiblingIDs = (await dbLive('categories'))
-			[oldStory.categoryID]
-			.articleIDs
-			.filter(x=>x!==id)
-		dbWrite( 'categories/'+story.categoryID, {articleIDs: storySiblingIDs} )
-		dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldStorySiblingIDs} )
+		const categories = await dbLive('categories')
+		const snippets = await dbLive('snippets')
+		const siblingIDs = categories[story.categoryID].articleIDs
+		const index = siblingIDs.findIndex(id=>snippets[id].timestamp < story.timestamp)
+		index < 0 ? siblingIDs.push(id) : siblingIDs.splice(index,0,id)
+		const oldSiblingIDs = categories[oldStory.categoryID].articleIDs.filter(x=>x!==id)
+		dbWrite( 'categories/'+story.categoryID, {articleIDs: siblingIDs} )
+		dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldSiblingIDs} )
 		dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
