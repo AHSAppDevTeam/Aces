@@ -1,3 +1,9 @@
+.preview.card{
+	scroll-margin-block: 4rem;
+}
+.preview.open.card {
+	border-style: dashed;
+}
 .menu > .media {
 	display: contents;
 }

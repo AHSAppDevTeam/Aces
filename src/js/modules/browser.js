@@ -85,7 +85,7 @@ function makePreview(id,snippet){
 	$title.addEventListener('click',event=>{
 		document.title = snippet.title
 		history.pushState({}, '', id)
-		editArticle()
+		updateEditor()
 		event.preventDefault()		
 	})
 	$title.href = id

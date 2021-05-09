@@ -38,14 +38,8 @@ async function initEditor() {
 		return $group
 	}))	
 
-	editArticle()
-	window.addEventListener('popstate',editArticle)
-}
-async function editArticle() {
-	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
-	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
-	if (!id.includes('-')) id = makeID()
-	updateEditor(id)
+	updateEditor()
+	window.addEventListener('popstate',updateEditor)
 }
 async function storyTemplate(){
 	const schema = (await dbLive('schemas')).story
@@ -70,13 +64,18 @@ async function storyTemplate(){
 		}
 	}
 }
-async function updateEditor(id) {
+async function updateEditor() {
+	const id = urlID()
 	history.replaceState({}, '', id)
 	let story = await dbOnce('storys/' + id) || {}
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
 	$$('#editor textarea').forEach(dispatchInput)
+	$$('.preview.open').forEach($preview=>$preview.classList.remove('open'))
+	const $preview = $('#preview-'+id)
+	$preview.classList.add('open')
+	$preview.scrollIntoView()
 }
 async function legacyAddress(categoryID){
 	return Object.entries(await dbLive('locations')).find(

@@ -743,6 +743,12 @@ body,
 .panel {
 	height: 100%;
 }
+.preview.card{
+	scroll-margin-block: 4rem;
+}
+.preview.open.card {
+	border-style: dashed;
+}
 .menu > .media {
 	display: contents;
 }
@@ -1171,7 +1177,7 @@ function makePreview(id,snippet){
 	$title.addEventListener('click',event=>{
 		document.title = snippet.title
 		history.pushState({}, '', id)
-		editArticle()
+		updateEditor()
 		event.preventDefault()		
 	})
 	$title.href = id
@@ -1282,14 +1288,8 @@ async function initEditor() {
 		return $group
 	}))	
 
-	editArticle()
-	window.addEventListener('popstate',editArticle)
-}
-async function editArticle() {
-	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
-	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
-	if (!id.includes('-')) id = makeID()
-	updateEditor(id)
+	updateEditor()
+	window.addEventListener('popstate',updateEditor)
 }
 async function storyTemplate(){
 	const schema = (await dbLive('schemas')).story
@@ -1309,18 +1309,23 @@ async function storyTemplate(){
 			timestamp: timestamp(),
 			notifTimestamp: timestamp(),
 			categoryID: 'Drafts',
-			blurb: 'You will not believe what this fox did!',
+			blurb: 'Notification text.',
 			markdown: 'A *quick* brown **fox** jumps over a lazy [dog](https://en.wikipedia.org/wiki/Dog).'
 		}
 	}
 }
-async function updateEditor(id) {
+async function updateEditor() {
+	const id = urlID()
 	history.replaceState({}, '', id)
 	let story = await dbOnce('storys/' + id) || {}
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
 	$$('#editor textarea').forEach(dispatchInput)
+	$$('.preview.open').forEach($preview=>$preview.classList.remove('open'))
+	const $preview = $('#preview-'+id)
+	$preview.classList.add('open')
+	$preview.scrollIntoView()
 }
 async function legacyAddress(categoryID){
 	return Object.entries(await dbLive('locations')).find(
@@ -1341,6 +1346,7 @@ async function publishStory(target){
 	if(!user) return
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	for(const type of ['story','article','snippet','notif']){
+		if(type==='notif' && !story.notified) continue
 		const keys = Object.keys((await dbLive('schemas'))[type])
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
@@ -2016,6 +2022,13 @@ const ISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').get
  * @returns {*} random element of the array
  */
 const randomElement = array => array[Math.floor(Math.random()*array.length)]
+
+const urlID = () => {
+	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
+	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
+	if (!id.includes('-')) id = makeID()
+	return id
+}
 async function initWorker(){
 	if (!('serviceWorker' in navigator)) return
 	// navigator.serviceWorker.register('/worker.js')

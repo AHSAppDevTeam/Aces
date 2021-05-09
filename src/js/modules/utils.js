@@ -56,3 +56,10 @@ const ISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').get
  * @returns {*} random element of the array
  */
 const randomElement = array => array[Math.floor(Math.random()*array.length)]
+
+const urlID = () => {
+	let id = window.location.pathname.split('/').pop() // Last portion of the path is the ID
+	if (id.includes('.')) id = rot13(id) // A . indicates that the ID is ciphered.
+	if (!id.includes('-')) id = makeID()
+	return id
+}
