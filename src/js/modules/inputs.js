@@ -43,7 +43,7 @@ async function dispatchChange($element){
  */
 function remapEnter($input,needCtrl=false){
 	$input.addEventListener('keydown',event=>{
-		if(!(event.key==='Enter' && (!needCtrl || event.ctrlKey))) return
+		if( event.key!=='Enter' || ( needCtrl && !event.ctrlKey ) ) return
 		event.preventDefault()
 		$input.blur()
 		return false

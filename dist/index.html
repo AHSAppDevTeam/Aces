@@ -1259,9 +1259,7 @@ const addChangeListener = async ($element, callback) =>
 		do $displayer = $displayer.parentElement
 		while ( !$displayer.classList.contains('card') )
 		$displayer.classList.add('changed')
-		console.log($displayer.classList)
 		await callback(event)
-		console.log('done')
 		$displayer.classList.remove('changed')
 	})
 
@@ -1575,7 +1573,7 @@ async function dispatchChange($element){
  */
 function remapEnter($input,needCtrl=false){
 	$input.addEventListener('keydown',event=>{
-		if(!(event.key==='Enter' && (!needCtrl || event.ctrlKey))) return
+		if( event.key!=='Enter' || ( needCtrl && !event.ctrlKey ) ) return
 		event.preventDefault()
 		$input.blur()
 		return false
@@ -2047,7 +2045,7 @@ const urlID = () => {
 }
 async function initWorker(){
 	if (!('serviceWorker' in navigator)) return
-	// navigator.serviceWorker.register('/worker.js')
+	navigator.serviceWorker.register('/worker.js')
 	navigator.serviceWorker.subscriptionList = { }
 	navigator.serviceWorker.addEventListener('message', ({data:{type,path}}) => {
 		console.log(data)

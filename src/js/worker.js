@@ -1,3 +1,4 @@
+if('EventSource' in self)
 self.addEventListener('fetch', event => event.respondWith(response(event.request)))
 
 self.addEventListener('install', event => event.waitUntil(self.skipWaiting()))
@@ -9,7 +10,7 @@ const response = request => new Promise(async (resolve)=>{
 	const cachedResponse = await cache.match(request)
 	console.log(request.url,cachedResponse)
 	if(cachedResponse) return resolve(cachedResponse)
-
+	cache.put(request,new Response())
 	const source = new EventSource(request.url)
 	let first = true
 	source.addEventListener('put', async ({data})=>{
