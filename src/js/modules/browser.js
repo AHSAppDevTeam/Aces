@@ -28,12 +28,12 @@ async function updateBrowser(){
 	$browser.replaceChildren(
 		$browser.firstElementChild,
 		...locationIDs
-			.filter(id=>id in locations)
-			.map(id=>makeGroup('location', id, locations[id], locations[id].categoryIDs
-				.filter(id=>id in categories)
-				.map(id=>makeGroup('category', id, categories[id], categories[id].articleIDs
-					.filter(id=>id in snippets)
-					.map(id=>makePreview(id, snippets[id])
+			.filter( id => (id in locations) && ('categoryIDs' in locations[id]))
+			.map( id => makeGroup('location', id, locations[id], locations[id].categoryIDs
+				.filter( id => (id in categories) && ('articleIDs' in categories[id]) )
+				.map( id => makeGroup('category', id, categories[id], categories[id].articleIDs
+					.filter( id => id in snippets )
+					.map( id => makePreview(id, snippets[id])
 	))))))
 
 	$$('textarea',$browser).forEach(initTextarea)
@@ -57,17 +57,17 @@ function makeGroup(
 
 	const $title = $('.title',$group)
 	$title.value = title
-	$title.addEventListener('change',({target:{value:title}})=>{
-		dbWrite(parent+'/'+id,{title})
-		discord('#'+id,`➡️ \`${bracket(id,type)}\` ${title}`)
+	addChangeListener($title, ({ target: { value: title } }) => {
+		dbWrite(parent+'/'+id, { title })
+		discord('#'+id, `➡️ \`${bracket(id,type)}\` ${ title }`)
 	})
 
 	if(type=='category'){
 		const $color = $('.color',$group) 
 		$color.value = color
-		$color.addEventListener('change',({target:{value:color}})=>{
-			dbWrite(parent+'/'+id,{color})
-			discord('#'+id,`🎨 \`${bracket(id,type)}\` ${color}`)
+		addChangeListener($color, ({ target: { value: color } }) => {
+			dbWrite(parent+'/'+id, { color })
+			discord('#'+id, `🎨 \`${ bracket(id,type) }\` ${ color }`)
 		})
 	}
 
@@ -82,7 +82,7 @@ function makePreview(id,snippet){
 	$preview.id = 'preview-'+id
 
 	const $title = $('.title',$preview)
-	$title.addEventListener('click',event=>{
+	$title.addEventListener('click',async (event) => {
 		document.title = snippet.title
 		history.pushState({}, '', id)
 		updateEditor()
@@ -91,7 +91,7 @@ function makePreview(id,snippet){
 	$title.href = id
 
 	const $featured = $('.featured',$preview)
-	$featured.addEventListener('change',({target:{checked:featured}})=>{
+	addChangeListener($featured, async ({ target: { checked: featured } }) => {
 		dbWrite('snippets/'+id,{featured})
 		dbWrite('articles/'+id,{featured})
 		discord(id,(featured ? '⭐ ' : '💔 ') + snippet.title)

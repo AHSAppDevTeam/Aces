@@ -6,7 +6,7 @@ async function initEditor() {
 	const $url = $('#url')
 	const $markdownWrapper = $('#markdown-wrapper')
 
-	$editor.addEventListener('change',async ({target}) => {
+	addChangeListener($editor, async ({target}) => {
 		switch(target.id){
 			case 'upload':
 				const urlSets = await Promise.all(Array.from(target.files).map(imgbb))
@@ -16,7 +16,7 @@ async function initEditor() {
 				$media.prepend($thumb(await imgbb(target.value)))
 				break
 		}
-		publishStory(target)
+		await publishStory()
 	})
 
 	initHighlighter($markdownWrapper)
@@ -87,13 +87,12 @@ async function encodeStory(story){
 	params.set('story',encodeURIComponent(JSON.stringify(story)))
 	history.replaceState({}, '', `${id}?${params}`)
 }
-async function publishStory(target){
-	target.parentElement.classList.add('changed')
-	const id = window.location.pathname.split('/').pop()
+async function publishStory(){
+	const id = urlID()
 	const story = await storyTemplate()
 	await syncStory(story,1)
 	
-	if(!user) return
+	if(!user) return false
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	for(const type of ['story','article','snippet','notif']){
 		if(type==='notif' && !story.notified) continue
@@ -129,7 +128,7 @@ async function publishStory(target){
 		dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
 	}
 	discord(id,'✏️ '+story.title,diff(story,oldStory))
-	target.parentElement.classList.remove('changed')
+	return true
 }
 
 function diff(newer,older){
