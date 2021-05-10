@@ -8,7 +8,7 @@ const response = request => new Promise(async (resolve)=>{
 	if(cachedResponse) return resolve(cachedResponse)
 	cache.put(request,new Response('{}'))
 	const source = new EventSource(request.url)
-	return source.addEventListener('put',async (message) => {
+	source.addEventListener('put',async (message) => {
 		let { path, data } = JSON.parse(message.data)
 		const cachedResponse = await cache.match(request)
 		let body = await cachedResponse.json()

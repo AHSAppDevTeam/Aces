@@ -57,18 +57,18 @@ function makeGroup(
 
 	const $title = $('.title',$group)
 	$title.value = title
-	addChangeListener($title, ({ target: { value: title } }) => {
-		dbWrite(parent+'/'+id, { title })
-		discord('#'+id, `➡️ \`${bracket(id,type)}\` ${ title }`)
-	})
+	addChangeListener($title, ({ target: { value: title } }) => [
+		dbWrite(parent+'/'+id, { title }),
+		discord('#'+id, `➡️ \`${bracket(id,type)}\` ${ title }`),
+	])
 
 	if(type=='category'){
 		const $color = $('.color',$group) 
 		$color.value = color
-		addChangeListener($color, ({ target: { value: color } }) => {
-			dbWrite(parent+'/'+id, { color })
-			discord('#'+id, `🎨 \`${ bracket(id,type) }\` ${ color }`)
-		})
+		addChangeListener($color, ({ target: { value: color } }) => [
+			dbWrite(parent+'/'+id, { color }),
+			discord('#'+id, `🎨 \`${ bracket(id,type) }\` ${ color }`),
+		])
 	}
 
 	$group.append(...children)
@@ -91,11 +91,11 @@ function makePreview(id,snippet){
 	$title.href = id
 
 	const $featured = $('.featured',$preview)
-	addChangeListener($featured, async ({ target: { checked: featured } }) => {
-		dbWrite('snippets/'+id,{featured})
-		dbWrite('articles/'+id,{featured})
+	addChangeListener($featured, async ({ target: { checked: featured } }) => [
+		dbWrite('snippets/'+id,{featured}),
+		dbWrite('articles/'+id,{featured}),
 		discord(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
-	})
+	])
 
 	updatePreview($preview,snippet)
 

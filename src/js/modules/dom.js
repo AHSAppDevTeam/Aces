@@ -32,7 +32,7 @@ const addChangeListener = async ($element, callback) =>
 		do $displayer = $displayer.parentElement
 		while ( !$displayer.classList.contains('card') )
 		$displayer.classList.add('changed')
-		await callback(event)
+		await Promise.all(callback(event))
 		$displayer.classList.remove('changed')
 	})
 

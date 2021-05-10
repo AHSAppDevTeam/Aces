@@ -16,7 +16,7 @@ async function initEditor() {
 				$media.prepend($thumb(await imgbb(target.value)))
 				break
 		}
-		await publishStory()
+		return [ publishStory() ]
 	})
 
 	initHighlighter($markdownWrapper)
