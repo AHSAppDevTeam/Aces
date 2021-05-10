@@ -20,7 +20,10 @@ async function initBrowser(){
 			url => window.open(url,'_blank')
 		)
 	})
-	$('#new').addEventListener('click', async () => updateEditor(makeID()) )
+	$('#new').addEventListener('click', async () => {
+		history.pushState({},'',makeID())
+		updateEditor() 
+	})
 }
 async function updateBrowser(){
 	const $browser = $('#browser')
