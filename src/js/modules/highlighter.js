@@ -7,11 +7,11 @@ async function initHighlighter($section){
 		strike: /~~(.+?)~~/gm,
 		hr: /\s{0,3}([-+* ]{3,})$/gm,
 		heading: /^#{1,6}\s(.+)$/gm,
-		link: /(!?\[.*?\]\((?:https?\:\/\/|mailto).*?\)|https?\:\/\/\S*|\S+@\S+\.\S+)/gm,
+		link: /(!?\[.*?\]\((?:https?:\/\/|mailto:).*?\)|&lt;\S+\.\S+&gt;)/gm,
 		list: /^((\d+\.)|[-+*]).+$/gm,
 	}
 	input.addEventListener('input',async ()=>{
-		let buffer = output.textContent = input.value
+		let buffer = output.textContent = sanitize(input.value)
 		for(const key in syntax){
 			const regex = syntax[key]
 			buffer = buffer.replace(regex,
@@ -28,6 +28,5 @@ async function initHighlighter($section){
 		output.innerHTML = buffer
 	})
 }
-function escape(string){
-	return string.replace(/[-_.!~*"'()]/g,char=>'&#'+char.charCodeAt()+';')
-}
+const sanitize = (string) => string.replace(/</g,'&lt;').replace(/>/g,'&gt;')
+const escape = (string) => string.replace(/[-_.!~*"'()]/g,char=>'&#'+char.charCodeAt()+';')

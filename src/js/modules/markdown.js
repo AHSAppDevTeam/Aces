@@ -180,10 +180,10 @@
 			markdown
 				// expand url shorthand
 				.replace(/(\(\/\/)/g,'(https://')
-				// turn raw URLs into links.
-				.replace(/<(https?:\/\/)?(\S+)>/g,'[$2](https://$2)')
 				// turn raw email addresses into email links.
 				.replace(/<(\S+@\S+)>/g,'[$1](mailto:$1)')
+				// turn raw URLs into links.
+				.replace(/<(https?:\/\/)?(\S+)>/g,'[$2](https://$2)')
 				// collect code blocks and replace with placeholder
 				// we do this to avoid code blocks matching the paragraph regexp
 				.replace(blockCodeRegExp, function (match, lang, block) {
