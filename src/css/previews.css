@@ -20,14 +20,12 @@
 }
 .menu > .action > svg {
 	fill: var(--hover-color);
-	stroke: var(--hover-color);
 	width: 100%;
 	height: 100%;
 }
 .menu > .action:hover > svg {
 	fill: var(--text-color);
-	stroke: var(--text-color);
 }
-.menu .featured:not(:checked) + svg{
-	fill: transparent;
+.menu > .action > input:not(:checked) + svg > :last-child {
+	opacity: 0;
 }

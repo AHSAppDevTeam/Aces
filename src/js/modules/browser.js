@@ -100,6 +100,11 @@ function makePreview(id,snippet){
 		discord(id,(featured ? '⭐ ' : '💔 ') + snippet.title)
 	])
 
+	const $archived = $('.archived',$preview)
+	addChangeListener($archived, async ({ target: { checked: archived } }) => [
+		discord(id,(archived ? '🗄️ ' : '♻️ ') + snippet.title)
+	])
+
 	updatePreview($preview,snippet)
 
 	return $preview
