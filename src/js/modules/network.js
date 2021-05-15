@@ -56,11 +56,13 @@ const dbPath = ( path, legacy ) => (
 const db = async ( path='', request={}, legacy=false ) => ( await fetch( dbPath(path, legacy), request ) ).json()
 
 /**
- * Reads the database once
+ * Reads a cached database
  * @param {string} path 
  * @returns {Promise} response
  */
-const dbOnce = async ( path ) => db( path )
+ const dbCache = async ( path ) => db( path, {
+	 headers: { Aces: 'cache' }
+ } )
 
 /**
  * Reads the database and updates it live
@@ -68,8 +70,17 @@ const dbOnce = async ( path ) => db( path )
  * @returns {Promise} response
  */
 const dbLive = async ( path ) => db( path, { 
-	headers: { 'Aces-Accept': 'text/event-stream' } 
+	headers: { Aces: 'live' } 
 })
+
+/**
+ * Reads the database once
+ * @param {string} path 
+ * @returns {Promise} response
+ */
+const dbOnce = async ( path ) => db( path, {
+	headers: { Aces: 'once' }
+} )
 
 /**
  * Writes to the database

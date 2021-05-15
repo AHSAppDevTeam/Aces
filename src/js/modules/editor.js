@@ -24,7 +24,7 @@ async function initEditor() {
 	remapEnter($url)
 	
 	const [locationIDs,locations,categories] = await Promise.all([
-		dbLive('locationIDs'),dbLive('locations'),dbLive('categories')
+		dbCache('locationIDs'),dbLive('locations'),dbLive('categories')
 	])
 	$categoryID.replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
 		const $group = document.createElement('optgroup')
@@ -42,7 +42,7 @@ async function initEditor() {
 	window.addEventListener('popstate',updateEditor)
 }
 async function storyTemplate(){
-	const schema = (await dbLive('schemas')).story
+	const schema = (await dbCache('schemas')).story
 	const template = {}
 	for (const key in schema)
 		template[key] = {
@@ -99,14 +99,14 @@ async function publishStory(){
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	for(const type of ['story','article','snippet','notif']){
 		if(type==='notif' && !story.notified) continue
-		const keys = Object.keys((await dbLive('schemas'))[type])
+		const keys = Object.keys((await dbCache('schemas'))[type])
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
 		)
 		tasks.push(dbWrite(type+'s',{[id]: object}))
 	}
 	
-	const legacyMap = (await dbLive('schemas')).legacy
+	const legacyMap = (await dbCache('schemas')).legacy
 	const legacyStory = {
 		...Object.fromEntries(
 			Object.entries(story)
