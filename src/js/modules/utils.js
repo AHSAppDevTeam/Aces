@@ -63,3 +63,12 @@ const urlID = () => {
 	if (!id.includes('-')) id = makeID()
 	return id
 }
+
+/**
+ * Returns list of properties whose values are different between two objects 
+ * @param {Object} a 
+ * @param {Object} b 
+ * @returns {Array}
+ */
+const diff = (a,b) => Object.keys({ ...a, ...b })
+.filter( k => JSON.stringify(a[k]||0) !== JSON.stringify(b[k]||0) )

@@ -9,9 +9,9 @@ const response = request => new Promise(async (resolve)=>{
 
 	// Remove token from request for cache retrieval
 	const anonRequest = new Request(request.url.split('?')[0], request) 
-	
+
 	// Return cached response if exists
-	const cache = await caches.open('v5')
+	const cache = await caches.open('v6')
 	const cachedResponse = await cache.match(anonRequest)
 	if(cachedResponse) return resolve(cachedResponse)
 
@@ -20,6 +20,7 @@ const response = request => new Promise(async (resolve)=>{
 
 	// Create an EventSource for recieving Server-Sent Events (SSE)
 	const source = new EventSource(request.url)
+	console.log('new source',request.url)
 	source.addEventListener('put',async (message) => {
 
 		// Parse SSE message data

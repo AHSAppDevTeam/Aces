@@ -1288,7 +1288,7 @@ async function initEditor() {
 				$media.prepend($thumb(await imgbb(target.value)))
 				break
 		}
-		return [ publishStory() ]
+		return publishStory()
 	})
 
 	initHighlighter($markdownWrapper)
@@ -1364,7 +1364,10 @@ async function publishStory(){
 	const story = await storyTemplate()
 	await syncStory(story,1)
 	
-	if(!user) return false
+	if(!user) return []
+
+	const tasks = []
+
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
 	for(const type of ['story','article','snippet','notif']){
 		if(type==='notif' && !story.notified) continue
@@ -1372,7 +1375,7 @@ async function publishStory(){
 		const object = Object.fromEntries(
 			Object.entries(story).filter(([key])=>keys.includes(key))
 		)
-		dbWrite(type+'s',{[id]: object})
+		tasks.push(dbWrite(type+'s',{[id]: object}))
 	}
 	
 	const legacyMap = (await dbLive('schemas')).legacy
@@ -1386,36 +1389,28 @@ async function publishStory(){
 			hasHTML: true,
 		}
 	}
-	dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true)
+	tasks.push(dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true))
 
-	if(story.categoryID !== oldStory.categoryID){
+	const changes = diff(story,oldStory)
+	if('timestamp' in changes || 'categoryID' in changes){
 		const categories = await dbLive('categories')
 		const snippets = await dbLive('snippets')
 		const siblingIDs = categories[story.categoryID].articleIDs
 		const index = siblingIDs.findIndex(id=>snippets[id].timestamp < story.timestamp)
 		index < 0 ? siblingIDs.push(id) : siblingIDs.splice(index,0,id)
-		const oldSiblingIDs = categories[oldStory.categoryID].articleIDs.filter(x=>x!==id)
-		dbWrite( 'categories/'+story.categoryID, {articleIDs: siblingIDs} )
-		dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldSiblingIDs} )
-		dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true )
+		tasks.push( dbWrite( 'categories/'+story.categoryID, {articleIDs: siblingIDs} ) )
+		if('categoryID' in changes) {
+			const oldSiblingIDs = categories[oldStory.categoryID].articleIDs.filter(x=>x!==id)
+			tasks.push(
+				dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldSiblingIDs} ),
+				dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true ),
+			)
+		}
 	}
-	discord(id,'✏️ '+story.title,diff(story,oldStory))
-	return true
+	tasks.push(discord(id,'✏️ '+story.title,changes.join(', ')))
+	return tasks
 }
 
-function diff(newer,older){
-	return Object.keys({...newer,...older}).map(key=>{
-		switch((key in newer)-(key in older)){
-			case 1:
-				return 'Created '+key
-			case 0:
-				return JSON.stringify(newer[key]) === JSON.stringify(older[key])
-				? null : 'Modified '+key
-			case -1:
-				return 'Deleted '+key
-		}
-	}).filter(x=>x).join('\n')
-}
 async function syncStory(story,direction){
 	for(const property in story){
 		const $element = $('#' + property, $('#editor'))
@@ -2049,6 +2044,15 @@ const urlID = () => {
 	if (!id.includes('-')) id = makeID()
 	return id
 }
+
+/**
+ * Returns list of properties whose values are different between two objects 
+ * @param {Object} a 
+ * @param {Object} b 
+ * @returns {Array}
+ */
+const diff = (a,b) => Object.keys({ ...a, ...b })
+.filter( k => JSON.stringify(a[k]||0) !== JSON.stringify(b[k]||0) )
 async function initWorker(){
 	if (!('serviceWorker' in navigator)) return
 	navigator.serviceWorker.register('/worker.js')
