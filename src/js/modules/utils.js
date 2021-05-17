@@ -32,7 +32,7 @@ const offset = () => new Date().getTimezoneOffset()*60
  * @param {number} timestamp Unix timestamp in seconds 
  * @returns {Date} Date object
  */
-const timestampToDate = timestamp => new Date((parseInt(timestamp) + offset())*1000)
+const timestampToDate = timestamp => new Date((parseInt(timestamp) - offset())*1000)
 
 const timestampToISOString = timestamp => timestampToDate(timestamp).toISOString().slice(0,19)
 
