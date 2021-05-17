@@ -25,18 +25,18 @@ const bracket = (id,type) => {
  * 
  * @returns {number} Timezone offset in seconds
  */
-const offset = () => new Date().getTimezoneOffset()*60
+const timezoneOffset = () => new Date().getTimezoneOffset()*60
 
 /**
  * 
  * @param {number} timestamp Unix timestamp in seconds 
  * @returns {Date} Date object
  */
-const timestampToDate = timestamp => new Date((parseInt(timestamp) - offset())*1000)
+const timestampToLocalDate = timestamp => new Date((parseInt(timestamp) - timezoneOffset())*1000)
 
-const timestampToISOString = timestamp => timestampToDate(timestamp).toISOString().slice(0,19)
+const timestampToLocalISOString = timestamp => timestampToLocalDate(timestamp).toISOString().slice(0,19)
 
-const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleDateString(undefined, {
+const timestampToLocalHumanString = timestamp => timestampToLocalDate(timestamp).toLocaleDateString(undefined, {
 	weekday: 'long',
 	month: 'long',
 	day: 'numeric'
@@ -47,7 +47,7 @@ const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleD
  * @param {string} ISOString ISO datetime string
  * @returns {number} Unix timestamp in seconds 
  */
-const ISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').getTime()/1000) + offset()
+const LocalISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').getTime()/1000) + timezoneOffset()
 
 
 /**

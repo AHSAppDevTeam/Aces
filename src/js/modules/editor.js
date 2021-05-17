@@ -152,8 +152,8 @@ async function syncStory(story,direction){
 				break
 			case 'datetime-local':
 				direction
-				? story[property] = ISOStringToTimestamp($element.value)
-				: $element.value = timestampToISOString(story[property])
+				? story[property] = LocalISOStringToTimestamp($element.value)
+				: $element.value = timestampToLocalISOString(story[property])
 				break
 			default:
 				direction
@@ -163,7 +163,7 @@ async function syncStory(story,direction){
 		}
 	}
 	if(direction) {
-		story.date = timestampToHumanString(story.timestamp)
+		story.date = timestampToLocalHumanString(story.timestamp)
 		story.body = md(story.markdown)
 		story.videoIDs = []
 		story.imageURLs = []
