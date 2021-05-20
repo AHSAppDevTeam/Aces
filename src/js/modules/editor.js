@@ -120,7 +120,9 @@ async function publishStory(){
 	tasks.push(dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true))
 
 	const changes = diff(story,oldStory)
-	if('timestamp' in changes || 'categoryID' in changes){
+	console.log(changes)
+	if( changes.includes('timestamp') || changes.includes('categoryID') ){
+		console.log('!!')
 		const categories = await dbLive('categories')
 		const snippets = await dbLive('snippets')
 		const siblingIDs = categories[story.categoryID].articleIDs

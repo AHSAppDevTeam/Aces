@@ -1392,7 +1392,9 @@ async function publishStory(){
 	tasks.push(dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true))
 
 	const changes = diff(story,oldStory)
-	if('timestamp' in changes || 'categoryID' in changes){
+	console.log(changes)
+	if( changes.includes('timestamp') || changes.includes('categoryID') ){
+		console.log('!!')
 		const categories = await dbLive('categories')
 		const snippets = await dbLive('snippets')
 		const siblingIDs = categories[story.categoryID].articleIDs
@@ -1424,8 +1426,8 @@ async function syncStory(story,direction){
 				break
 			case 'datetime-local':
 				direction
-				? story[property] = ISOStringToTimestamp($element.value)
-				: $element.value = timestampToISOString(story[property])
+				? story[property] = LocalISOStringToTimestamp($element.value)
+				: $element.value = timestampToLocalISOString(story[property])
 				break
 			default:
 				direction
@@ -1435,7 +1437,7 @@ async function syncStory(story,direction){
 		}
 	}
 	if(direction) {
-		story.date = timestampToHumanString(story.timestamp)
+		story.date = timestampToLocalHumanString(story.timestamp)
 		story.body = md(story.markdown)
 		story.videoIDs = []
 		story.imageURLs = []
@@ -2017,18 +2019,18 @@ const bracket = (id,type) => {
  * 
  * @returns {number} Timezone offset in seconds
  */
-const offset = () => new Date().getTimezoneOffset()*60
+const timezoneOffset = () => new Date().getTimezoneOffset()*60
 
 /**
  * 
  * @param {number} timestamp Unix timestamp in seconds 
  * @returns {Date} Date object
  */
-const timestampToDate = timestamp => new Date((parseInt(timestamp) - offset())*1000)
+const timestampToLocalDate = timestamp => new Date((parseInt(timestamp) - timezoneOffset())*1000)
 
-const timestampToISOString = timestamp => timestampToDate(timestamp).toISOString().slice(0,19)
+const timestampToLocalISOString = timestamp => timestampToLocalDate(timestamp).toISOString().slice(0,19)
 
-const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleDateString(undefined, {
+const timestampToLocalHumanString = timestamp => timestampToLocalDate(timestamp).toLocaleDateString(undefined, {
 	weekday: 'long',
 	month: 'long',
 	day: 'numeric'
@@ -2039,7 +2041,7 @@ const timestampToHumanString = timestamp => timestampToDate(timestamp).toLocaleD
  * @param {string} ISOString ISO datetime string
  * @returns {number} Unix timestamp in seconds 
  */
-const ISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').getTime()/1000) + offset()
+const LocalISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').getTime()/1000) + timezoneOffset()
 
 
 /**
@@ -2066,12 +2068,19 @@ const diff = (a,b) => Object.keys({ ...a, ...b })
 .filter( k => JSON.stringify(a[k]||0) !== JSON.stringify(b[k]||0) )
 async function initWorker(){
 	if (!('serviceWorker' in navigator)) return
-	navigator.serviceWorker.register('/worker.js')
+	// navigator.serviceWorker.register('/worker.js')
 	navigator.serviceWorker.subscriptionList = { }
 	navigator.serviceWorker.addEventListener('message', ({data:{type,path}}) => {
 		console.log(data)
 		const list = navigator.serviceWorker.subscriptionList
 		if(type=='update' && path in list) (list[path])()
+	})
+	navigator.serviceWorker.getRegistrations().then(function (registrations) {
+		for (const registration of registrations) {
+			// unregister service worker
+			console.log('serviceWorker unregistered')
+			registration.unregister()
+		}
 	})
 }
 initWorker()
