@@ -1,7 +1,7 @@
 /**
  * Initiates the resize bar
  */
-const initResize = async () => {
+async function initResize(){
 	// resize bar
 	const $resize = $('#resize')
 

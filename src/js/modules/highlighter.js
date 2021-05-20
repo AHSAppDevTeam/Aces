@@ -1,3 +1,7 @@
+/**
+ * Initates the markdown syntax highlighter on an element
+ * @param {Element} $section
+ */
 async function initHighlighter($section){
 	const input = $('.input',$section)
 	const output = $('.output',$section)
