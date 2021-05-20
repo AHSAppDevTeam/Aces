@@ -120,16 +120,15 @@ async function publishStory(){
 	tasks.push(dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true))
 
 	const changes = diff(story,oldStory)
-	console.log(changes)
+	console.log(story.timestamp)
 	if( changes.includes('timestamp') || changes.includes('categoryID') ){
-		console.log('!!')
 		const categories = await dbLive('categories')
 		const snippets = await dbLive('snippets')
 		const siblingIDs = categories[story.categoryID].articleIDs
 		const index = siblingIDs.findIndex(id=>snippets[id].timestamp < story.timestamp)
 		index < 0 ? siblingIDs.push(id) : siblingIDs.splice(index,0,id)
 		tasks.push( dbWrite( 'categories/'+story.categoryID, {articleIDs: siblingIDs} ) )
-		if('categoryID' in changes) {
+		if( changes.includes('categoryID') ) {
 			const oldSiblingIDs = categories[oldStory.categoryID].articleIDs.filter(x=>x!==id)
 			tasks.push(
 				dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldSiblingIDs} ),
