@@ -1,3 +1,6 @@
+/**
+ * Initiates the editor panel
+ */
 async function initEditor() {
 	const $editor = $('#editor')
 	const $media = $('#media')
@@ -41,6 +44,11 @@ async function initEditor() {
 	updateEditor()
 	window.addEventListener('popstate',updateEditor)
 }
+
+/**
+ * Create a template story from the schemas.
+ * @returns {Object} story
+ */
 async function storyTemplate(){
 	const schema = (await dbCache('schemas')).story
 	const template = {}
@@ -64,6 +72,10 @@ async function storyTemplate(){
 		}
 	}
 }
+
+/**
+ * Update the editor with a new article ID from the URL
+ */
 async function updateEditor() {
 	const id = urlID()
 	history.replaceState({}, '', id)
@@ -77,26 +89,41 @@ async function updateEditor() {
 	$preview.classList.add('open')
 	$preview.scrollIntoView()
 }
+
+/**
+ * Get the address of a category in a legacy database
+ * @param {string} categoryID 
+ * @returns {string}
+ */
 async function legacyAddress(categoryID){
 	return Object.entries(await dbLive('locations')).find(
 		([,{categoryIDs}]) => categoryIDs.includes(categoryID)
 	)[0] + '/' + categoryID
 }
+
+/**
+ * Encode a story into the URL parameters string
+ * @param {Object} story
+ */
 async function encodeStory(story){
 	const params = new URLSearchParams(window.location.search)
 	params.set('story',encodeURIComponent(JSON.stringify(story)))
 	history.replaceState({}, '', `${id}?${params}`)
 }
-async function publishStory(){
-	const id = urlID()
-	const story = await storyTemplate()
-	await syncStory(story,1)
-	
-	if(!user) return []
 
+/**
+ * Publish a story into the database
+ * @returns {Promise[]} tasks
+ */
+async function publishStory(){
+	if(!user) return []
 	const tasks = []
 
+	const id = urlID()
+	const story = await storyTemplate()
 	const oldStory = {...story, ...await dbOnce('storys/'+id)}
+	await syncStory(story,1)
+	
 	for(const type of ['story','article','snippet','notif']){
 		if(type==='notif' && !story.notified) continue
 		const keys = Object.keys((await dbCache('schemas'))[type])
@@ -140,6 +167,11 @@ async function publishStory(){
 	return tasks
 }
 
+/**
+ * Create a story object out of some data
+ * @param {string} story 
+ * @param {Int} direction 0: from database, 1: from editor 
+ */
 async function syncStory(story,direction){
 	for(const property in story){
 		const $element = $('#' + property, $('#editor'))
@@ -187,6 +219,12 @@ async function syncStory(story,direction){
 		$('#media').replaceChildren(...urlSets.map($thumb))
 	}
 }
+
+/**
+ * Create a thumbnail element from a set of image URLs
+ * @param {Object} urlSet 
+ * @returns {Element}
+ */
 function $thumb(urlSet){
 	const $thumb = $template('thumb')
 	const $media = $('#media')
