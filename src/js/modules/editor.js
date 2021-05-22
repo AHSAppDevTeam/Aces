@@ -124,6 +124,7 @@ async function publishStory(){
 
 	const oldStory = ( await dbOnce('storys/'+id) ) || {}
 	const changes = diff(story,oldStory)
+	const formattedChanges = formattedDiff(story,oldStory)
 
 	await syncStory(story,1)
 	
@@ -165,7 +166,7 @@ async function publishStory(){
 			)
 		}
 	}
-	tasks.push(discord(id,'✏️ '+story.title,changes.join(', ')))
+	tasks.push(discord(id,'✏️ '+story.title,formattedChanges))
 	return tasks
 }
 
