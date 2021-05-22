@@ -123,8 +123,8 @@ async function publishStory(){
 	const story = await syncStory( await storyTemplate() ,1)
 
 	const oldStory = ( await dbOnce('storys/'+id) ) || {}
-	const changes = diff(story,oldStory)
-	const formattedChanges = formattedDiff(story,oldStory)
+	const changes = diff(oldStory,story)
+	const formattedChanges = formattedDiff(oldStory,story)
 	
 	for(const type of ['story','article','snippet','notif']){
 		if(type==='notif' && !story.notified) continue
