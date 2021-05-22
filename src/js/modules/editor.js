@@ -120,13 +120,11 @@ async function publishStory(){
 	const tasks = []
 
 	const id = urlID()
-	const story = await storyTemplate()
+	const story = await syncStory( await storyTemplate() ,1)
 
 	const oldStory = ( await dbOnce('storys/'+id) ) || {}
 	const changes = diff(story,oldStory)
 	const formattedChanges = formattedDiff(story,oldStory)
-
-	await syncStory(story,1)
 	
 	for(const type of ['story','article','snippet','notif']){
 		if(type==='notif' && !story.notified) continue
@@ -172,10 +170,11 @@ async function publishStory(){
 
 /**
  * Create a story object out of some data
- * @param {string} story 
+ * @param {Object} story 
  * @param {Int} direction 0: from database, 1: from editor 
  */
-async function syncStory(story,direction){
+async function syncStory(base,direction){
+	let story = {...base}
 	for(const property in story){
 		const $element = $('#' + property, $('#editor'))
 		if (!$element) continue
@@ -221,6 +220,7 @@ async function syncStory(story,direction){
 		)
 		$('#media').replaceChildren(...urlSets.map($thumb))
 	}
+	return story
 }
 
 /**
