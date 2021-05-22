@@ -1,4 +1,4 @@
-const timestamp = () => Math.trunc(Date.now()/1000)
+const timestamp = () => Math.trunc(Date.now()/1000/60)*60
 
 /**
  * Shifts every character 13 places down the alphabet; swaps - and .
