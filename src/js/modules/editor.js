@@ -120,9 +120,10 @@ async function publishStory(){
 	const tasks = []
 
 	const id = urlID()
-	const story = await syncStory( await storyTemplate() ,1)
+	const templateStory = await storyTemplate()
+	const story = await syncStory( templateStory, 1 )
 
-	const oldStory = ( await dbOnce('storys/'+id) ) || {}
+	const oldStory = { ...templateStory, ... await dbOnce('storys/'+id) }
 	const changes = diff(oldStory,story)
 	const formattedChanges = formattedDiff(oldStory,story)
 	
@@ -156,7 +157,7 @@ async function publishStory(){
 		const index = siblingIDs.findIndex(id=>snippets[id].timestamp < story.timestamp)
 		index < 0 ? siblingIDs.push(id) : siblingIDs.splice(index,0,id)
 		tasks.push( dbWrite( 'categories/'+story.categoryID, {articleIDs: siblingIDs} ) )
-		if( changes.includes('categoryID') && 'categoryID' in oldStory ) {
+		if( changes.includes('categoryID') && oldStory.categoryID ) {
 			const oldSiblingIDs = categories[oldStory.categoryID].articleIDs.filter(x=>x!==id)
 			tasks.push(
 				dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldSiblingIDs} ),
