@@ -771,7 +771,7 @@ body,
 .menu > .action:hover > svg {
 	fill: var(--text-color);
 }
-.menu > .action > input:not(:checked) + svg > :not(:last-child) {
+.menu > .action > input:not(:checked) + svg > :nth-child(2) {
 	opacity: 0;
 }
 #resize {
@@ -1393,12 +1393,12 @@ async function publishStory(){
 
 	const id = urlID()
 	const story = await storyTemplate()
-	await syncStory(story,1)
 
 	const oldStory = ( await dbOnce('storys/'+id) ) || {}
 	const changes = diff(story,oldStory)
 	const formattedChanges = formattedDiff(story,oldStory)
 
+	await syncStory(story,1)
 	
 	for(const type of ['story','article','snippet','notif']){
 		if(type==='notif' && !story.notified) continue

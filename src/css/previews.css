@@ -26,6 +26,6 @@
 .menu > .action:hover > svg {
 	fill: var(--text-color);
 }
-.menu > .action > input:not(:checked) + svg > :not(:last-child) {
+.menu > .action > input:not(:checked) + svg > :nth-child(2) {
 	opacity: 0;
 }
