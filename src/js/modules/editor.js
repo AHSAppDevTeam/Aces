@@ -156,7 +156,7 @@ async function publishStory(){
 		const index = siblingIDs.findIndex(id=>snippets[id].timestamp < story.timestamp)
 		index < 0 ? siblingIDs.push(id) : siblingIDs.splice(index,0,id)
 		tasks.push( dbWrite( 'categories/'+story.categoryID, {articleIDs: siblingIDs} ) )
-		if( changes.includes('categoryID') ) {
+		if( changes.includes('categoryID') && 'categoryID' in oldStory ) {
 			const oldSiblingIDs = categories[oldStory.categoryID].articleIDs.filter(x=>x!==id)
 			tasks.push(
 				dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldSiblingIDs} ),
