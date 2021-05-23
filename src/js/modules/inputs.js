@@ -35,7 +35,7 @@ async function dispatchInput($element){
  * @param {Element} $element 
  */
 async function dispatchChange($element){
-	$element.dispatchEvent(new Event('change'))
+	$element.dispatchEvent(new Event('change', { bubbles: true } ))
 }
 /**
  * Assign the enter key to trigger the 'change' event

@@ -236,7 +236,7 @@ function $thumb(urlSet){
 	$('img',$thumb).src = urlSet.thumbURL
 	$('.delete',$thumb).addEventListener('click',()=>{
 		$thumb.remove()
-		dispatchChange($('#editor'))
+		dispatchChange($media)
 	},{once:true})
 	$('.move-ahead',$thumb).addEventListener('click',()=>{
 		if($thumb.previousSibling) $media.insertBefore($thumb,$thumb.previousSibling)
