@@ -63,28 +63,3 @@ const urlID = () => {
 	if (!id.includes('-')) id = makeID()
 	return id
 }
-
-/**
- * Returns list of properties whose values are different between two objects 
- * @param {Object} a 
- * @param {Object} b 
- * @returns {Array}
- */
-const diff = (a,b) => Object.keys({ ...a, ...b })
-.filter( k => JSON.stringify(a[k]||0) !== JSON.stringify(b[k]||0) )
-
-/**
- * Returns a formatted list of properties and their before and after values
- * @param {Object} a 
- * @param {Object} b 
- * @returns {String}
- */
-const formattedDiff = (a,b) => diff(a,b)
-.map( k =>
-  [k,a[k],b[k]]
-  .map( s => s === undefined ? null : s )
-  .map( JSON.stringify )
-  .map( s => s.length > 16 ? s.substring(0,16) + '...' : s )
-)
-.map(([k,a,b])=>`${k}: ${a} → ${b}`)
-.join('\n')
