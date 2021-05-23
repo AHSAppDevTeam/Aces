@@ -10,6 +10,7 @@ async function initEditor() {
 	const $markdownWrapper = $('#markdown-wrapper')
 
 	addChangeListener($editor, async ({target}) => {
+		if(!user) return false
 		switch(target.id){
 			case 'upload':
 				const urlSets = await Promise.all(Array.from(target.files).map(imgbb))
@@ -18,8 +19,11 @@ async function initEditor() {
 			case 'url':
 				$media.prepend($thumb(await imgbb(target.value)))
 				break
-		}
-		return publishStory()
+		}	
+		const id = urlID()
+		const templateStory = await storyTemplate()
+		const story = await syncStory( templateStory, 1 )
+		return dbWrite('storys',{[id]: story})
 	})
 
 	initHighlighter($markdownWrapper)
@@ -50,7 +54,7 @@ async function initEditor() {
  * @returns {Object} story
  */
 async function storyTemplate(){
-	const schema = (await dbCache('schemas')).story
+	const schema = await dbCache('schemas/story')
 	const template = {}
 	for (const key in schema)
 		template[key] = {
@@ -91,17 +95,6 @@ async function updateEditor() {
 }
 
 /**
- * Get the address of a category in a legacy database
- * @param {string} categoryID 
- * @returns {string}
- */
-async function legacyAddress(categoryID){
-	return Object.entries(await dbLive('locations')).find(
-		([,{categoryIDs}]) => categoryIDs.includes(categoryID)
-	)[0] + '/' + categoryID
-}
-
-/**
  * Encode a story into the URL parameters string
  * @param {Object} story
  */
@@ -109,64 +102,6 @@ async function encodeStory(story){
 	const params = new URLSearchParams(window.location.search)
 	params.set('story',encodeURIComponent(JSON.stringify(story)))
 	history.replaceState({}, '', `${id}?${params}`)
-}
-
-/**
- * Publish a story into the database
- * @returns {Promise[]} tasks
- */
-async function publishStory(){
-	if(!user) return []
-	const tasks = []
-
-	const id = urlID()
-	const templateStory = await storyTemplate()
-	const story = await syncStory( templateStory, 1 )
-
-	const oldStory = { ...templateStory, ... await dbOnce('storys/'+id) }
-	const changes = diff(oldStory,story)
-	const formattedChanges = formattedDiff(oldStory,story)
-	
-	for(const type of ['story','article','snippet','notif']){
-		if(type==='notif' && !story.notified) continue
-		const keys = Object.keys((await dbCache('schemas'))[type])
-		const object = Object.fromEntries(
-			Object.entries(story).filter(([key])=>keys.includes(key))
-		)
-		tasks.push(dbWrite(type+'s',{[id]: object}))
-	}
-	
-	const legacyMap = (await dbCache('schemas')).legacy
-	const legacyStory = {
-		...Object.fromEntries(
-			Object.entries(story)
-			.filter(([key])=>key in legacyMap)
-			.map(([key,value]) => [legacyMap[key],value])
-		),
-		...{
-			hasHTML: true,
-		}
-	}
-	tasks.push(dbWrite( await legacyAddress(story.categoryID), {[id]: legacyStory}, true))
-
-	console.log(story.timestamp)
-	if( changes.includes('timestamp') || changes.includes('categoryID') ){
-		const categories = await dbLive('categories')
-		const snippets = await dbLive('snippets')
-		const siblingIDs = categories[story.categoryID].articleIDs.filter(x=>x!==id)
-		const index = siblingIDs.findIndex(id=>snippets[id].timestamp < story.timestamp)
-		index < 0 ? siblingIDs.push(id) : siblingIDs.splice(index,0,id)
-		tasks.push( dbWrite( 'categories/'+story.categoryID, {articleIDs: siblingIDs} ) )
-		if( changes.includes('categoryID') && oldStory.categoryID ) {
-			const oldSiblingIDs = categories[oldStory.categoryID].articleIDs.filter(x=>x!==id)
-			tasks.push(
-				dbWrite( 'categories/'+oldStory.categoryID, {articleIDs: oldSiblingIDs} ),
-				dbWrite( await legacyAddress(oldStory.categoryID), { [id]: null}, true ),
-			)
-		}
-	}
-	tasks.push(discord(id,'✏️ '+story.title,formattedChanges))
-	return tasks
 }
 
 /**
