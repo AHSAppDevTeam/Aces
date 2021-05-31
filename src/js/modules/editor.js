@@ -145,6 +145,7 @@ async function syncStory(base,direction){
 			if(imageURL) story.imageURLs.push(imageURL)
 			if(videoID) story.videoIDs.push(videoID)
 		})
+		story.editTimestamp = timestamp()
 	} else {
 		const urlSets = story.thumbURLs.map(
 			(thumbURL,index) =>
