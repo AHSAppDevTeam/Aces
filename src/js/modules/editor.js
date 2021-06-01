@@ -89,10 +89,10 @@ async function updateEditor() {
 	syncStory(story,0)
 	$$('#editor textarea').forEach(dispatchInput)
 	$$('.preview.open').forEach($preview=>$preview.classList.remove('open'))
-	const $preview = $('#preview-'+id)
-	if(!$preview) return
-	$preview.classList.add('open')
-	$preview.scrollIntoView()
+	$$('#preview-'+id).forEach($preview=>{
+		$preview.classList.add('open')
+		$preview.scrollIntoView()
+	})
 }
 
 /**
