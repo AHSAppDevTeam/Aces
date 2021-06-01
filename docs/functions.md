@@ -49,7 +49,7 @@
 <dt><a href="#syncStory">syncStory(story, direction)</a></dt>
 <dd><p>Create a story object out of some data</p>
 </dd>
-<dt><a href="#$thumb">$thumb(urlSet)</a> ⇒ <code>Element</code></dt>
+<dt><a href="#$thumb">$thumb(mediaSet)</a> ⇒ <code>Element</code></dt>
 <dd><p>Create a thumbnail element from a set of image URLs</p>
 </dd>
 <dt><a href="#initHighlighter">initHighlighter($section)</a></dt>
@@ -73,7 +73,7 @@
 <dt><a href="#post">post(path, request)</a> ⇒ <code>json</code></dt>
 <dd><p>Sends an HTTP GET request</p>
 </dd>
-<dt><a href="#imgbb">imgbb(data)</a> ⇒ <code><a href="#urlSet">urlSet</a></code></dt>
+<dt><a href="#imgbb">imgbb(data)</a> ⇒ <code><a href="#mediaSet">mediaSet</a></code></dt>
 <dd><p>Uploads an image to ImgBB.com</p>
 </dd>
 <dt><a href="#dbPath">dbPath(path, legacy)</a> ⇒ <code>string</code></dt>
@@ -121,7 +121,7 @@
 ## Typedefs
 
 <dl>
-<dt><a href="#urlSet">urlSet</a> : <code>Object</code></dt>
+<dt><a href="#mediaSet">mediaSet</a> : <code>Object</code></dt>
 <dd></dd>
 </dl>
 
@@ -282,14 +282,14 @@ Create a story object out of some data
 
 <a name="$thumb"></a>
 
-## $thumb(urlSet) ⇒ <code>Element</code>
+## $thumb(mediaSet) ⇒ <code>Element</code>
 Create a thumbnail element from a set of image URLs
 
 **Kind**: global function  
 
 | Param | Type |
 | --- | --- |
-| urlSet | <code>Object</code> | 
+| mediaSet | <code>Object</code> | 
 
 <a name="initHighlighter"></a>
 
@@ -368,7 +368,7 @@ Sends an HTTP GET request
 
 <a name="imgbb"></a>
 
-## imgbb(data) ⇒ [<code>urlSet</code>](#urlSet)
+## imgbb(data) ⇒ [<code>mediaSet</code>](#mediaSet)
 Uploads an image to ImgBB.com
 
 **Kind**: global function  
@@ -540,9 +540,9 @@ Returns a formatted list of properties and their before and after values
 | a | <code>Object</code> | 
 | b | <code>Object</code> | 
 
-<a name="urlSet"></a>
+<a name="mediaSet"></a>
 
-## urlSet : <code>Object</code>
+## mediaSet : <code>Object</code>
 **Kind**: global typedef  
 **Properties**
 

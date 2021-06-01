@@ -13,11 +13,11 @@ async function initEditor() {
 		if(!user) return false
 		switch(target.id){
 			case 'upload':
-				const urlSets = await Promise.all(Array.from(target.files).map(imgbb))
-				$media.prepend(...urlSets.map($thumb))
+				const mediaSets = await Promise.all(Array.from(target.files).map(imgbb))
+				$media.prepend(...mediaSets.map($thumb))
 				break
 			case 'url':
-				$media.prepend($thumb(await imgbb(target.value)))
+				$media.prepend($thumb(await youtube(target.value) || await imgbb(target.value)))
 				break
 		}	
 		const id = urlID()
@@ -147,7 +147,7 @@ async function syncStory(base,direction){
 		})
 		story.editTimestamp = timestamp()
 	} else {
-		const urlSets = story.thumbURLs.map(
+		const mediaSets = story.thumbURLs.map(
 			(thumbURL,index) =>
 			({
 				thumbURL,
@@ -155,21 +155,21 @@ async function syncStory(base,direction){
 				imageURL: story.imageURLs[index-story.videoIDs.length],
 			})
 		)
-		$('#media').replaceChildren(...urlSets.map($thumb))
+		$('#media').replaceChildren(...mediaSets.map($thumb))
 	}
 	return story
 }
 
 /**
  * Create a thumbnail element from a set of image URLs
- * @param {Object} urlSet 
+ * @param {Object} mediaSet 
  * @returns {Element}
  */
-function $thumb(urlSet){
+function $thumb(mediaSet){
 	const $thumb = $template('thumb')
 	const $media = $('#media')
-	$thumb.dataset.media = JSON.stringify(urlSet)
-	$('img',$thumb).src = urlSet.thumbURL
+	$thumb.dataset.media = JSON.stringify(mediaSet)
+	$('img',$thumb).src = mediaSet.thumbURL
 	$('.delete',$thumb).addEventListener('click',()=>{
 		$thumb.remove()
 		dispatchChange($media)
