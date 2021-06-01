@@ -107,12 +107,13 @@ function makePreview(id,snippet){
 }
 
 function updatePreview($preview,snippet){
-	$('.title',$preview).innerHTML = snippet.title
+	$('.title',$preview).innerHTML = snippet.title || 'Untitled Article'
 	$('.featured',$preview).checked = snippet.featured
 	$('.media',$preview).replaceChildren(...(snippet.thumbURLs||[]).map(thumbURL=>{
 		const $img = document.createElement('img')
 		$img.src = thumbURL
 		$img.loading = 'lazy'
+		$img.alt = ''
 		return $img
 	}))
 }
