@@ -19,6 +19,9 @@ const response = request => new Promise(async (resolve)=>{
 	// Simply relay request if no caching is wanted
 	if(requestType === 'once') return resolve(fetch(request))
 
+	// temporary measure
+	if(requestType === 'live') return resolve(fetch(request))
+
 	// Otherwise, return cached response if exists
 	const cache = await caches.open(version)
 	const cachedResponse = await cache.match(anonRequest)
