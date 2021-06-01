@@ -15,15 +15,18 @@ async function initEditor() {
 			case 'upload':
 				const mediaSets = await Promise.all(Array.from(target.files).map(imgbb))
 				$media.prepend(...mediaSets.map($thumb))
+				delete target.files
 				break
 			case 'url':
 				$media.prepend($thumb(await youtube(target.value) || await imgbb(target.value)))
+				target.value = ''
 				break
 		}	
 		const id = urlID()
 		const templateStory = await storyTemplate()
 		const story = await syncStory( templateStory, 1 )
-		return dbWrite('storys',{[id]: story})
+		await dbWrite('storys',{[id]: story})
+		return updateEditor()
 	})
 
 	initHighlighter($markdownWrapper)
