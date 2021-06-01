@@ -1,8 +1,7 @@
 #!/bin/sh
 cd src
 
-cat index.html \
-> ../dist/index.html
+cp static/* ../dist/
 
 cat js/config.js js/modules/*.js js/init.js \
 > ../dist/script.js
