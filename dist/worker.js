@@ -21,7 +21,7 @@ const response = request => new Promise(async (resolve)=>{
 	if(cachedResponse) return resolve(cachedResponse)
 
 	// Use Server-Sent Events (SSE) if live type is chosen
-	if(requestType === 'live') {
+	if(false && requestType === 'live') {
 
 		// Put a placeholder response in the cache
 		cache.put(anonRequest,new Response('{}'))

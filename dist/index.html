@@ -1259,11 +1259,11 @@ async function initEditor() {
 		if(!user) return false
 		switch(target.id){
 			case 'upload':
-				const urlSets = await Promise.all(Array.from(target.files).map(imgbb))
-				$media.prepend(...urlSets.map($thumb))
+				const mediaSets = await Promise.all(Array.from(target.files).map(imgbb))
+				$media.prepend(...mediaSets.map($thumb))
 				break
 			case 'url':
-				$media.prepend($thumb(await imgbb(target.value)))
+				$media.prepend($thumb(await youtube(target.value) || await imgbb(target.value)))
 				break
 		}	
 		const id = urlID()
@@ -1297,7 +1297,7 @@ async function initEditor() {
 
 /**
  * Create a template story from the schemas.
- * @returns {Object} story
+ * @returns {Promise<Object>} story
  */
 async function storyTemplate(){
 	const schema = await dbCache('schemas/story')
@@ -1391,8 +1391,9 @@ async function syncStory(base,direction){
 			if(imageURL) story.imageURLs.push(imageURL)
 			if(videoID) story.videoIDs.push(videoID)
 		})
+		story.editTimestamp = timestamp()
 	} else {
-		const urlSets = story.thumbURLs.map(
+		const mediaSets = story.thumbURLs.map(
 			(thumbURL,index) =>
 			({
 				thumbURL,
@@ -1400,21 +1401,21 @@ async function syncStory(base,direction){
 				imageURL: story.imageURLs[index-story.videoIDs.length],
 			})
 		)
-		$('#media').replaceChildren(...urlSets.map($thumb))
+		$('#media').replaceChildren(...mediaSets.map($thumb))
 	}
 	return story
 }
 
 /**
  * Create a thumbnail element from a set of image URLs
- * @param {Object} urlSet 
+ * @param {Object} mediaSet 
  * @returns {Element}
  */
-function $thumb(urlSet){
+function $thumb(mediaSet){
 	const $thumb = $template('thumb')
 	const $media = $('#media')
-	$thumb.dataset.media = JSON.stringify(urlSet)
-	$('img',$thumb).src = urlSet.thumbURL
+	$thumb.dataset.media = JSON.stringify(mediaSet)
+	$('img',$thumb).src = mediaSet.thumbURL
 	$('.delete',$thumb).addEventListener('click',()=>{
 		$thumb.remove()
 		dispatchChange($media)
@@ -1800,7 +1801,7 @@ function remapEnter($input,needCtrl=false){
  * Sends an HTTP GET request
  * @param {string} path 
  * @param {Object} request 
- * @returns {json} response
+ * @returns {Promise<Response>} response
  */
 const post = async ( path, request ) => fetch(
 	'https://'+path,
@@ -1812,15 +1813,17 @@ const post = async ( path, request ) => fetch(
 )
 
 /**
- * @typedef {Object} urlSet
- * @property {string} imageURL URL of full image
+ * @typedef {Object} mediaSet
+ * @property {Boolean} isVideo Whether the original is a video or an image
+ * @property {string?} videoID ID of YouTube video if isVideo
+ * @property {string?} imageURL URL of full image otherwise
  * @property {string} thumbURL URL of thumbnail
  */
 
 /**
  * Uploads an image to ImgBB.com
  * @param {*} data URL or image file
- * @returns {urlSet}
+ * @returns {Promise<mediaSet>}
  */
 const imgbb = async ( data ) => {
 	const body = new FormData()
@@ -1834,6 +1837,29 @@ const imgbb = async ( data ) => {
 		imageURL: medium ? medium.url : image.url,
 		thumbURL: thumb.url,
 	}
+}
+
+/**
+ * Get the ID of a YouTube video and upload its thumbnail to ImgBB.com
+ * @param {string} videoURL YouTube video URL
+ * @returns {Promise<mediaSet}
+ */
+const youtube = async ( videoURL ) => {
+	const { hostname, pathname, searchParams } = new URL(videoURL)
+	let videoID
+	switch(hostname) {
+		case 'youtu.be':
+			videoID = pathname.slice(1)
+			break
+		case 'youtube.com':
+		case 'www.youtube.com':
+			videoID = searchParams.get('v')
+			break
+		default:
+			return false
+	}
+	const { thumbURL }= await imgbb(`https://img.youtube.com/vi/${videoID}/mqdefault.jpg`)
+	return { videoID, thumbURL }
 }
 
 /**
@@ -1851,12 +1877,19 @@ const dbPath = ( path, legacy ) => (
 	token
 )
 
+/**
+ * Performs a fetch to a database
+ * @param {string} path 
+ * @param {Object?} request 
+ * @param {Boolean} legacy 
+ * @returns {Promise<Object>} response
+ */
 const db = async ( path='', request={}, legacy=false ) => ( await fetch( dbPath(path, legacy), request ) ).json()
 
 /**
  * Reads a cached database
  * @param {string} path 
- * @returns {Promise} response
+ * @returns {Promise<Object>} response
  */
  const dbCache = async ( path ) => db( path, {
 	 headers: { Aces: 'cache' }
@@ -1865,7 +1898,7 @@ const db = async ( path='', request={}, legacy=false ) => ( await fetch( dbPath(
 /**
  * Reads the database and updates it live
  * @param {string} path 
- * @returns {Promise} response
+ * @returns {Promise<Object>} response
  */
 const dbLive = async ( path ) => db( path, { 
 	headers: { Aces: 'live' } 
@@ -1874,7 +1907,7 @@ const dbLive = async ( path ) => db( path, {
 /**
  * Reads the database once
  * @param {string} path 
- * @returns {Promise} response
+ * @returns {Promise<Object>} response
  */
 const dbOnce = async ( path ) => db( path, {
 	headers: { Aces: 'once' }
@@ -1885,7 +1918,7 @@ const dbOnce = async ( path ) => db( path, {
  * @param {string} path 
  * @param {Object} body 
  * @param {boolean} legacy Use legacy database
- * @returns {Promise} return
+ * @returns {(Promise<Object>|Boolean)} return
  */
 const dbWrite = async ( path, body, legacy ) => user ? db( path, {
 	body: JSON.stringify(body),
@@ -1897,7 +1930,7 @@ const dbWrite = async ( path, body, legacy ) => user ? db( path, {
  * 
  * @param {string} path 
  * @param {Object} request 
- * @returns {Promise} response
+ * @returns {Promise<Object>} response
  */
 const googleapis = async (path,request) => (await post(path+'?key='+KEY,request)).json()
 /**
@@ -1931,7 +1964,36 @@ async function initResize(){
 	// unfocus the resize bar if the mouse click or finger dragging ends
 	window.addEventListener('pointerup',()=>$resize.blur())
 }
-const typography = text => text
+const timestamp = () => Math.floor(Date.now()/1000/60)*60
+
+/**
+ * 
+ * @returns {number} Timezone offset in seconds
+ */
+ const timezoneOffset = () => new Date().getTimezoneOffset()*60
+
+ /**
+  * 
+  * @param {number} timestamp Unix timestamp in seconds 
+  * @returns {Date} Date object
+  */
+ const timestampToLocalDate = timestamp => new Date((parseInt(timestamp) - timezoneOffset())*1000)
+ 
+ const timestampToLocalISOString = timestamp => timestampToLocalDate(timestamp).toISOString().slice(0,19)
+ 
+ const timestampToLocalHumanString = timestamp => timestampToLocalDate(timestamp).toLocaleDateString(undefined, {
+	 weekday: 'long',
+	 month: 'long',
+	 day: 'numeric'
+ })
+ 
+ /**
+  * 
+  * @param {string} ISOString ISO datetime string
+  * @returns {number} Unix timestamp in seconds 
+  */
+ const LocalISOStringToTimestamp = ISOString => Math.floor(new Date(ISOString+'Z').getTime()/1000) + timezoneOffset()
+ const typography = text => text
 		// Smart quotes
 		/* opening singles */
 		.replace(/(^|[-\u2014\s(\["])'/g,'$1‘')
@@ -1946,8 +2008,6 @@ const typography = text => text
 		.replace(/\s--\s?/g,' — ')
 		/* en-dashes */
 		.replace(/--/g,'–')
-const timestamp = () => Math.trunc(Date.now()/1000/60)*60
-
 /**
  * Shifts every character 13 places down the alphabet; swaps - and .
  * @param {string} string 
@@ -1971,35 +2031,6 @@ const bracket = (id,type) => {
 
 /**
  * 
- * @returns {number} Timezone offset in seconds
- */
-const timezoneOffset = () => new Date().getTimezoneOffset()*60
-
-/**
- * 
- * @param {number} timestamp Unix timestamp in seconds 
- * @returns {Date} Date object
- */
-const timestampToLocalDate = timestamp => new Date((parseInt(timestamp) - timezoneOffset())*1000)
-
-const timestampToLocalISOString = timestamp => timestampToLocalDate(timestamp).toISOString().slice(0,19)
-
-const timestampToLocalHumanString = timestamp => timestampToLocalDate(timestamp).toLocaleDateString(undefined, {
-	weekday: 'long',
-	month: 'long',
-	day: 'numeric'
-})
-
-/**
- * 
- * @param {string} ISOString ISO datetime string
- * @returns {number} Unix timestamp in seconds 
- */
-const LocalISOStringToTimestamp = ISOString => Math.trunc(new Date(ISOString+'Z').getTime()/1000) + timezoneOffset()
-
-
-/**
- * 
  * @param {array} array array
  * @returns {*} random element of the array
  */
@@ -2013,7 +2044,7 @@ const urlID = () => {
 }
 async function initWorker(){
 	if (!('serviceWorker' in navigator)) return
-	// navigator.serviceWorker.register('/worker.js')
+	navigator.serviceWorker.register('/worker.js')
 	navigator.serviceWorker.subscriptionList = { }
 	navigator.serviceWorker.addEventListener('message', ({data:{type,path}}) => {
 		console.log(data)

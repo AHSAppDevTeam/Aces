@@ -51,7 +51,7 @@ async function initEditor() {
 
 /**
  * Create a template story from the schemas.
- * @returns {Object} story
+ * @returns {Promise<Object>} story
  */
 async function storyTemplate(){
 	const schema = await dbCache('schemas/story')
@@ -68,8 +68,8 @@ async function storyTemplate(){
 		...{
 			title: 'Untitled Article',
 			author: 'Content Editors',
-			timestamp: timestamp(),
-			notifTimestamp: timestamp(),
+			timestamp: roundedTimestamp(),
+			notifTimestamp: roundedTimestamp(),
 			categoryID: 'Drafts',
 			blurb: 'Notification text.',
 			markdown: 'A *quick* brown **fox** jumps over a lazy [dog](https://en.wikipedia.org/wiki/Dog).'

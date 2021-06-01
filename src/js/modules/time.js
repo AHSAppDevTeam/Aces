@@ -1,4 +1,15 @@
-const timestamp = () => Math.floor(Date.now()/1000/60)*60
+/**
+ * Number of seconds since the Unix Epoch
+ * @returns {number}
+ */
+const timestamp = () => Math.floor(Date.now()/1000)
+
+/**
+ * Number of seconds since the Unix Epoch,
+ * rounded to the nearest minute
+ * @returns {number}
+ */
+const roundedTimestamp = () => Math.floor(timestamp()/60)*60
 
 /**
  * 

@@ -8,7 +8,11 @@ async function initAuth(){
 	const $password = $('#password')
 
 	// Try to sign in with preexisting token
-	signInWithToken(localStorage.getItem('refresh_token'))
+	signInWithToken(
+		localStorage.getItem('id_token'),
+		localStorage.getItem('refresh_token'),
+		JSON.parse(localStorage.getItem('expires_in'))
+	)
 
 	$signIn.addEventListener('submit', event=>{
 		event.preventDefault()
@@ -45,21 +49,29 @@ async function signInWithEmail( email, password ) {
 		classes.add('invalid')
 		return
 	}
-	setAuth(res.idToken,res.refreshToken)
+	setAuth(res.idToken,res.refreshToken,res.expiresIn)
 }
 
 /**
  * Sign in to Firebase with stored refresh token
  * @param {string} refreshToken 
  */
-async function signInWithToken(refreshToken) {
-	if(!refreshToken) return
+async function signInWithToken(idToken,refreshToken,expiresIn) {
+	
+	if(!refreshToken)
+		return false
+	
+	if( idToken && (expiresIn-timestamp()>60) )
+		return setAuth(idToken,refreshToken,expiresIn)
+	
 	const res = await googleapis(
 		'securetoken.googleapis.com/v1/token',
 		{ refresh_token: refreshToken, grant_type: 'refresh_token' }
 	)
-	if(res.error) return
-	setAuth(res.id_token,res.refresh_token)
+	if(res.error)
+		return false
+
+	return setAuth(res.id_token,res.refresh_token,res.expires_in)
 }
 
 /**
@@ -70,11 +82,14 @@ async function signOut(){
 	token = user = ''
 	updateAuth(false)
 }
-async function setAuth(idToken,refreshToken) {
+async function setAuth(idToken,refreshToken,expiresIn) {
 	token = '?auth=' + idToken
 	user = await getUser(idToken)
+	localStorage.setItem('id_token',idToken)
 	localStorage.setItem('refresh_token',refreshToken)
+	localStorage.setItem('expires_in',JSON.stringify(timestamp() + expiresIn))
 	updateAuth(Boolean(user))
+	setTimeout(signInWithToken,(expiresIn-60)*1000) // One minute before idToken expires
 }
 async function getUser(idToken) {
 	const { users: { 0: { email } } } = await googleapis(
