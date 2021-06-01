@@ -1,9 +1,7 @@
 #!/bin/sh
 cd src
-html=$(cat index.html)
-js=$(cd js && cat config.js modules/*.js init.js)
-css=$(cd css && cat *.css)
-cd ..
-printf "$html" "$css" "$js" > dist/index.html
-cat src/js/worker.js > dist/worker.js
+cat index.html > ../dist/index.html
+cat js/config.js js/modules/*.js js/init.js > ../dist/script.js
+cat js/worker.js > ../dist/worker.js
+cat css/*.css > ../dist/style.css
 echo "built site"

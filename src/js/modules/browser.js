@@ -112,6 +112,7 @@ function updatePreview($preview,snippet){
 	$('.media',$preview).replaceChildren(...(snippet.thumbURLs||[]).map(thumbURL=>{
 		const $img = document.createElement('img')
 		$img.src = thumbURL
+		$img.loading = 'lazy'
 		return $img
 	}))
 }

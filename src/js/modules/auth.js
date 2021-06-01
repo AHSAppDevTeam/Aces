@@ -8,7 +8,7 @@ async function initAuth(){
 	const $password = $('#password')
 
 	// Try to sign in with preexisting token
-	signInWithToken(JSON.parse(localStorage.getItem('auth'))||{})
+	signInWithToken(JSON.parse(localStorage.getItem('AUTH'))||{})
 
 	$signIn.addEventListener('submit', event=>{
 		event.preventDefault()
@@ -48,7 +48,7 @@ async function signInWithEmail( email, password ) {
 	setAuth({
 		idToken: res.idToken,
 		refreshToken: res.refreshToken,
-		expiresAt: timestamp() + res.expiresIn
+		expiresAt: timestamp() + parseInt(res.expiresIn)
 	})
 }
 
@@ -56,26 +56,22 @@ async function signInWithEmail( email, password ) {
  * Sign in to Firebase with stored refresh token
  * @param {string} refreshToken 
  */
-async function signInWithToken({idToken,refreshToken,expiresAt}) {
+async function signInWithToken(auth) {
 	
-	if(!refreshToken) return false
+	if(!auth.refreshToken) return false
 	
-	if( idToken && (expiresAt-timestamp()>60) ) return setAuth({
-		idToken,
-		refreshToken,
-		expiresAt,
-	})
+	if( auth.idToken && auth.expiresAt && (auth.expiresAt-timestamp()>60) ) return setAuth(auth)
 	
 	const res = await googleapis(
 		'securetoken.googleapis.com/v1/token',
-		{ refresh_token: refreshToken, grant_type: 'refresh_token' }
+		{ refresh_token: auth.refreshToken, grant_type: 'refresh_token' }
 	)
 	if(res.error) return false
 
 	return setAuth({
 		idToken: res.id_token,
 		refreshToken: res.refresh_token,
-		expiresAt: timestamp() + res.expires_in,
+		expiresAt: timestamp() + parseInt(res.expires_in),
 	})
 }
 
@@ -83,18 +79,20 @@ async function signInWithToken({idToken,refreshToken,expiresAt}) {
  * Sign out of Firebase
  */
 async function signOut(){
-	localStorage.setItem('auth','')
+	localStorage.setItem('AUTH','')
 	token = user = ''
 	updateAuth(false)
 }
-async function setAuth({idToken,refreshToken,expiresAt}) {
-	token = '?auth=' + idToken
-	user = await getUser(idToken)
-	localStorage.setItem('auth',JSON.stringify({
-		idToken, refreshToken, expiresAt
-	}))
+async function setAuth(auth) {
+	token = '?auth=' + auth.idToken
+	user = await getUser(auth.idToken)
+	localStorage.setItem('AUTH',JSON.stringify(auth))
 	updateAuth(Boolean(user))
-	setTimeout(signInWithToken,(expiresAt-timestamp()-60)*1000) // One minute before idToken expires
+	setTimeout(
+		signInWithToken,
+		(auth.expiresAt-timestamp()-60)*1000,
+		auth,
+	) // One minute before idToken expires
 }
 async function getUser(idToken) {
 	const { users: { 0: { email } } } = await googleapis(
