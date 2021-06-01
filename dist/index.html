@@ -323,7 +323,7 @@ input::placeholder {
 } }
 
 html {
-	font-family: 'pt-root', Sans-serif;
+	font-family: 'pt-root', Helvetica, Roboto, Arial, sans-serif;
 	font-weight: 400;
 	font-size: 14pt;
 	touch-action: pan-x;
@@ -864,6 +864,8 @@ body,
 					<code class=output></code>
 				</section>
 			</label>
+			<input id=editTimestamp type=hidden>
+			<input id=relatedArticleIDs type=hidden>
 		</main>
 		<div id=resize class=card tabindex=0>
 			<span class=name>
@@ -1009,7 +1011,7 @@ async function initAuth(){
 	const $password = $('#password')
 
 	// Try to sign in with preexisting token
-	signInWithToken(localStorage.getItem('refresh_token'))
+	signInWithToken(JSON.parse(localStorage.getItem('auth'))||{})
 
 	$signIn.addEventListener('submit', event=>{
 		event.preventDefault()
@@ -1046,36 +1048,56 @@ async function signInWithEmail( email, password ) {
 		classes.add('invalid')
 		return
 	}
-	setAuth(res.idToken,res.refreshToken)
+	setAuth({
+		idToken: res.idToken,
+		refreshToken: res.refreshToken,
+		expiresAt: timestamp() + res.expiresIn
+	})
 }
 
 /**
  * Sign in to Firebase with stored refresh token
  * @param {string} refreshToken 
  */
-async function signInWithToken(refreshToken) {
-	if(!refreshToken) return
+async function signInWithToken({idToken,refreshToken,expiresAt}) {
+	
+	if(!refreshToken) return false
+	
+	if( idToken && (expiresAt-timestamp()>60) ) return setAuth({
+		idToken,
+		refreshToken,
+		expiresAt,
+	})
+	
 	const res = await googleapis(
 		'securetoken.googleapis.com/v1/token',
 		{ refresh_token: refreshToken, grant_type: 'refresh_token' }
 	)
-	if(res.error) return
-	setAuth(res.id_token,res.refresh_token)
+	if(res.error) return false
+
+	return setAuth({
+		idToken: res.id_token,
+		refreshToken: res.refresh_token,
+		expiresAt: timestamp() + res.expires_in,
+	})
 }
 
 /**
  * Sign out of Firebase
  */
 async function signOut(){
-	localStorage.setItem('refresh_token','')
+	localStorage.setItem('auth','')
 	token = user = ''
 	updateAuth(false)
 }
-async function setAuth(idToken,refreshToken) {
+async function setAuth({idToken,refreshToken,expiresAt}) {
 	token = '?auth=' + idToken
 	user = await getUser(idToken)
-	localStorage.setItem('refresh_token',refreshToken)
+	localStorage.setItem('auth',JSON.stringify({
+		idToken, refreshToken, expiresAt
+	}))
 	updateAuth(Boolean(user))
+	setTimeout(signInWithToken,(expiresAt-timestamp()-60)*1000) // One minute before idToken expires
 }
 async function getUser(idToken) {
 	const { users: { 0: { email } } } = await googleapis(
@@ -1314,8 +1336,8 @@ async function storyTemplate(){
 		...{
 			title: 'Untitled Article',
 			author: 'Content Editors',
-			timestamp: timestamp(),
-			notifTimestamp: timestamp(),
+			timestamp: roundedTimestamp(),
+			notifTimestamp: roundedTimestamp(),
 			categoryID: 'Drafts',
 			blurb: 'Notification text.',
 			markdown: 'A *quick* brown **fox** jumps over a lazy [dog](https://en.wikipedia.org/wiki/Dog).'
@@ -1336,6 +1358,7 @@ async function updateEditor() {
 	$$('#editor textarea').forEach(dispatchInput)
 	$$('.preview.open').forEach($preview=>$preview.classList.remove('open'))
 	const $preview = $('#preview-'+id)
+	if(!$preview) return
 	$preview.classList.add('open')
 	$preview.scrollIntoView()
 }
@@ -1371,6 +1394,11 @@ async function syncStory(base,direction){
 				direction
 				? story[property] = LocalISOStringToTimestamp($element.value)
 				: $element.value = timestampToLocalISOString(story[property])
+				break
+			case 'hidden':
+				direction
+				? story[property] = JSON.parse($element.value)
+				: $element.value = JSON.stringify(story[property])
 				break
 			default:
 				direction
@@ -1964,7 +1992,18 @@ async function initResize(){
 	// unfocus the resize bar if the mouse click or finger dragging ends
 	window.addEventListener('pointerup',()=>$resize.blur())
 }
-const timestamp = () => Math.floor(Date.now()/1000/60)*60
+/**
+ * Number of seconds since the Unix Epoch
+ * @returns {number}
+ */
+const timestamp = () => Math.floor(Date.now()/1000)
+
+/**
+ * Number of seconds since the Unix Epoch,
+ * rounded to the nearest minute
+ * @returns {number}
+ */
+const roundedTimestamp = () => Math.floor(timestamp()/60)*60
 
 /**
  * 
@@ -2051,13 +2090,13 @@ async function initWorker(){
 		const list = navigator.serviceWorker.subscriptionList
 		if(type=='update' && path in list) (list[path])()
 	})
-	navigator.serviceWorker.getRegistrations().then(function (registrations) {
-		for (const registration of registrations) {
-			// unregister service worker
-			console.log('serviceWorker unregistered')
-			registration.unregister()
-		}
-	})
+	// navigator.serviceWorker.getRegistrations().then(function (registrations) {
+	// 	for (const registration of registrations) {
+	// 		// unregister service worker
+	// 		console.log('serviceWorker unregistered')
+	// 		registration.unregister()
+	// 	}
+	// })
 }
 initWorker()
 initEditor()

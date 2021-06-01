@@ -90,6 +90,7 @@ async function updateEditor() {
 	$$('#editor textarea').forEach(dispatchInput)
 	$$('.preview.open').forEach($preview=>$preview.classList.remove('open'))
 	const $preview = $('#preview-'+id)
+	if(!$preview) return
 	$preview.classList.add('open')
 	$preview.scrollIntoView()
 }
@@ -125,6 +126,11 @@ async function syncStory(base,direction){
 				direction
 				? story[property] = LocalISOStringToTimestamp($element.value)
 				: $element.value = timestampToLocalISOString(story[property])
+				break
+			case 'hidden':
+				direction
+				? story[property] = JSON.parse($element.value)
+				: $element.value = JSON.stringify(story[property])
 				break
 			default:
 				direction

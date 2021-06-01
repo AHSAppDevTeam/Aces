@@ -4,6 +4,10 @@ self.addEventListener('activate', event => event.waitUntil(self.clients.claim())
 
 const version = 10
 
+/**
+ * @param {Request} request
+ * @returns {Promise}
+ */
 const response = request => new Promise(async (resolve)=>{
 
 	// Only respond to certain fetches
@@ -13,7 +17,7 @@ const response = request => new Promise(async (resolve)=>{
 	const anonRequest = requestType ? new Request(request.url.split('?')[0],request) : request
 
 	// Simply relay request if no caching is wanted
-	if(requestType === 'no-cache') return resolve(fetch(request))
+	if(requestType === 'once') return resolve(fetch(request))
 
 	// Otherwise, return cached response if exists
 	const cache = await caches.open(version)
@@ -70,7 +74,7 @@ const response = request => new Promise(async (resolve)=>{
 
 	// Otherwise, simple caching operation
 	const response = await fetch(request)
-	cache.put(anonRequest,response.clone())
+	if(request.method === 'GET') cache.put(anonRequest,response.clone())
 	return resolve(response.clone())
 	
 })

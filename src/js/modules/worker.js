@@ -7,11 +7,11 @@ async function initWorker(){
 		const list = navigator.serviceWorker.subscriptionList
 		if(type=='update' && path in list) (list[path])()
 	})
-	navigator.serviceWorker.getRegistrations().then(function (registrations) {
-		for (const registration of registrations) {
-			// unregister service worker
-			console.log('serviceWorker unregistered')
-			registration.unregister()
-		}
-	})
+	// navigator.serviceWorker.getRegistrations().then(function (registrations) {
+	// 	for (const registration of registrations) {
+	// 		// unregister service worker
+	// 		console.log('serviceWorker unregistered')
+	// 		registration.unregister()
+	// 	}
+	// })
 }

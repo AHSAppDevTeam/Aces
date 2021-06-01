@@ -21,7 +21,7 @@
 } }
 
 html {
-	font-family: 'pt-root', Sans-serif;
+	font-family: 'pt-root', Helvetica, Roboto, Arial, sans-serif;
 	font-weight: 400;
 	font-size: 14pt;
 	touch-action: pan-x;
