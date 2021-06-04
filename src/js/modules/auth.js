@@ -40,7 +40,7 @@ async function signInWithEmail( email, password ) {
 		{ email, password, returnSecureToken: true }
 	)
 	if(res.error) {
-		const classes = $('#signIn').classList
+		const classes = $('#sign-in').classList
 		classes.remove('loading')
 		classes.add('invalid')
 		return

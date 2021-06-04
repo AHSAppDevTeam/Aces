@@ -25,7 +25,7 @@ async function initEditor() {
 		const id = urlID()
 		const templateStory = await storyTemplate()
 		const story = await syncStory( templateStory, 1 )
-		await dbWrite('storys',{[id]: story})
+		await dbWrite('inputs',{[id]: story})
 		return updateEditor()
 	})
 
@@ -57,7 +57,7 @@ async function initEditor() {
  * @returns {Promise<Object>} story
  */
 async function storyTemplate(){
-	const schema = await dbCache('schemas/story')
+	const schema = await dbCache('schemas/input')
 	const template = {}
 	for (const key in schema)
 		template[key] = {
@@ -86,7 +86,7 @@ async function storyTemplate(){
 async function updateEditor() {
 	const id = urlID()
 	history.replaceState({}, '', id)
-	let story = await dbOnce('storys/' + id) || {}
+	let story = await dbOnce('inputs/' + id) || {}
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
@@ -104,7 +104,7 @@ async function updateEditor() {
  */
 async function encodeStory(story){
 	const params = new URLSearchParams(window.location.search)
-	params.set('story',encodeURIComponent(JSON.stringify(story)))
+	params.set('input',encodeURIComponent(JSON.stringify(story)))
 	history.replaceState({}, '', `${id}?${params}`)
 }
 
@@ -144,7 +144,6 @@ async function syncStory(base,direction){
 	}
 	if(direction) {
 		story.date = timestampToLocalHumanString(story.timestamp)
-		story.body = md(story.markdown)
 		story.videoIDs = []
 		story.imageURLs = []
 		story.thumbURLs = []
@@ -154,7 +153,6 @@ async function syncStory(base,direction){
 			if(imageURL) story.imageURLs.push(imageURL)
 			if(videoID) story.videoIDs.push(videoID)
 		})
-		story.editTimestamp = timestamp()
 	} else {
 		const mediaSets = story.thumbURLs.map(
 			(thumbURL,index) =>

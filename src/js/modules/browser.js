@@ -93,12 +93,12 @@ function makePreview(id,snippet){
 
 	const $featured = $('.featured',$preview)
 	addChangeListener($featured, async ({ target: { checked: featured } }) =>
-		dbWrite('storys/'+id,{featured})
+		dbWrite('inputs/'+id,{featured})
 	)
 
 	const $archived = $('.archived',$preview)
 	addChangeListener($archived, async ({ target: { checked: archived } }) =>
-		dbWrite('storys/'+id,{categoryID:archived ? 'archived' : 'drafts'})
+		dbWrite('inputs/'+id,{categoryID:archived ? 'archived' : 'drafts'})
 	)
 
 	updatePreview($preview,snippet)

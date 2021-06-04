@@ -6,20 +6,6 @@
 const rot13 = string => string.replace(/[a-z]/gi,c=>'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm.-'['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-.'.indexOf(c)])
 
 /**
- * Brackets an ID by its type
- * @param {string} id 
- * @param {string} type
- * @returns {string} bracketed ID
- */
-const bracket = (id,type) => {
-	let brackets = type == 'location' ? '{}'
-	: type == 'category' ? '[]'
-	: type == 'article' ? '<>'
-	: '""'
-	return brackets[0] + id + brackets[1]	
-}
-
-/**
  * 
  * @param {array} array array
  * @returns {*} random element of the array
