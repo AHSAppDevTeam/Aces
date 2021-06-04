@@ -2,7 +2,7 @@ if('EventSource' in self) self.addEventListener('fetch', event => event.respondW
 self.addEventListener('install', event => event.waitUntil(self.skipWaiting()))
 self.addEventListener('activate', event => event.waitUntil(self.clients.claim()))
 
-const version = 10
+const version = 11
 
 /**
  * @param {Request} request
