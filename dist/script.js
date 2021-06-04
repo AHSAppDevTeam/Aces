@@ -414,7 +414,6 @@ async function syncStory(base,direction){
 		}
 	}
 	if(direction) {
-		story.date = timestampToLocalHumanString(story.timestamp)
 		story.videoIDs = []
 		story.imageURLs = []
 		story.thumbURLs = []
