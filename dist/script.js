@@ -297,7 +297,7 @@ async function initEditor() {
 		const templateStory = await storyTemplate()
 		const story = await syncStory( templateStory, 1 )
 		await dbWrite('inputs',{[id]: story})
-		return updateEditor()
+		return updateBrowser()
 	})
 
 	initHighlighter($markdownWrapper)
