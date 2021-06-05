@@ -6,7 +6,7 @@
 #editor > * {
 	grid-column-end: span 2;
 }
-#editor > label[half-width] {
+#editor > label.half-width {
 	grid-column-end: span 1;
 }
 #editor header > * {

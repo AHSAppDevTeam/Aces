@@ -157,7 +157,7 @@ async function updateBrowser(){
 }
 function makeGroup(
 	type, id,
-	{ title, color },
+	{ title, blurb, color },
 	children,
 ){
 	const parent = {
@@ -183,6 +183,11 @@ function makeGroup(
 		$color.value = color
 		addChangeListener($color, ({ target: { value: color } }) =>
 			dbWrite(parent+'/'+id, { color })
+		)
+		const $blurb = $('.blurb',$group)
+		$blurb.value = blurb
+		addChangeListener($blurb, ({ target: { value: blurb } }) => 
+			dbWrite(parent+'/'+id, { blurb })
 		)
 	}
 

@@ -13,52 +13,55 @@
 	</head>
 	<body>
 		<main id=editor class=panel>
-			<label class=card id=title-label>
+			<label class='card in-story in-category in-location' id=title-label>
 				<span>title</span>
 				<textarea id=title accesskey=t></textarea>
 			</label>
-			<label class=card id=categoryID-label>
+			<label class='card in-story' id=categoryID-label>
 				<span>category</span>
 				<select id=categoryID></select>
 			</label>
-			<label class=card id=title-label>
+			<label class='card in-story' id=title-label>
 				<span>author</span>
 				<textarea id=author accesskey=a></textarea>
 			</label>
-			<label class=card id=timestamp-label>
+			<label class='card in-story' id=timestamp-label>
 				<span>publication time</span>
 				<input id=timestamp type=datetime-local>
 			</label>
-			<label class=card id=featured-label half-width><div>
+			<label class='half-width card in-story in-category' id=featured-label><div>
 				<input id=featured type=checkbox>
 				feature
 			</div></label>
-			<label class=card id=notified-label half-width><div>
+			<label class='half-width card in-story' id=notified-label><div>
 				<input id=notified type=checkbox>
 				notify
 			</div></label>
-			<label class=card id=blurb-label>
+			<label class='half-width card in-category' id=color-label>
+				<input id=color type=color>
+			</label>
+			<label class='card in-story in-category' id=blurb-label>
 				<span>blurb (notification body)</span>
 				<textarea id=blurb></textarea>
 			</label>
-			<label class=card id=notifTimestamp-label>
+			<label class='card in-story' id=notifTimestamp-label>
 				<span>notification time</span>
 				<input id=notifTimestamp type=datetime-local>
 			</label>
-			<label class=card id=upload-label half-width>
+			<label class='card in-story' id=upload-label half-width>
 				<span>upload images</span>
 				<input id=upload type=file multiple accept=image/*>
 			</label>
-			<label class=card id=url-label half-width>
+			<label class='half-width card in-story' id=url-label half-width>
 				<span>image/YouTube URL</span>
 				<input id=url type=url>
 			</label>
-			<label class=card id=media-label>
+			<label class='card in-story' id=media-label>
 				<span>images and videos</span>
 				<section id=media>
 				</section>
 			</label>
-			<label class=card id=markdown-label>
+			<label class='card in-story' id=markdown-label>
 				<span>body (article text)</span>
 				<section id=markdown-wrapper class=markdown>
 					<textarea class=input id=markdown accesskey=b multi-line></textarea>
@@ -121,33 +124,14 @@
 			<input type=button class=cancel value='✕'>
 		</form>
 		<!-- TEMPLATES -->
-		<template id='template-location'>
-			<section class='group location'>
-				<header>
-					<label class='card'>
-						<span>location title</span>
-						<textarea class='title input'></textarea>
-					</label>
-					<a class='id' hidden></a>
-				</header>
+		<template id=template-group>
+			<section class=group>
+				<label class='card'>
+					<a class='title'></a>
+				</label>
 			</section>
 		</template>
-		<template id='template-category'>
-			<section class='group category'>
-				<header>
-					<label class='card'>
-						<span>category title</span>
-						<textarea class='title input'></textarea>
-					</label>
-					<a class='id' hidden></a>
-					<label class='card'>
-						<span>color</span>
-						<input type='color' class='color'>
-					</label>
-				</header>
-			</section>
-		</template>
-		<template id='template-preview'>
+		<template id=template-preview>
 			<article class='preview info card'>
 				<a class='title'></a>
 				<section class=menu>

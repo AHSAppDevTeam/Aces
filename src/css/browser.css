@@ -10,11 +10,17 @@
 .group > header {
 	display: flex;
 	gap: 8pt;
+	grid-column: 1 / -1;
 }
-.group > header > label:first-child {
+.group > header > .title-label {
+	flex-basis: 8rem;
 	flex-grow: 1;
 }
-.group > header > label:last-child {
+.group > header > .blurb-label {
+	flex-basis: 16rem;
+	flex-grow: 2;
+}
+.group > header > .color-label {
 	flex-basis: 4rem;
 }
 .group.location > header .title {
@@ -24,9 +30,8 @@
 	margin-top: 1rem;
 }
 .group.category > header {
-	grid-column: 1 / -1;
 }
-.group.category > header .title{
+.group.category > header .title {
 	font-size: 1.5rem;
 }
 #browser > section > section {
