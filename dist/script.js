@@ -14,7 +14,8 @@ async function initAuth(){
 	const $password = $('#password')
 
 	// Try to sign in with preexisting token
-	signInWithToken(JSON.parse(localStorage.getItem('AUTH'))||{})
+	const auth = localStorage.getItem('AUTH')
+	if(auth) signInWithToken(JSON.parse(auth))
 
 	$signIn.addEventListener('submit', event=>{
 		event.preventDefault()
@@ -85,7 +86,7 @@ async function signInWithToken(auth) {
  * Sign out of Firebase
  */
 async function signOut(){
-	localStorage.setItem('AUTH','')
+	localStorage.removeItem('AUTH')
 	token = user = ''
 	updateAuth(false)
 }
