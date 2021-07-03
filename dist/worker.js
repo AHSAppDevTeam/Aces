@@ -2,7 +2,14 @@ if('EventSource' in self) self.addEventListener('fetch', event => event.respondW
 self.addEventListener('install', event => event.waitUntil(self.skipWaiting()))
 self.addEventListener('activate', event => event.waitUntil(self.clients.claim()))
 
-const version = 13
+self.addEventListener('activate', event => event.waitUntil(
+	caches.keys().then( keys => Promise.all(
+	   keys.filter(key => key !== version)
+	   .map(caches.delete.bind(caches))
+   ))
+))
+
+const version = 14
 
 /**
  * @param {Request} request
