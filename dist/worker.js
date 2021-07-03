@@ -2,7 +2,7 @@ if('EventSource' in self) self.addEventListener('fetch', event => event.respondW
 self.addEventListener('install', event => event.waitUntil(self.skipWaiting()))
 self.addEventListener('activate', event => event.waitUntil(self.clients.claim()))
 
-const version = 12
+const version = 13
 
 /**
  * @param {Request} request
@@ -28,7 +28,7 @@ const response = request => new Promise(async (resolve)=>{
 	if(cachedResponse) return resolve(cachedResponse)
 
 	// Use Server-Sent Events (SSE) if live type is chosen
-	if(false && requestType === 'live') {
+	if(requestType === 'live') {
 
 		// Put a placeholder response in the cache
 		cache.put(anonRequest,new Response('{}'))
@@ -67,7 +67,7 @@ const response = request => new Promise(async (resolve)=>{
 			console.log(request.url)
 			console.log(body)
 			const response = new Response(JSON.stringify(body))
-			cache.put(anonRequest,response.clone())
+			await cache.put(anonRequest,response.clone())
 
 			// Reply to original intercepted fetch request
 			resolve(response.clone())
@@ -77,7 +77,7 @@ const response = request => new Promise(async (resolve)=>{
 
 	// Otherwise, simple caching operation
 	const response = await fetch(request)
-	if(request.method === 'GET') cache.put(anonRequest,response.clone())
+	if(request.method === 'GET') await cache.put(anonRequest,response.clone())
 	return resolve(response.clone())
 	
 })
