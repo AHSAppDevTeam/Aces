@@ -483,7 +483,7 @@ async function initHighlighter($section){
 		strike: /~~(.+?)~~/gm,
 		hr: /\s{0,3}([-+* ]{3,})$/gm,
 		heading: /^#{1,6}\s(.+)$/gm,
-		link: /(!?\[.*?\]\((?:https?:\/\/|mailto:).*?\)|\bhttps?:\/\/\S*|\b\S*@\S*?\.\S*)/gm,
+		link: /(!?\[.*?\]\((?:https?:\/\/|mailto:)\S*\)|\bhttps?:\/\/\S*|\b\S*@\S*?\.\S*)/gm,
 		list: /^((\d+\.)|[-+*]).+$/gm,
 	}
 	input.addEventListener('input',async ()=>{
