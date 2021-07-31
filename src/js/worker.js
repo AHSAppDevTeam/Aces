@@ -9,7 +9,7 @@ self.addEventListener('activate', event => event.waitUntil(
    ))
 ))
 
-const version = 15
+const version = 18
 
 /**
  * @param {Request} request
