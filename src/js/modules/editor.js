@@ -8,10 +8,14 @@ async function initEditor() {
 	const $$textarea = $$('textarea',$editor)
 	const $url = $('#url')
 	const $markdownWrapper = $('#markdown-wrapper')
+	const $save = $('#save')
 
+	$save.addEventListener('click',event=>{
+		event.preventDefault()
+		window.open($save.dataset.src)
+	})
 	addChangeListener($editor, async ({target}) => {
-		if(!user) return false
-		switch(target.id){
+		if(user) switch(target.id){
 			case 'upload':
 				const mediaSets = await Promise.all(Array.from(target.files).map(imgbb))
 				$media.prepend(...mediaSets.map($thumb))
@@ -21,11 +25,12 @@ async function initEditor() {
 				$media.prepend($thumb(await youtube(target.value) || await imgbb(target.value)))
 				target.value = ''
 				break
-		}	
+		}
 		const id = urlID()
 		const templateStory = await storyTemplate()
 		const story = await syncStory( templateStory, 1 )
 		await dbWrite('inputs',{[id]: story})
+		$save.dataset.src = await encodeStory(story)
 		return updateBrowser()
 	})
 
@@ -105,7 +110,10 @@ async function updateEditor() {
 async function encodeStory(story){
 	const params = new URLSearchParams(window.location.search)
 	params.set('input',encodeURIComponent(JSON.stringify(story)))
-	history.replaceState({}, '', `${id}?${params}`)
+	const mail_params = new URLSearchParams()
+	mail_params.set('subject',`"${story.title}": Submission request from ${story.author} for ${story.categoryID}`)
+	mail_params.set('body',`Review at https://edit.ahs.app/${urlID()}?${params}`)
+	return `mailto:articles@ahs.app?${mail_params}`
 }
 
 /**
