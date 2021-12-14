@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang=en-US dir=ltr>
-  	<head>
+	<head>
 		<meta charset=utf-8>
 
 		<title>Aces</title>
@@ -13,6 +13,11 @@
 	</head>
 	<body>
 		<main id=editor class=panel>
+			<header class=card>
+				<input readonly class=card id=published value='not published'>
+				&bull;
+				<input readonly class=card id=saved value='not saved'>
+			</header>
 			<label class=card id=title-label>
 				<span>title</span>
 				<textarea id=title accesskey=t></textarea>
@@ -77,6 +82,7 @@
 				Designed and programmed by Xing Liu
 			</span>
 		</div>
+		<div id=resize-ghost></div>
 		<aside id=browser class=panel>
 			<header class=card>
 				<input type=button

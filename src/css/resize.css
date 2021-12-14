@@ -11,12 +11,28 @@
 	align-items: center;
 	color: var(--border-color);
 	touch-action: none;
+	z-index: 100;
+	background: var(--background-color);
 }
 #resize:hover {
 	color: var(--hover-color);
 }
 #resize:focus {
 	color: var(--text-color);
+}
+#resize:focus + #resize-ghost {
+	opacity: 1;
+}
+#resize-ghost {
+	position: fixed;
+	opacity: 0;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: .6rem;
+	border-right: 4pt solid var(--text-color);
+	z-index: 10;
+	transform: translateX(-1rem);
 }
 #resize > :not(.dots) {
 	color: inherit;
