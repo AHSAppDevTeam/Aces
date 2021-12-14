@@ -1,7 +1,6 @@
 #editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	width: 36vw;
-	padding-top: 1rem;
 }
 #editor > * {
 	grid-column-end: span 2;

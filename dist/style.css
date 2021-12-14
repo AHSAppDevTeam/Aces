@@ -45,14 +45,14 @@ input[disabled] {
 	text-decoration: none;
 	flex-grow: 1;
 }
-.group > header {
+header {
 	display: flex;
 	gap: 8pt;
 }
-.group > header > label:first-child {
+header > label:first-child {
 	flex-grow: 1;
 }
-.group > header > label:last-child {
+header > label:last-child {
 	flex-basis: 4rem;
 }
 .group.location > header .title {
@@ -130,7 +130,6 @@ input[disabled] {
 #editor {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	width: 36vw;
-	padding-top: 1rem;
 }
 #editor > * {
 	grid-column-end: span 2;

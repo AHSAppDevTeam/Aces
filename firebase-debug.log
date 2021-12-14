@@ -1,0 +1,95 @@
+[debug] [2021-12-14T04:32:24.199Z] ----------------------------------------------------------------------
+[debug] [2021-12-14T04:32:24.204Z] Command:       /usr/bin/node /usr/local/bin/firebase deploy
+[debug] [2021-12-14T04:32:24.205Z] CLI Version:   9.23.0
+[debug] [2021-12-14T04:32:24.205Z] Platform:      linux
+[debug] [2021-12-14T04:32:24.205Z] Node Version:  v10.19.0
+[debug] [2021-12-14T04:32:24.210Z] Time:          Mon Dec 13 2021 20:32:24 GMT-0800 (Pacific Standard Time)
+[debug] [2021-12-14T04:32:24.211Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-12-14T04:32:24.215Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2021-12-14T04:32:24.456Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-12-14T04:32:24.457Z] > authorizing via signed-in user (fly.or.boom@gmail.com)
+[debug] [2021-12-14T04:32:24.457Z] [iam] checking project xing-ahs-app for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2021-12-14T04:32:24.461Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-12-14T04:32:24.461Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-12-14T04:32:24.718Z] <<< HTTP RESPONSE 200 {"expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Tue, 14 Dec 2021 04:32:24 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-14T04:32:24.774Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/xing-ahs-app:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2021-12-14T04:32:24.786Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2021-12-14T04:32:24.786Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2021-12-14T04:32:25.227Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 14 Dec 2021 04:32:25 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=134","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-14T04:32:25.231Z] > refreshing access token with scopes: []
+[debug] [2021-12-14T04:32:25.231Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-12-14T04:32:25.535Z] <<< HTTP RESPONSE 200 {"cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Tue, 14 Dec 2021 04:32:25 GMT","pragma":"no-cache","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-14T04:32:25.582Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/xing-ahs-app [none]
+[debug] [2021-12-14T04:32:26.257Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/xing-ahs-app 200
+[debug] [2021-12-14T04:32:26.257Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/xing-ahs-app {"projectId":"xing-ahs-app","projectNumber":"295063116684","displayName":"ahs-app","name":"projects/xing-ahs-app","resources":{"hostingSite":"xing-ahs-app","realtimeDatabaseInstance":"xing-ahs-app-default-rtdb"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'xing-ahs-app'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2021-12-14T04:32:26.265Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-12-14T04:32:26.265Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-12-14T04:32:26.535Z] <<< HTTP RESPONSE 200 {"cache-control":"no-cache, no-store, max-age=0, must-revalidate","pragma":"no-cache","date":"Tue, 14 Dec 2021 04:32:26 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-14T04:32:26.542Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/edit-ahs-app/versions  
+ {"config":{"rewrites":[{"glob":"**","path":"/index.html"}],"trailingSlashBehavior":"REMOVE"},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2021-12-14T04:32:27.482Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 14 Dec 2021 04:32:27 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  hosting[edit-ahs-app]: beginning deploy... 
+[info] i  hosting[edit-ahs-app]: found 7 files in dist 
+[debug] [2021-12-14T04:32:27.499Z] [hosting] hash cache [ZGlzdA] not populated
+[debug] [2021-12-14T04:32:27.523Z] > refreshing access token with scopes: []
+[debug] [2021-12-14T04:32:27.523Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-12-14T04:32:27.526Z] [hosting] hash cache [ZGlzdA] stored for 7 files
+[debug] [2021-12-14T04:32:27.526Z] [hosting][hash queue][FINAL] {"max":18,"min":11,"avg":14.142857142857142,"active":0,"complete":7,"success":7,"errored":0,"retried":0,"total":7,"elapsed":25}
+[debug] [2021-12-14T04:32:27.788Z] <<< HTTP RESPONSE 200 {"cache-control":"no-cache, no-store, max-age=0, must-revalidate","expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","date":"Tue, 14 Dec 2021 04:32:27 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-14T04:32:27.828Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/sites/edit-ahs-app/versions/2800857de21d0250:populateFiles [none]
+[debug] [2021-12-14T04:32:27.828Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/sites/edit-ahs-app/versions/2800857de21d0250:populateFiles {"files":{"/icon.png":"da88ce1fbdf3df52a49b613a747d986aadd8eabcb197f40d6f21222a706bb99a","/index.html":"791daeddc0f9aefb89cffb09eff5fe26bd8456604c508c24de94ef6bbbf215e0","/robots.txt":"fd6e17f8e10f6101478a06237c2188a5509ff36c19f2178764fc56d1902e0756","/style.css":"e001207e8936625bda6be89ddaf18415b0d904c7c513229798bbc4dbe14ccd2e","/worker.js":"e7e6205425288d013383f77b9f6554647391bd7a6f5a30ae5fcd81dc17673873","/script.js":"a7c210250bed870b565db8e8159a11720fecfad8968f7333a2e7d915d2122e43","/pt-root.woff2":"0e390a964e774e46c4b5c6db6c2402869e8c75b0472a879aa20c562b02a59757"}}
+[debug] [2021-12-14T04:32:28.406Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/sites/edit-ahs-app/versions/2800857de21d0250:populateFiles 200
+[debug] [2021-12-14T04:32:28.406Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/sites/edit-ahs-app/versions/2800857de21d0250:populateFiles {"uploadRequiredHashes":["791daeddc0f9aefb89cffb09eff5fe26bd8456604c508c24de94ef6bbbf215e0","e001207e8936625bda6be89ddaf18415b0d904c7c513229798bbc4dbe14ccd2e","a7c210250bed870b565db8e8159a11720fecfad8968f7333a2e7d915d2122e43"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files"}
+[debug] [2021-12-14T04:32:28.410Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/791daeddc0f9aefb89cffb09eff5fe26bd8456604c508c24de94ef6bbbf215e0 [none]
+[debug] [2021-12-14T04:32:28.410Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/791daeddc0f9aefb89cffb09eff5fe26bd8456604c508c24de94ef6bbbf215e0 [stream]
+[debug] [2021-12-14T04:32:28.412Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/e001207e8936625bda6be89ddaf18415b0d904c7c513229798bbc4dbe14ccd2e [none]
+[debug] [2021-12-14T04:32:28.412Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/e001207e8936625bda6be89ddaf18415b0d904c7c513229798bbc4dbe14ccd2e [stream]
+[debug] [2021-12-14T04:32:28.413Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/a7c210250bed870b565db8e8159a11720fecfad8968f7333a2e7d915d2122e43 [none]
+[debug] [2021-12-14T04:32:28.413Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/a7c210250bed870b565db8e8159a11720fecfad8968f7333a2e7d915d2122e43 [stream]
+[debug] [2021-12-14T04:32:28.415Z] [hosting][populate queue][FINAL] {"max":888,"min":888,"avg":888,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":893}
+[debug] [2021-12-14T04:32:28.416Z] [hosting] uploads queued: 3
+[debug] [2021-12-14T04:32:29.563Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/791daeddc0f9aefb89cffb09eff5fe26bd8456604c508c24de94ef6bbbf215e0 200
+[debug] [2021-12-14T04:32:29.563Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/791daeddc0f9aefb89cffb09eff5fe26bd8456604c508c24de94ef6bbbf215e0 [stream]
+[debug] [2021-12-14T04:32:29.860Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/a7c210250bed870b565db8e8159a11720fecfad8968f7333a2e7d915d2122e43 200
+[debug] [2021-12-14T04:32:29.860Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/a7c210250bed870b565db8e8159a11720fecfad8968f7333a2e7d915d2122e43 [stream]
+[debug] [2021-12-14T04:32:30.124Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/e001207e8936625bda6be89ddaf18415b0d904c7c513229798bbc4dbe14ccd2e 200
+[debug] [2021-12-14T04:32:30.124Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/edit-ahs-app/versions/2800857de21d0250/files/e001207e8936625bda6be89ddaf18415b0d904c7c513229798bbc4dbe14ccd2e [stream]
+[debug] [2021-12-14T04:32:30.124Z] [hosting][upload queue][FINAL] {"max":1717,"min":1158,"avg":1442.3333333333333,"active":0,"complete":3,"success":3,"errored":0,"retried":0,"total":3,"elapsed":1718}
+[info] ✔  hosting[edit-ahs-app]: file upload complete 
+[debug] [2021-12-14T04:32:30.126Z] [hosting] deploy completed after 2641ms
+[debug] [2021-12-14T04:32:30.126Z] [
+  {
+    "config": {
+      "site": "edit-ahs-app",
+      "public": "dist",
+      "trailingSlash": false,
+      "ignore": [
+        "firebase.json",
+        "**/.*"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    "site": "edit-ahs-app",
+    "version": "sites/edit-ahs-app/versions/2800857de21d0250"
+  }
+]
+[info] i  hosting[edit-ahs-app]: finalizing version... 
+[debug] [2021-12-14T04:32:30.127Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-12-14T04:32:30.127Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-12-14T04:32:30.275Z] <<< HTTP RESPONSE 200 {"expires":"Mon, 01 Jan 1990 00:00:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","pragma":"no-cache","date":"Tue, 14 Dec 2021 04:32:30 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}

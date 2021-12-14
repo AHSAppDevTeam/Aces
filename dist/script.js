@@ -281,6 +281,17 @@ async function initEditor() {
 	const $url = $('#url')
 	const $markdownWrapper = $('#markdown-wrapper')
 
+	const templateStory = await storyTemplate()
+	const story = await syncStory( templateStory, 1 )
+	$editor.addEventListener('input', async ()=>{
+		$('#status').textContent = ['Drafts','Debug','Trash'].includes(story.categoryID)
+		? 'new edits unsaved; old version in drafts'
+		: 'new edits unsaved; old version published'
+	})
+	$('#status').textContent = ['Drafts','Debug','Trash'].includes(story.categoryID)
+	? 'all edits saved in drafts'
+	: 'all edits saved & published'
+
 	addChangeListener($editor, async ({target}) => {
 		if(!user) return false
 		switch(target.id){
@@ -298,6 +309,11 @@ async function initEditor() {
 		const templateStory = await storyTemplate()
 		const story = await syncStory( templateStory, 1 )
 		await dbWrite('inputs',{[id]: story})
+
+		$('#status').textContent = ['Drafts','Debug','Trash'].includes(story.categoryID)
+		? 'all edits saved in drafts'
+		: 'all edits saved & published'
+
 		return updateBrowser()
 	})
 
@@ -362,6 +378,11 @@ async function updateEditor() {
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
+
+	$('#status').textContent = ['Drafts','Debug','Trash'].includes(story.categoryID)
+	? 'all edits saved in drafts'
+	: 'all edits saved & published'
+
 	$$('#editor textarea').forEach(dispatchInput)
 	$$('.preview.open').forEach($preview=>$preview.classList.remove('open'))
 	$$('#preview-'+id).forEach($preview=>{
