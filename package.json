@@ -1,0 +1,33 @@
+{
+  "name": "aces",
+  "version": "1.0.0",
+  "description": "Aces (AHS App Content Editing System) is a single static webpage that can read and edit articles from the Arcadia High Mobile database.",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AHSAppDevTeam/Aces.git"
+  },
+  "scripts": {
+    "start": "webpack serve --open",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/AHSAppDevTeam/Aces/issues"
+  },
+  "homepage": "https://github.com/AHSAppDevTeam/Aces#readme",
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.10.0"
+  },
+  "dependencies": {
+    "firebase": "^9.9.3"
+  }
+}

@@ -4,7 +4,7 @@
  * @param {Element} parent 
  * @returns {Element}
  */
-const $ = (query,parent=document) => parent.querySelector(query)
+export const $ = (query,parent=document) => parent.querySelector(query)
 
 /**
  * Shortcut for querySelectorAll
@@ -12,21 +12,21 @@ const $ = (query,parent=document) => parent.querySelector(query)
  * @param {Element} parent 
  * @returns {Element[]}
  */
-const $$ = (query,parent=document) => Array.from(parent.querySelectorAll(query))
+export const $$ = (query,parent=document) => Array.from(parent.querySelectorAll(query))
 
 /**
  * Clones a template element
  * @param {string} id
  * @returns {Element}
  */
-const $template = id => $('#template-'+id).content.cloneNode(true).querySelector('*')
+export const $template = id => $('#template-'+id).content.cloneNode(true).querySelector('*')
 
 /**
  * Adds a change event listener that also displays success
  * @param {Element} $element 
  * @param {callback} callback 
  */
-const addChangeListener = async ($element, callback) =>
+export const addChangeListener = async ($element, callback) =>
 	$element.addEventListener( 'change', async event => {
 		let $displayer = event.target
 		do $displayer = $displayer.parentElement

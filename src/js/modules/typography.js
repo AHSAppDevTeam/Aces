@@ -1,4 +1,4 @@
-const typography = text => text
+export const typography = text => text
 		// Smart quotes
 		/* opening singles */
 		.replace(/(^|[-\u2014\s(\["])'/g,'$1‘')

@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'pt-root';
-	src: url('pt-root.woff2') format('woff2');
+	src: url('../assets/pt-root.woff2') format('woff2');
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;

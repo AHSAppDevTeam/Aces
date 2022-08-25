@@ -1,0 +1,14 @@
+/* just imports everything */
+@import 'auth.css';
+@import 'browser.css';
+@import 'cards.css';
+@import 'editor.css';
+@import 'font.css';
+@import 'highlighter-markdown.css';
+@import 'highlighter.css';
+@import 'input.css';
+@import 'main.css';
+@import 'normalize.css';
+@import 'panel.css';
+@import 'previews.css';
+@import 'resize.css';

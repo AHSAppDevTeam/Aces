@@ -1,7 +1,8 @@
 /**
  * Initiates the resize bar
  */
-async function initResize(){
+import { $, $$ } from './dom'
+export async function init(){
 	let x
 	
 	// resize bar

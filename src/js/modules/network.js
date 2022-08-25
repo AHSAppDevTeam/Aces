@@ -1,16 +1,21 @@
+import {
+	ref, get, set
+} from 'firebase/database'
+import { db } from '../config'
+
 /**
  * Sends an HTTP GET request
  * @param {string} path 
  * @param {Object} request 
  * @returns {Promise<Response>} response
  */
-const post = async ( path, request ) => fetch(
-	'https://'+path,
+const post = async (path, request) => fetch(
+	'https://' + path,
 	{
 		body: JSON.stringify(request),
 		headers: { 'Content-Type': 'application/json' },
 		method: 'POST',
-	}	
+	}
 )
 
 /**
@@ -26,9 +31,9 @@ const post = async ( path, request ) => fetch(
  * @param {*} data URL or image file
  * @returns {Promise<mediaSet>}
  */
-const imgbb = async ( data ) => {
+const imgbb = async (data) => {
 	const body = new FormData()
-	body.append('image',data)
+	body.append('image', data)
 	const response = await fetch(
 		'https://' + await dbRead('secrets/imgbb'),
 		{ method: 'POST', body }
@@ -45,10 +50,10 @@ const imgbb = async ( data ) => {
  * @param {string} videoURL YouTube video URL
  * @returns {Promise<mediaSet}
  */
-const youtube = async ( videoURL ) => {
+const youtube = async (videoURL) => {
 	const { hostname, pathname, searchParams } = new URL(videoURL)
 	let videoID
-	switch(hostname) {
+	switch (hostname) {
 		case 'youtu.be':
 			videoID = pathname.slice(1)
 			break
@@ -59,7 +64,7 @@ const youtube = async ( videoURL ) => {
 		default:
 			return false
 	}
-	const { thumbURL }= await imgbb(`https://img.youtube.com/vi/${videoID}/mqdefault.jpg`)
+	const { thumbURL } = await imgbb(`https://img.youtube.com/vi/${videoID}/mqdefault.jpg`)
 	return { videoID, thumbURL }
 }
 
@@ -70,7 +75,7 @@ const youtube = async ( videoURL ) => {
  * @param {Boolean} legacy 
  * @returns {Promise<Object>} response
  */
-const dbRead = async ( path ) => await get(ref(db, path)).then(x=>x.val())
+export const dbRead = async (path) => await get(ref(db, path)).then(x => x.val())
 
 /**
  * Writes to the database
@@ -79,4 +84,4 @@ const dbRead = async ( path ) => await get(ref(db, path)).then(x=>x.val())
  * @param {boolean} legacy Use legacy database
  * @returns {(Promise<Object>|Boolean)} return
  */
-const dbWrite = async ( path, body ) => user ? set(ref(db, path), body) : false
+export const dbWrite = async (path, body) => user ? set(ref(db, path), body) : false

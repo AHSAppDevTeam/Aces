@@ -1,14 +1,14 @@
 import {
   initializeApp
-} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js"
+} from 'firebase/app'
 
 import {
-  getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider
-} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-auth.js"
+  getAuth
+} from 'firebase/auth'
 
 import {
-  getDatabase, ref, get, set, onValue
-} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
+  getDatabase
+} from 'firebase/database'
 
 const firebaseConfig = {
   apiKey: "AIzaSyDweQSkpqQSGP42qBgoiSm5VAhDoe9dJA8",
@@ -21,11 +21,11 @@ const firebaseConfig = {
   measurementId: "G-YGN0551PM8"
 }
 const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
-const db = getDatabase()
+export const auth = getAuth(app)
+export const db = getDatabase()
 
 const DEBUG = true
 const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'
 let user = ''
 let token = ''
-const ldb = {} // local DB
+export const ldb = {} // local DB
