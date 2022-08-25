@@ -81,6 +81,7 @@ async function storyTemplate(){
 			author: 'Content Editors',
 			timestamp: roundedTimestamp(),
 			notifTimestamp: roundedTimestamp(),
+			tags: '',
 			categoryID: 'Drafts',
 			blurb: 'Notification text.',
 			markdown: 'A *quick* brown **fox** jumps over a lazy [dog](https://en.wikipedia.org/wiki/Dog).'

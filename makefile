@@ -1,3 +1,7 @@
+.PHONY: build host deploy test
+
+test: build host
+
 build:
 	sh build.sh
 host:

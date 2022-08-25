@@ -1,6 +1,5 @@
 .firebase/
-dist/index.html
-dist/worker.js
+dist/*
 *.swp
 *.swo
 *~
