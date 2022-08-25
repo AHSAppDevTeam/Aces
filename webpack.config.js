@@ -1,5 +1,6 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require("copy-webpack-plugin");
 
@@ -9,8 +10,7 @@ module.exports = {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  mode: 'development',
-  devtool: 'inline-source-map', // make a non
+  mode: 'production',
   plugins: [
     new HtmlWebpackPlugin({ template: './src/index.html' }),
     new MiniCssExtractPlugin({
@@ -29,6 +29,10 @@ module.exports = {
           'css-loader'
         ],
       },
+    ],
+  }, optimization: {
+    minimizer: [
+      new CssMinimizerPlugin(),
     ],
   },
 };
