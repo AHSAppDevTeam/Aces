@@ -1,5 +1,4 @@
-initWorker()
+initAuth()
 initEditor()
 initBrowser()
 initResize()
-initAuth()

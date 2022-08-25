@@ -1,13 +1,15 @@
-const dbBrowserResources = () => Promise.all(['locationIDs','locations','categories','snippets'].map(dbLive))
 async function initBrowser(){
-	dbBrowserResources()
-	Object.assign(navigator.serviceWorker.subscriptionList,{
-		locationsIDs: updateBrowser,
-		locations: updateBrowser,
-		categories: updateBrowser,
-		snippets: updateBrowser,
+	onValue(ref(db, "snippets"), (snap) => {
+		ldb.snippets = snap.val()
+		updateBrowser()
 	})
-	updateBrowser()
+	onValue(ref(db, "categories"), (snap) => {
+		ldb.categories = Object.fromEntries(
+			Object.entries(snap.val())
+			.sort( ([,a], [,b]) => a.sort - b.sort )
+		)
+		updateBrowser()
+	})
 	$('#search').addEventListener('input',({target:{value:query}})=>{
 		$$('.preview>.title',$('#browser')).forEach($title=>{
 			const $preview = $title.parentElement
@@ -26,18 +28,16 @@ async function initBrowser(){
 	})
 }
 async function updateBrowser(){
+	if(!(ldb.categories && ldb.snippets)) return false
 	const $browser = $('#browser')
-	const [ locationIDs, locations, categories, snippets ] = await dbBrowserResources()
 	$browser.replaceChildren(
 		$browser.firstElementChild,
-		...locationIDs
-			.filter( id => id in locations)
-			.map( id => makeGroup('location', id, locations[id], ( locations[id].categoryIDs || [] )
-				.filter( id => id in categories)
-				.map( id => makeGroup('category', id, categories[id], ( categories[id].articleIDs || [] )
-					.filter( id => id in snippets )
-					.map( id => makePreview(id, snippets[id])
-	))))))
+		...Object.entries(ldb.categories)
+			.map( ([id, category]) => makeGroup('category', id, category, 
+				( category.articleIDs || [] )
+				.filter( id => id in ldb.snippets )
+				.map( id => makePreview(id, ldb.snippets[id])
+	))))
 
 	$$('textarea',$browser).forEach(initTextarea)
 }

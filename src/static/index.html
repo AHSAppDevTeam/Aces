@@ -110,19 +110,8 @@
 			<!-- insert previews -->
 		</aside>
 		<form id=sign-in class=card tabindex=0 method=dialog>
-			<label class=card>
-				<span>email</span>
-				<input id='email' type='email'
-				autocomplete='on' spellcheck='false' required>
-			</label>
-			<label class=card>
-				<span>password</span>
-				<input id='password' type='password'
-				autocomplete='on' spellcheck='false' required>
-			</label>
 			<input type=submit class=card value='sign in'>
-			<input type=button class=cancel value='✕'>
-		</form>
+		<form>
 		<!-- TEMPLATES -->
 		<template id='template-location'>
 			<section class='group location'>
@@ -196,6 +185,6 @@
 				</section>
 			</section>
 		</template>
-		<script src=/script.js></script>
+		<script src=/script.js type=module></script>
   </body>
 </html>

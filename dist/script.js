@@ -1,128 +1,70 @@
-'use strict'
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js"
+
+import {
+  getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider
+} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-auth.js"
+
+import {
+  getDatabase, ref, get, set, onValue
+} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDweQSkpqQSGP42qBgoiSm5VAhDoe9dJA8",
+  authDomain: "arcadia-high-mobile.firebaseapp.com",
+  databaseURL: "https://ahs-app.firebaseio.com",
+  projectId: "arcadia-high-mobile",
+  storageBucket: "arcadia-high-mobile.appspot.com",
+  messagingSenderId: "654225823864",
+  appId: "1:654225823864:web:944772a5cadae0c8b7758d",
+  measurementId: "G-YGN0551PM8"
+}
+const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
+const db = getDatabase()
+
 const DEBUG = true
 const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'
 let user = ''
 let token = ''
-const dbObject = {}
+const ldb = {} // local DB
 /**
  * Initiates the authentication elements
  */
 async function initAuth(){
 	const $sign = $('#sign')
-	const $signIn = $('#sign-in')
-	const $email = $('#email')
-	const $password = $('#password')
 
-	// Try to sign in with preexisting token
-	const auth = localStorage.getItem('AUTH')
-	if(auth) signInWithToken(JSON.parse(auth))
+	const provider = new GoogleAuthProvider()
+	provider.setCustomParameters({
+	  'hd': 'ausd.net'
+	})
 
-	$signIn.addEventListener('submit', event=>{
-		event.preventDefault()
-		signInWithEmail( $email.value, $password.value )
-		$signIn.reset()
-		$signIn.classList.add('loading')
+	$sign.addEventListener("click", event => {
+		 event.preventDefault()
+		 signInWithRedirect(auth, provider)
 	})
-	$signIn.addEventListener('input', ()=>{
-		$signIn.classList.remove('invalid')
-	})
-	$sign.addEventListener('click', event=>{
-		event.preventDefault()
-		user ? signOut() : $email.focus()
-	})
-	$('.cancel',$signIn).addEventListener('click', ()=>{
-		$signIn.reset()
-		document.activeElement.blur()
-	})
-}
-
-/**
- * Sign in to Firebase with email and password
- * @param {string} email 
- * @param {string} password 
- */
-async function signInWithEmail( email, password ) {
-	const res = await googleapis(
-		'identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
-		{ email, password, returnSecureToken: true }
-	)
-	if(res.error) {
-		const classes = $('#sign-in').classList
-		classes.remove('loading')
-		classes.add('invalid')
-		return
-	}
-	setAuth({
-		idToken: res.idToken,
-		refreshToken: res.refreshToken,
-		expiresAt: timestamp() + parseInt(res.expiresIn)
-	})
-}
-
-/**
- * Sign in to Firebase with stored refresh token
- * @param {string} refreshToken 
- */
-async function signInWithToken(auth) {
 	
-	if(!auth.refreshToken) return false
-	
-	if( auth.idToken && auth.expiresAt && (auth.expiresAt-timestamp()>60) ) return setAuth(auth)
-	
-	const res = await googleapis(
-		'securetoken.googleapis.com/v1/token',
-		{ refresh_token: auth.refreshToken, grant_type: 'refresh_token' }
-	)
-	if(res.error) return false
-
-	return setAuth({
-		idToken: res.id_token,
-		refreshToken: res.refresh_token,
-		expiresAt: timestamp() + parseInt(res.expires_in),
-	})
+	getRedirectResult(auth)
 }
 
-/**
- * Sign out of Firebase
- */
-async function signOut(){
-	localStorage.removeItem('AUTH')
-	token = user = ''
-	updateAuth(false)
-}
-async function setAuth(auth) {
-	token = '?auth=' + auth.idToken
-	user = await getUser(auth.idToken)
-	localStorage.setItem('AUTH',JSON.stringify(auth))
-	updateAuth(Boolean(user))
-	setTimeout(
-		signInWithToken,
-		(auth.expiresAt-timestamp()-60)*1000,
-		auth,
-	) // One minute before idToken expires
-}
-async function getUser(idToken) {
-	const { users: { 0: { email } } } = await googleapis(
-		'identitytoolkit.googleapis.com/v1/accounts:lookup',
-		{ idToken }
-	)
-	return email
-}
 async function updateAuth(signedIn){
 	document.body.classList.toggle('signed-in',signedIn)
 	$('#sign').value = `Sign ${signedIn ? 'out' : 'in'}`
 	document.activeElement.blur()
 }
-const dbBrowserResources = () => Promise.all(['locationIDs','locations','categories','snippets'].map(dbLive))
 async function initBrowser(){
-	dbBrowserResources()
-	Object.assign(navigator.serviceWorker.subscriptionList,{
-		locationsIDs: updateBrowser,
-		locations: updateBrowser,
-		categories: updateBrowser,
-		snippets: updateBrowser,
+	onValue(ref(db, "snippets"), (snap) => {
+		ldb.snippets = snap.val()
+		updateBrowser()
 	})
-	updateBrowser()
+	onValue(ref(db, "categories"), (snap) => {
+		ldb.categories = Object.fromEntries(
+			Object.entries(snap.val())
+			.sort( ([,a], [,b]) => a.sort - b.sort )
+		)
+		updateBrowser()
+	})
 	$('#search').addEventListener('input',({target:{value:query}})=>{
 		$$('.preview>.title',$('#browser')).forEach($title=>{
 			const $preview = $title.parentElement
@@ -141,18 +83,16 @@ async function initBrowser(){
 	})
 }
 async function updateBrowser(){
+	if(!(ldb.categories && ldb.snippets)) return false
 	const $browser = $('#browser')
-	const [ locationIDs, locations, categories, snippets ] = await dbBrowserResources()
 	$browser.replaceChildren(
 		$browser.firstElementChild,
-		...locationIDs
-			.filter( id => id in locations)
-			.map( id => makeGroup('location', id, locations[id], ( locations[id].categoryIDs || [] )
-				.filter( id => id in categories)
-				.map( id => makeGroup('category', id, categories[id], ( categories[id].articleIDs || [] )
-					.filter( id => id in snippets )
-					.map( id => makePreview(id, snippets[id])
-	))))))
+		...Object.entries(ldb.categories)
+			.map( ([id, category]) => makeGroup('category', id, category, 
+				( category.articleIDs || [] )
+				.filter( id => id in ldb.snippets )
+				.map( id => makePreview(id, ldb.snippets[id])
+	))))
 
 	$$('textarea',$browser).forEach(initTextarea)
 }
@@ -321,19 +261,11 @@ async function initEditor() {
 	$$textarea.forEach(initTextarea)
 	remapEnter($url)
 	
-	const [locationIDs,locations,categories] = await Promise.all([
-		dbCache('locationIDs'),dbLive('locations'),dbLive('categories')
-	])
-	$categoryID.replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
-		const $group = document.createElement('optgroup')
-		$group.setAttribute('label',locations[id].title)
-		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
-			const $option = document.createElement('option')
-			$option.value = id
-			$option.textContent = categories[id].title
-			return $option
-		}))
-		return $group
+	$categoryID.replaceChildren(...Object.entries(ldb.categories).map(([id, category])=>{
+		const $option = document.createElement('option')
+		$option.value = id
+		$option.textContent = category.title
+		return $option
 	}))	
 
 	updateEditor()
@@ -345,7 +277,7 @@ async function initEditor() {
  * @returns {Promise<Object>} story
  */
 async function storyTemplate(){
-	const schema = await dbCache('schemas/input')
+	const schema = await dbRead("schemas/input")
 	const template = {}
 	for (const key in schema)
 		template[key] = {
@@ -374,7 +306,7 @@ async function storyTemplate(){
 async function updateEditor() {
 	const id = urlID()
 	history.replaceState({}, '', id)
-	let story = await dbOnce('inputs/' + id) || {}
+	let story = await dbRead('inputs/' + id) || {}
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
@@ -532,7 +464,7 @@ const escape = (string) => string.replace(/[-_.!~*"'()]/g,char=>'&#'+char.charCo
  * @returns {string} ID
  */
 function makeID(){
-	const words = 'aero,alabaster,alizarin,almond,amaranth,amazon,amber,amethyst,ao,apricot,aqua,aquamarine,artichoke,asparagus,auburn,aureolin,avocado,azure,beaver,beige,bisque,bistre,bittersweet,black,blue,blueberry,blush,bole,bone,bronze,brown,buff,burgundy,burlywood,byzantine,byzantium,cadet,calypso,camel,cardinal,carmine,carnelian,catawba,celadon,celeste,cerise,cerulean,champagne,charcoal,chartreuse,chestnut,chocolate,cinereous,citrine,citron,claret,coconut,coffee,copper,coquelicot,coral,cordovan,cornsilk,cream,crimson,cultured,cyan,cyclamen,dandelion,denim,desert,diamond,dirt,ebony,ecru,eggplant,eggshell,emerald,eminence,eucalyptus,fallow,fandango,fawn,feldgrau,firebrick,flame,flax,flirt,frostbite,fuchsia,fulvous,gainsboro,gamboge,garnet,glaucous,gold,goldenrod,gray,green,grullo,gunmetal,harlequin,heliotrope,honeydew,iceberg,icterine,inchworm,independence,indigo,iris,irresistible,isabelline,ivory,jade,jasmine,jet,jonquil,keppel,khaki,kobe,kobi,kobicha,lanzones,lava,lavender,lemon,lenurple,liberty,licorice,lilac,lime,limerick,linen,lion,liver,livid,lotion,lumber,lust,magenta,mahogany,maize,malachite,manatee,mandarin,mango,mantis,marigold,maroon,mauve,mauvelous,melon,menthol,midnight,milk,mindaro,ming,mint,moccasin,mocha,moonstone,mud,mulberry,mustard,mystic,nickel,nyanza,ochre,olive,olivine,onyx,opal,orange,orchid,oxblood,oxley,parchment,patriarch,peach,pear,pearl,peridot,periwinkle,persimmon,peru,petal,phlox,pineapple,pink,pistachio,platinum,plum,popstar,prune,puce,pumpkin,purple,purpureus,quartz,quincy,rackley,rajah,raspberry,razzmatazz,red,redwood,rhythm,rose,rosewood,ruber,ruby,rufous,rum,russet,rust,saffron,sage,salem,salmon,sand,sandstorm,sapphire,scarlet,seashell,sepia,shadow,shampoo,shandy,sienna,silver,sinopia,skobeloff,smalt,smitten,smoke,snow,soap,straw,strawberry,sunglow,sunny,sunray,sunset,taffy,tan,tangelo,tangerine,taupe,teal,telemagenta,temptress,tenné,thistle,timberwolf,titanium,tomato,toolbox,tooth,topaz,tulip,tumbleweed,turquoise,tuscan,tuscany,ube,ultramarine,umber,urobilin,vanilla,verdigris,vermilion,veronica,violet,viridian,water,watermelon,waterspout,wenge,wheat,white,wine,wisteria,xanadu,yellow,zaffre,zinnwaldite,zomp'.split(',')
+	const words = 'aero,alabaster,alizarin,almond,amaranth,amazon,amber,amethyst,ao,apricot,aqua,aquamarine,artichoke,asparagus,auburn,aureolin,avocado,azure,beaver,beige,bisque,bistre,bittersweet,black,blue,blueberry,blush,bole,bone,bronze,brown,buff,burgundy,burlywood,byzantine,byzantium,cadet,calypso,camel,cardinal,carmine,carnelian,catawba,celadon,celeste,cerise,cerulean,champagne,charcoal,chartreuse,chestnut,chocolate,cinereous,citrine,citron,claret,coconut,coffee,copper,coquelicot,coral,cordovan,cornsilk,cream,crimson,cultured,cyan,cyclamen,dandelion,denim,desert,diamond,dirt,ebony,ecru,eggplant,eggshell,emerald,eminence,eucalyptus,fallow,fandango,fawn,feldgrau,firebrick,flame,flax,flirt,frostbite,fuchsia,fulvous,gainsboro,gamboge,garnet,glaucous,gold,goldenrod,gray,green,grullo,gunmetal,harlequin,heliotrope,honeydew,iceberg,icterine,inchworm,independence,indigo,iris,irresistible,isabelline,ivory,jade,jasmine,jet,jonquil,keppel,khaki,kobe,kobi,kobicha,lanzones,lava,lavender,lemon,lenurple,liberty,licorice,lilac,lime,limerick,linen,lion,liver,livid,lotion,lumber,lust,magenta,mahogany,maize,malachite,manatee,mandarin,mango,mantis,marigold,maroon,mauve,mauvelous,melon,menthol,midnight,milk,mindaro,ming,mint,moccasin,mocha,moonstone,mud,mulberry,mustard,mystic,nickel,nyanza,ochre,olive,olivine,onyx,opal,orange,orchid,oxblood,oxley,parchment,patriarch,peach,pear,pearl,peridot,periwinkle,persimmon,peru,petal,phlox,pineapple,pink,pistachio,platinum,plum,popstar,prune,puce,pumpkin,purple,purpureus,quartz,quincy,rackley,rajah,raspberry,razzmatazz,red,redwood,rhythm,rose,rosewood,ruber,ruby,rufous,rum,russet,rust,saffron,sage,salem,salmon,sand,sandstorm,sapphire,scarlet,seashell,sepia,shadow,shampoo,shandy,sienna,silver,sinopia,skobeloff,smalt,smitten,smoke,snow,soap,straw,strawberry,sunglow,sunny,sunray,sunset,taffy,tan,tangelo,tangerine,taupe,teal,telemagenta,temptress,tenne,thistle,timberwolf,titanium,tomato,toolbox,tooth,topaz,tulip,tumbleweed,turquoise,tuscan,tuscany,ube,ultramarine,umber,urobilin,vanilla,verdigris,vermilion,veronica,violet,viridian,water,watermelon,waterspout,wenge,wheat,white,wine,wisteria,xanadu,yellow,zaffre,zinnwaldite,zomp'.split(',')
 	
 	return new Array(3).fill(words).map(randomElement).join('-')
 }
@@ -619,7 +551,7 @@ const imgbb = async ( data ) => {
 	const body = new FormData()
 	body.append('image',data)
 	const response = await fetch(
-		'https://' + await dbOnce('secrets/imgbb'),
+		'https://' + await dbRead('secrets/imgbb'),
 		{ method: 'POST', body }
 	)
 	const { data: { image, medium, thumb } } = await response.json()
@@ -653,55 +585,13 @@ const youtube = async ( videoURL ) => {
 }
 
 /**
- * Expands relative path to Firebase realtime database URL
- * @param {string} path Relative path
- * @param {boolean} legacy Use legacy database
- * @returns {string} full path
- */
-const dbPath = ( path, legacy ) => (
-	'https://'+
-	(legacy ? 'arcadia-high-mobile' : 'ahs-app')+
-	'.firebaseio.com/'+
-	path+
-	'.json'+
-	token
-)
-
-/**
  * Performs a fetch to a database
  * @param {string} path 
  * @param {Object?} request 
  * @param {Boolean} legacy 
  * @returns {Promise<Object>} response
  */
-const db = async ( path='', request={}, legacy=false ) => ( await fetch( dbPath(path, legacy), request ) ).json()
-
-/**
- * Reads a cached database
- * @param {string} path 
- * @returns {Promise<Object>} response
- */
- const dbCache = async ( path ) => db( path, {
-	 headers: { Aces: 'cache' }
- } )
-
-/**
- * Reads the database and updates it live
- * @param {string} path 
- * @returns {Promise<Object>} response
- */
-const dbLive = async ( path ) => db( path, { 
-	headers: { Aces: 'live' } 
-})
-
-/**
- * Reads the database once
- * @param {string} path 
- * @returns {Promise<Object>} response
- */
-const dbOnce = async ( path ) => db( path, {
-	headers: { Aces: 'once' }
-} )
+const dbRead = async ( path ) => await get(ref(db, path)).then(x=>x.val())
 
 /**
  * Writes to the database
@@ -710,19 +600,7 @@ const dbOnce = async ( path ) => db( path, {
  * @param {boolean} legacy Use legacy database
  * @returns {(Promise<Object>|Boolean)} return
  */
-const dbWrite = async ( path, body, legacy ) => user ? db( path, {
-	body: JSON.stringify(body),
-	headers: { 'Content-Type': 'application/json' },
-	method: 'PATCH',
-}, legacy ) : false
-
-/**
- * 
- * @param {string} path 
- * @param {Object} request 
- * @returns {Promise<Object>} response
- */
-const googleapis = async (path,request) => (await post(path+'?key='+KEY,request)).json()
+const dbWrite = async ( path, body ) => user ? set(ref(db, path), body) : false
 /**
  * Initiates the resize bar
  */
@@ -856,8 +734,7 @@ async function initWorker(){
 	// 	}
 	// })
 }
-initWorker()
+initAuth()
 initEditor()
 initBrowser()
 initResize()
-initAuth()

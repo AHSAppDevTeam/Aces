@@ -29,7 +29,7 @@ header > label:last-child {
 .group.category > header .title{
 	font-size: 1.5rem;
 }
-#browser > section > section {
+#browser > section {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
 	grid-auto-rows: auto;

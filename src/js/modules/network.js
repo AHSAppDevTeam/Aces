@@ -30,7 +30,7 @@ const imgbb = async ( data ) => {
 	const body = new FormData()
 	body.append('image',data)
 	const response = await fetch(
-		'https://' + await dbOnce('secrets/imgbb'),
+		'https://' + await dbRead('secrets/imgbb'),
 		{ method: 'POST', body }
 	)
 	const { data: { image, medium, thumb } } = await response.json()
@@ -64,55 +64,13 @@ const youtube = async ( videoURL ) => {
 }
 
 /**
- * Expands relative path to Firebase realtime database URL
- * @param {string} path Relative path
- * @param {boolean} legacy Use legacy database
- * @returns {string} full path
- */
-const dbPath = ( path, legacy ) => (
-	'https://'+
-	(legacy ? 'arcadia-high-mobile' : 'ahs-app')+
-	'.firebaseio.com/'+
-	path+
-	'.json'+
-	token
-)
-
-/**
  * Performs a fetch to a database
  * @param {string} path 
  * @param {Object?} request 
  * @param {Boolean} legacy 
  * @returns {Promise<Object>} response
  */
-const db = async ( path='', request={}, legacy=false ) => ( await fetch( dbPath(path, legacy), request ) ).json()
-
-/**
- * Reads a cached database
- * @param {string} path 
- * @returns {Promise<Object>} response
- */
- const dbCache = async ( path ) => db( path, {
-	 headers: { Aces: 'cache' }
- } )
-
-/**
- * Reads the database and updates it live
- * @param {string} path 
- * @returns {Promise<Object>} response
- */
-const dbLive = async ( path ) => db( path, { 
-	headers: { Aces: 'live' } 
-})
-
-/**
- * Reads the database once
- * @param {string} path 
- * @returns {Promise<Object>} response
- */
-const dbOnce = async ( path ) => db( path, {
-	headers: { Aces: 'once' }
-} )
+const dbRead = async ( path ) => await get(ref(db, path)).then(x=>x.val())
 
 /**
  * Writes to the database
@@ -121,16 +79,4 @@ const dbOnce = async ( path ) => db( path, {
  * @param {boolean} legacy Use legacy database
  * @returns {(Promise<Object>|Boolean)} return
  */
-const dbWrite = async ( path, body, legacy ) => user ? db( path, {
-	body: JSON.stringify(body),
-	headers: { 'Content-Type': 'application/json' },
-	method: 'PATCH',
-}, legacy ) : false
-
-/**
- * 
- * @param {string} path 
- * @param {Object} request 
- * @returns {Promise<Object>} response
- */
-const googleapis = async (path,request) => (await post(path+'?key='+KEY,request)).json()
+const dbWrite = async ( path, body ) => user ? set(ref(db, path), body) : false

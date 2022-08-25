@@ -49,19 +49,11 @@ async function initEditor() {
 	$$textarea.forEach(initTextarea)
 	remapEnter($url)
 	
-	const [locationIDs,locations,categories] = await Promise.all([
-		dbCache('locationIDs'),dbLive('locations'),dbLive('categories')
-	])
-	$categoryID.replaceChildren(...locationIDs.filter(id=>id in locations).map(id=>{
-		const $group = document.createElement('optgroup')
-		$group.setAttribute('label',locations[id].title)
-		$group.append(...locations[id].categoryIDs.filter(id=>id in categories).map(id=>{
-			const $option = document.createElement('option')
-			$option.value = id
-			$option.textContent = categories[id].title
-			return $option
-		}))
-		return $group
+	$categoryID.replaceChildren(...Object.entries(ldb.categories).map(([id, category])=>{
+		const $option = document.createElement('option')
+		$option.value = id
+		$option.textContent = category.title
+		return $option
 	}))	
 
 	updateEditor()
@@ -73,7 +65,7 @@ async function initEditor() {
  * @returns {Promise<Object>} story
  */
 async function storyTemplate(){
-	const schema = await dbCache('schemas/input')
+	const schema = await dbRead("schemas/input")
 	const template = {}
 	for (const key in schema)
 		template[key] = {
@@ -102,7 +94,7 @@ async function storyTemplate(){
 async function updateEditor() {
 	const id = urlID()
 	history.replaceState({}, '', id)
-	let story = await dbOnce('inputs/' + id) || {}
+	let story = await dbRead('inputs/' + id) || {}
 	story = {...await storyTemplate(),...story}
 	document.title = story.title
 	syncStory(story,0)
