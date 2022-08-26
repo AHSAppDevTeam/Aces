@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth'
 import { $ } from './dom'
 
-export async function init() {
+export async function authinit() {
 	const $sign = $('#sign')
 
 	const provider = new GoogleAuthProvider()

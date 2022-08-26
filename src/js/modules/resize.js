@@ -2,7 +2,7 @@
  * Initiates the resize bar
  */
 import { $, $$ } from './dom'
-export async function init(){
+export async function resizeinit(){
 	let x
 	
 	// resize bar

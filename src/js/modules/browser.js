@@ -5,7 +5,7 @@ import { ldb, db } from '../config'
 import { $, $$, $template, addChangeListener } from './dom'
 import { initTextarea } from './inputs'
 
-export async function init() {
+export async function browserinit() {
 	onValue(ref(db, "snippets"), (snap) => {
 		ldb.snippets = snap.val()
 		updateBrowser()

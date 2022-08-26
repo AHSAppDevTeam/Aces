@@ -1,10 +1,10 @@
-import * as auth from "./modules/auth.js"
-import * as editor from "./modules/editor.js"
-import * as browser from "./modules/browser.js"
-import * as resize from "./modules/resize.js"
+import { authinit } from "./modules/auth.js"
+import { editinit } from "./modules/editor.js"
+import { browserinit } from "./modules/browser.js"
+import { resizeinit } from "./modules/resize.js"
 import '../css/style.css'
 
-auth.init()
-editor.init()
-browser.init()
-resize.init()
+authinit()
+editinit()
+browserinit()
+resizeinit()

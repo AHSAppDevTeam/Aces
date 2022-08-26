@@ -16,7 +16,7 @@ import { remapEnter } from './inputs'
 import { urlID } from './utils'
 import { dispatchInput } from './inputs'
 
-export async function init() {
+export async function editinit() {
 	const $editor = $('#editor')
 	const $media = $('#media')
 	const $categoryID = $('#categoryID')
