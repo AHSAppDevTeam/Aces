@@ -1,7 +1,7 @@
 /**
  * Initiates the authentication elements
  */
-import * as fire from "../config.js"
+import { auth } from "../config.js"
 import {
 	signInWithRedirect, getRedirectResult, GoogleAuthProvider
 } from 'firebase/auth'
@@ -17,10 +17,10 @@ export async function authinit() {
 
 	$sign.addEventListener("click", event => {
 		event.preventDefault()
-		signInWithRedirect(fire.auth, provider)
+		signInWithRedirect(auth, provider)
 	})
 
-	getRedirectResult(fire.auth)
+	getRedirectResult(auth)
 }
 
 async function updateAuth(signedIn) {
