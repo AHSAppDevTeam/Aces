@@ -11,7 +11,7 @@ import {
 } from 'firebase/database'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDweQSkpqQSGP42qBgoiSm5VAhDoe9dJA8",
+  apiKey: "AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE",
   authDomain: "arcadia-high-mobile.firebaseapp.com",
   databaseURL: "https://ahs-app.firebaseio.com",
   projectId: "arcadia-high-mobile",
