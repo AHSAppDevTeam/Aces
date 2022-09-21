@@ -13,9 +13,8 @@ module.exports = {
   mode: 'production',
   plugins: [
     new HtmlWebpackPlugin({ template: './src/index.html' }),
-    new MiniCssExtractPlugin({
-      filename: './src/css/style.css',
-    }), new CopyPlugin({
+    new MiniCssExtractPlugin(),
+    new CopyPlugin({
       patterns: [
         { from: "./src/static", to: "." },
       ],
@@ -23,11 +22,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          { loader: MiniCssExtractPlugin.loader },
-          'css-loader'
-        ],
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
   }, optimization: {

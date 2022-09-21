@@ -2,6 +2,8 @@
  * Initiates the resize bar
  */
 import { $, $$ } from './dom'
+import { dispatchInput } from './inputs'
+
 export async function resizeinit(){
 	let x
 	

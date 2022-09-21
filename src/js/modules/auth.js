@@ -1,7 +1,7 @@
 /**
  * Initiates the authentication elements
  */
-import { auth } from "../config.js"
+import { auth, user } from "../config.js"
 import {
   signInWithRedirect, getRedirectResult, GoogleAuthProvider
 } from 'firebase/auth'

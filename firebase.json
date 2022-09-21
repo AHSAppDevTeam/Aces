@@ -3,13 +3,14 @@
 		"site": "edit-ahs-app",
 		"public": "dist",
 		"trailingSlash": false,
-		"ignore": [
-			"firebase.json",
-			"**/.*"
-		],
+		"ignore": [],
 		"rewrites": [
 			{
-				"source": "**",
+				"regex": "(.+)\\.(.+)",
+				"destination": "/:1.:2"
+			},
+			{
+				"regex": ".+",
 				"destination": "/index.html"
 			}
 		]

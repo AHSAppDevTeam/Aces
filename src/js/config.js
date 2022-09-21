@@ -26,6 +26,6 @@ export const db = getDatabase()
 
 const DEBUG = true
 const KEY = 'AIzaSyDEUekXeyIKJUreRaX78lsEYBt8JGHYmHE'
-let user = ''
+export let user = ''
 let token = ''
 export const ldb = {} // local DB
