@@ -107,7 +107,7 @@ async function storyTemplate() {
 /**
  * Update the editor with a new article ID from the URL
  */
-async function updateEditor() {
+export async function updateEditor() {
 	const id = urlID()
 	history.replaceState({}, '', id)
 	let story = await dbRead('inputs/' + id) || {}
@@ -144,6 +144,10 @@ async function encodeStory(story) {
  */
 async function syncStory(base, direction) {
 	let story = { ...base }
+	if(direction == 1 && !story.imageURLs){
+		alert("no picture uploaded")
+		return story
+	}
 	for (const property in story) {
 		const $element = $('#' + property, $('#editor'))
 		if (!$element) continue
