@@ -1,6 +1,6 @@
 {
 	"hosting": {
-		"site": "edit-ahs-app",
+		"site": "ahsapp-internaltesting",
 		"public": "dist",
 		"trailingSlash": false,
 		"ignore": [],

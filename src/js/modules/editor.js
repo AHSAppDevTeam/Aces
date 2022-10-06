@@ -15,6 +15,7 @@ import { initTextarea } from './inputs'
 import { remapEnter } from './inputs'
 import { urlID } from './utils'
 import { dispatchInput } from './inputs'
+import {user} from '../config'
 
 export async function editinit() {
 	const $editor = $('#editor')
