@@ -15,7 +15,7 @@ import { initTextarea } from './inputs'
 import { remapEnter } from './inputs'
 import { urlID } from './utils'
 import { dispatchInput } from './inputs'
-import {user} from '../config'
+import { user } from '../config'
 
 export async function editinit() {
 	const $editor = $('#editor')
@@ -145,8 +145,8 @@ async function encodeStory(story) {
  */
 async function syncStory(base, direction) {
 	let story = { ...base }
-	if(direction == 1 && !story.imageURLs){
-		alert("no picture uploaded")
+	if (direction == 1 && !!story.imageURLs && story.categoryID != "Drafts") {
+		alert(story.title + " has no picture uploaded")
 		return story
 	}
 	for (const property in story) {

@@ -6,6 +6,7 @@ import { $, $$, $template, addChangeListener } from './dom'
 import { initTextarea } from './inputs'
 import { makeID } from './id'
 import { updateEditor } from './editor'
+import { dbWrite } from './network'
 
 export async function browserinit() {
 	onValue(ref(db, "snippets"), (snap) => {
