@@ -31,7 +31,7 @@ const post = async (path, request) => fetch(
  * @param {*} data URL or image file
  * @returns {Promise<mediaSet>}
  */
-const imgbb = async (data) => {
+export const imgbb = async (data) => {
 	const body = new FormData()
 	body.append('image', data)
 	const response = await fetch(
@@ -50,7 +50,7 @@ const imgbb = async (data) => {
  * @param {string} videoURL YouTube video URL
  * @returns {Promise<mediaSet}
  */
-const youtube = async (videoURL) => {
+export const youtube = async (videoURL) => {
 	const { hostname, pathname, searchParams } = new URL(videoURL)
 	let videoID
 	switch (hostname) {
