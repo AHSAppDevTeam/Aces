@@ -3,7 +3,7 @@
  */
 import { auth, user } from "../config.js"
 import {
-  signInWithRedirect, getRedirectResult, GoogleAuthProvider
+  signInWithPopup, getRedirectResult, GoogleAuthProvider
 } from 'firebase/auth'
 import { $ } from './dom'
 
@@ -17,7 +17,7 @@ export async function authinit() {
 
   $sign.addEventListener("click", event => {
     event.preventDefault()
-    signInWithRedirect(auth, provider)
+    signInWithPopup(auth, provider)
   })
 
   getRedirectResult(auth)
